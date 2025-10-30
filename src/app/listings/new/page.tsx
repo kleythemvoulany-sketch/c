@@ -52,6 +52,18 @@ const listingSchema = z.object({
   color: z.string().min(1, 'الرجاء إدخال اللون'),
 });
 
+const carModelsByMake: Record<string, string[]> = {
+  تويوتا: ['كامري', 'كورولا', 'لاند كروزر', 'هيلوكس', 'راف فور', 'ياريس'],
+  هيونداي: ['إلنترا', 'سوناتا', 'سنتافي', 'أكسنت', 'توسان', 'كونا'],
+  'مرسيدس-بنز': ['C-Class', 'E-Class', 'S-Class', 'GLE', 'GLC'],
+  نيسان: ['صني', 'سنترا', 'باترول', 'ألتيما', 'إكس-تريل'],
+  كيا: ['سيراتو', 'أوبتيما', 'سبورتاج', 'سورينتو', 'ريو'],
+  رينو: ['ميجان', 'كليو', 'داستر', 'كابتشر'],
+  فورد: ['فوكس', 'فيوجن', 'إكسبلورر', 'إدج', 'رينجر'],
+  تسلا: ['Model S', 'Model 3', 'Model X', 'Model Y'],
+};
+
+
 export default function NewListingPage() {
   const { toast } = useToast();
   const firestore = useFirestore();
@@ -74,6 +86,8 @@ export default function NewListingPage() {
       color: '',
     },
   });
+
+  const selectedMake = form.watch('make');
 
   const onSubmit = async (values: z.infer<typeof listingSchema>) => {
     if (!firestore || !user) {
@@ -139,7 +153,10 @@ export default function NewListingPage() {
                         <FormLabel>الماركة</FormLabel>
                         <Select
                           dir="rtl"
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            form.setValue('model', ''); // Reset model on make change
+                          }}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -148,14 +165,9 @@ export default function NewListingPage() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="تويوتا">تويوتا</SelectItem>
-                            <SelectItem value="هيونداي">هيونداي</SelectItem>
-                            <SelectItem value="مرسيدس-بنز">مرسيدس</SelectItem>
-                            <SelectItem value="نيسان">نيسان</SelectItem>
-                            <SelectItem value="كيا">كيا</SelectItem>
-                             <SelectItem value="رينو">رينو</SelectItem>
-                            <SelectItem value="فورد">فورد</SelectItem>
-                             <SelectItem value="تسلا">تسلا</SelectItem>
+                            {Object.keys(carModelsByMake).map((make) => (
+                              <SelectItem key={make} value={make}>{make}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -168,9 +180,25 @@ export default function NewListingPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>الموديل</FormLabel>
-                        <FormControl>
-                          <Input placeholder="مثال: كامري، سنتافي" {...field} />
-                        </FormControl>
+                        <Select
+                          dir="rtl"
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          disabled={!selectedMake}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={!selectedMake ? 'اختر الماركة أولاً' : 'اختر الموديل'} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {selectedMake && carModelsByMake[selectedMake]?.map((model) => (
+                               <SelectItem key={model} value={model}>
+                                {model}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -410,3 +438,5 @@ export default function NewListingPage() {
     </div>
   );
 }
+
+    
