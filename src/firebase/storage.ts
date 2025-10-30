@@ -1,6 +1,11 @@
 'use client';
 
-import { ref, uploadBytesResumable, getDownloadURL, Storage } from 'firebase/storage';
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  Storage,
+} from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -20,15 +25,18 @@ export async function uploadImages(
   const calculateOverallProgress = () => {
     const totalFiles = files.length;
     if (totalFiles === 0) return 0;
-    const totalProgress = Object.values(progressByFile).reduce((acc, curr) => acc + curr, 0);
+    const totalProgress = Object.values(progressByFile).reduce(
+      (acc, curr) => acc + curr,
+      0
+    );
     return totalProgress / totalFiles;
   };
 
-  const uploadPromises = files.map(file => {
+  const uploadPromises = files.map((file) => {
     return new Promise<string>((resolve, reject) => {
       const fileId = uuidv4();
       progressByFile[fileId] = 0;
-      
+
       const fileExtension = file.name.split('.').pop();
       const fileName = `${fileId}.${fileExtension}`;
       const storageRef = ref(storage, `listings/${fileName}`);
@@ -38,7 +46,8 @@ export async function uploadImages(
       uploadTask.on(
         'state_changed',
         (snapshot) => {
-          const singleFileProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const singleFileProgress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           progressByFile[fileId] = singleFileProgress;
           onProgress(calculateOverallProgress());
         },
@@ -55,7 +64,10 @@ export async function uploadImages(
             onProgress(calculateOverallProgress());
             resolve(downloadURL);
           } catch (error) {
-            console.error(`Failed to get download URL for ${file.name}:`, error);
+            console.error(
+              `Failed to get download URL for ${file.name}:`,
+              error
+            );
             reject(error);
           }
         }
