@@ -223,51 +223,29 @@
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/users/{userId}",
-        "definition": {
-          "entityName": "User",
-          "schema": {
-            "$ref": "#/backend/entities/User"
-          },
-          "description": "Stores user profile data. Path-based ownership ensures only the user can access their data."
-        }
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
       },
-      {
-        "path": "/vehicleListings/{vehicleListingId}",
-        "definition": {
-          "entityName": "VehicleListing",
-          "schema": {
-            "$ref": "#/backend/entities/VehicleListing"
-          },
-          "description": "Stores all vehicle listings. Publicly readable, but only writable by the owning user.",
-          "rules": {
-            "read": "if true;",
-            "write": "if request.auth != null && request.auth.uid == request.resource.data.userId;"
-          }
-        }
+      "description": "Stores user profile data. Path-based ownership ensures only the user can access their data."
+    },
+    "/vehicleListings/{vehicleListingId}": {
+      "schema": {
+        "$ref": "#/entities/VehicleListing"
       },
-      {
-        "path": "/faqs/{faqId}",
-        "definition": {
-          "entityName": "FAQ",
-          "schema": {
-            "$ref": "#/backend/entities/FAQ"
-          },
-          "description": "Stores frequently asked questions. Accessible to all users."
-        }
+      "description": "Stores all vehicle listings. Publicly readable, but only writable by the owning user."
+    },
+    "/faqs/{faqId}": {
+      "schema": {
+        "$ref": "#/entities/FAQ"
       },
-      {
-        "path": "/contactMessages/{contactMessageId}",
-        "definition": {
-          "entityName": "ContactMessage",
-          "schema": {
-            "$ref": "#/backend/entities/ContactMessage"
-          },
-          "description": "Stores contact messages sent by users. Access controlled by backend functions."
-        }
-      }
-    ]
+      "description": "Stores frequently asked questions. Accessible to all users."
+    },
+    "/contactMessages/{contactMessageId}": {
+      "schema": {
+        "$ref": "#/entities/ContactMessage"
+      },
+      "description": "Stores contact messages sent by users. Access controlled by backend functions."
+    }
   }
 }
