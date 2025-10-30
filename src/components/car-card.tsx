@@ -22,7 +22,7 @@ type CarCardProps = {
 
 export function CarCard({ car, isOwnerView = false }: CarCardProps) {
   return (
-    <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full bg-card">
+    <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl flex flex-col h-full bg-card">
       <div className="flex-grow">
         <Link href={`/listings/${car.id}`} className="block">
           <CardHeader className="p-0">
@@ -89,7 +89,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
             </Button>
           </div>
         ) : (
-          <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+          <Button asChild className="w-full">
             <Link href={`/listings/${car.id}`}>
               <Phone className="ml-2 h-4 w-4" />
               عرض التفاصيل والاتصال

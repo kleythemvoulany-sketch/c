@@ -13,12 +13,13 @@ import { Star } from "lucide-react";
 
 
 export default function Home() {
-  const featuredCars = cars.slice(0, 5);
-  const latestCars = cars.slice(5, 11);
+  const featuredCars = cars.filter(c => c.featured);
+  const latestCars = cars.sort((a, b) => b.id - a.id).slice(0, 6);
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-secondary">
+        <div className="absolute inset-0 bg-primary opacity-80 z-0"></div>
         <Image 
           src="https://picsum.photos/seed/hero/1920/1080" 
           alt="Hero background" 
@@ -26,16 +27,16 @@ export default function Home() {
           className="object-cover z-[-1] opacity-20"
           data-ai-hint="car driving sunset"
         />
-        <div className="container px-4 md:px-6 text-center">
+        <div className="container relative px-4 md:px-6 text-center z-10">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-primary">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white">
               البورصة – سوق السيارات في موريتانيا
             </h1>
-            <p className="mt-4 text-lg text-foreground/80 md:text-xl">
+            <p className="mt-4 text-lg text-white/80 md:text-xl">
               بيع، اشترِ، وتصفح أحدث السيارات بأسهل تجربة في البلاد
             </p>
           </div>
-          <Card className="max-w-5xl mx-auto mt-8 p-4 bg-background/80 backdrop-blur-sm shadow-xl">
+          <Card className="max-w-5xl mx-auto mt-8 p-4 bg-background/90 backdrop-blur-sm shadow-xl">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:items-end">
               <div className="md:col-span-2">
                 <Input type="text" placeholder="ابحث عن سيارة..." className="h-12 text-lg"/>
@@ -56,7 +57,7 @@ export default function Home() {
                   <SelectItem value="2022">2022</SelectItem>
                 </SelectContent>
               </Select>
-              <Button size="lg" className="h-12 text-lg w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+              <Button size="lg" className="h-12 text-lg w-full">
                 <Car className="ml-2 h-6 w-6" />
                 بحث
               </Button>
@@ -65,9 +66,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 md:py-20">
+      <section className="py-12 md:py-20 bg-background">
         <div className="container">
-          <h2 className="text-3xl font-bold text-center mb-2">عروض مميزة</h2>
+          <h2 className="text-3xl font-bold text-center mb-2 text-primary">عروض مميزة</h2>
           <p className="text-center text-muted-foreground mb-8">سيارات مختارة بعناية لك</p>
           <Carousel opts={{ loop: true, direction: 'rtl' }} className="w-full max-w-6xl mx-auto">
             <CarouselContent>
@@ -87,7 +88,7 @@ export default function Home() {
 
       <section className="bg-secondary py-12 md:py-20">
         <div className="container">
-          <h2 className="text-3xl font-bold text-center mb-8">تصفح حسب الفئة</h2>
+          <h2 className="text-3xl font-bold text-center mb-8 text-primary">تصفح حسب الفئة</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {categories.map((category) => (
               <Link href="#" key={category.name}>
@@ -105,11 +106,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 md:py-20">
+      <section className="py-12 md:py-20 bg-background">
         <div className="container">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 className="text-3xl font-bold">أحدث الإعلانات</h2>
+              <h2 className="text-3xl font-bold text-primary">أحدث الإعلانات</h2>
               <p className="text-muted-foreground">اكتشف آخر ما تم إضافته لمنصتنا</p>
             </div>
             <Button variant="ghost" asChild>
@@ -145,9 +146,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 md:py-20">
+      <section className="py-12 md:py-20 bg-secondary">
         <div className="container">
-          <h2 className="text-3xl font-bold text-center mb-8">ماذا يقول عملاؤنا؟</h2>
+          <h2 className="text-3xl font-bold text-center mb-8 text-primary">ماذا يقول عملاؤنا؟</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="bg-card">
