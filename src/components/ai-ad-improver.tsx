@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useActionState } from "react";
+import { useState, useEffect, useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -86,10 +85,10 @@ export function AiAdImprover({ currentDescription, onDescriptionChange }: AiAdIm
         onChange={(e) => onDescriptionChange(e.target.value)}
       />
        <div className="pt-2">
-         <form action={formAction}>
+         <div action={formAction}>
            <input type="hidden" name="adDescription" value={currentDescription} />
            <SubmitButton />
-         </form>
+         </div>
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
