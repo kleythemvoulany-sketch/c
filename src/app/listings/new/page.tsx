@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { UploadCloud } from "lucide-react";
+import Image from "next/image";
 
 export default function NewListingPage() {
   return (
@@ -89,7 +90,13 @@ export default function NewListingPage() {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="phone">رقم الهاتف</Label>
-                        <Input id="phone" type="tel" placeholder="سيتم التحقق من الرقم" />
+                        <div className="flex items-center gap-2">
+                            <div className="flex h-10 items-center rounded-md border border-input bg-background px-3">
+                                <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
+                                <span className="mr-2 text-sm text-muted-foreground">+222</span>
+                            </div>
+                            <Input id="phone" type="tel" placeholder="سيتم التحقق من الرقم" dir="ltr" className="text-left"/>
+                        </div>
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="city">المدينة</Label>

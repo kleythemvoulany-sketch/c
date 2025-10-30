@@ -26,6 +26,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 // Mock user data for demonstration
 const user = {
@@ -137,7 +138,13 @@ export function ProfileForm() {
                   <FormItem>
                     <FormLabel>رقم الهاتف</FormLabel>
                     <FormControl>
-                      <Input placeholder="رقم هاتفك" {...field} />
+                       <div className="flex items-center gap-2">
+                            <div className="flex h-10 items-center rounded-md border border-input bg-background px-3">
+                                <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
+                                <span className="mr-2 text-sm text-muted-foreground">+222</span>
+                            </div>
+                            <Input placeholder="رقم هاتفك" {...field} dir="ltr" className="text-left"/>
+                        </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
