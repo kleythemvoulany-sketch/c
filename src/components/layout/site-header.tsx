@@ -7,6 +7,7 @@ import {
   Menu,
   Moon,
   PlusCircle,
+  Search,
   Sun,
   User,
 } from "lucide-react";
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
+import { Input } from "../ui/input";
 
 const navLinks = [
   { href: "/listings", label: "السيارات" },
@@ -65,7 +67,7 @@ export function SiteHeader() {
             </SheetContent>
           </Sheet>
         </div>
-        <nav className="hidden md:flex items-center gap-6 text-sm flex-1">
+        <nav className="hidden md:flex items-center gap-4 text-sm flex-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -111,6 +113,10 @@ export function SiteHeader() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <div className="relative hidden md:block">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input placeholder="بحث..." className="w-64 bg-background/20 text-white placeholder:text-white/70 border-0" />
+          </div>
 
           <Button variant="ghost" asChild className="hidden sm:inline-flex hover:bg-white/10">
             <Link href="/profile">

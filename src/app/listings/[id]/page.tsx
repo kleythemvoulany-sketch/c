@@ -29,7 +29,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
   ];
 
   return (
-    <div className="container py-12 md:py-20">
+    <div className="container py-12 md:py-20 bg-secondary">
       <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
         <div className="md:col-span-2">
           {/* Gallery */}
@@ -37,7 +37,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
             <div className="relative aspect-video w-full overflow-hidden rounded-lg mb-4 shadow-lg">
               <Image src={gallery[0]} alt={`${car.make} ${car.model}`} fill className="object-cover" />
                {car.featured && (
-                <Badge variant="default" className="absolute top-4 right-4 bg-accent text-accent-foreground">
+                <Badge variant="default" className="absolute top-4 right-4 bg-yellow-400 text-black border-2 border-white/50">
                   <Gem className="ml-1 h-3 w-3" />
                   مميزة
                 </Badge>

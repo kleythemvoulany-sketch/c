@@ -31,7 +31,7 @@ export function CarListItem({ car }: CarListItemProps) {
           {car.featured && (
             <Badge
               variant="default"
-              className="absolute top-3 right-3 bg-accent text-accent-foreground border-2 border-white/50"
+              className="absolute top-3 right-3 bg-yellow-400 text-black border-2 border-white/50"
             >
               <Gem className="ml-1 h-3 w-3" />
               مميزة

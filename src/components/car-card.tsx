@@ -22,7 +22,7 @@ type CarCardProps = {
 
 export function CarCard({ car, isOwnerView = false }: CarCardProps) {
   return (
-    <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl flex flex-col h-full bg-card">
+    <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl flex flex-col h-full bg-card border-border/20">
       <div className="flex-grow">
         <Link href={`/listings/${car.id}`} className="block">
           <CardHeader className="p-0">
@@ -37,7 +37,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
               {car.featured && (
                 <Badge
                   variant="default"
-                  className="absolute top-3 right-3 bg-accent text-accent-foreground border-2 border-white/50"
+                  className="absolute top-3 right-3 bg-yellow-400 text-black border-2 border-white/50"
                 >
                   <Gem className="ml-1 h-3 w-3" />
                   مميزة
