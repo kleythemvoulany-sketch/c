@@ -31,7 +31,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { useFirestore, useStorage } from '@/firebase';
+import { firestore, storage } from '@/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase/provider';
@@ -81,8 +81,6 @@ const carColors = [
 
 export default function NewListingPage() {
   const { toast } = useToast();
-  const firestore = useFirestore();
-  const storage = useStorage();
   const { user } = useUser();
   const router = useRouter();
 
