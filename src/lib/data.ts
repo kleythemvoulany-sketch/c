@@ -21,6 +21,7 @@ export type Car = {
 export type Category = {
     name: string;
     icon: LucideIcon;
+    image: string;
 };
 
 export const cars: Car[] = [
@@ -208,10 +209,10 @@ export const cars: Car[] = [
 ];
 
 export const categories: Category[] = [
-    { name: 'بورصة النخيل', icon: Palmtree },
-    { name: 'بورصة الأندلس', icon: Castle },
-    { name: 'بورصة الأمانة', icon: ShieldCheck },
-    { name: 'بورصة الواحة', icon: Leaf },
+    { name: 'بورصة النخيل', icon: Palmtree, image: 'https://picsum.photos/seed/c1/300/300' },
+    { name: 'بورصة الأندلس', icon: Castle, image: 'https://picsum.photos/seed/c2/300/300' },
+    { name: 'بورصة الأمانة', icon: ShieldCheck, image: 'https://picsum.photos/seed/c3/300/300' },
+    { name: 'بورصة الواحة', icon: Leaf, image: 'https://picsum.photos/seed/c4/300/300' },
 ];
 
 export const testimonials = [

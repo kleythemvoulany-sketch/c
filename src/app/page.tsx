@@ -61,8 +61,8 @@ export default function Home() {
               {categories.map((category) => (
                 <Link href="/listings" key={category.name}>
                   <div className="group flex cursor-pointer flex-col items-center text-center *:duration-200 hover:scale-105">
-                    <div className="relative size-20 sm:size-24 lg:size-28 rounded-full p-4 transition-transform bg-accent/10 flex items-center justify-center">
-                        <category.icon className="h-full w-full text-accent" />
+                    <div className="relative size-28 sm:size-32 lg:size-40 rounded-full transition-transform border-4 border-accent/20 group-hover:border-accent/50 overflow-hidden">
+                       <Image src={category.image} alt={category.name} fill className="object-cover" />
                     </div>
                     <p className="m-0 mt-3 font-medium whitespace-nowrap text-sm md:text-base group-hover:text-accent">
                       {category.name}
