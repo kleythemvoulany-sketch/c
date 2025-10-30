@@ -83,9 +83,9 @@ export function AiAdImprover() {
 
       {showResult && (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="sm:max-w-2xl" dir="rtl">
+          <DialogContent className="sm:max-w-2xl" dir="rtl" aria-labelledby="ai-improver-dialog-title">
             <DialogHeader>
-              <DialogTitle className="font-headline flex items-center gap-2">
+              <DialogTitle id="ai-improver-dialog-title" className="font-headline flex items-center gap-2">
                 <Wand2 /> اقتراحات التحسين
               </DialogTitle>
               <DialogDescription>
