@@ -24,7 +24,7 @@ import { Car as CarType } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMemoFirebase } from '@/firebase/provider';
 
-type PageProps = {
+interface PageProps {
   params: { id: string };
 };
 
