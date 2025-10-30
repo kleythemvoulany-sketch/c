@@ -32,6 +32,9 @@ const navLinks = [
 export function SiteHeader() {
   const { setTheme } = useTheme();
 
+  // A simplified check for authentication status
+  const isAuthenticated = false;
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-primary text-primary-foreground">
       <div className="container flex h-16 items-center sm:h-20">
@@ -74,27 +77,38 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <div className="flex flex-none items-center justify-end space-x-4">
+        <div className="flex flex-none items-center justify-end space-x-2">
           <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground hidden sm:flex">
             <Link href="/listings/new">
               <PlusCircle className="mr-2 h-4 w-4" />
               بيع على البورصة
             </Link>
           </Button>
+            
+          {isAuthenticated ? (
+             <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-white/10">
+                <Link href="/profile">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">Profile</span>
+                </Link>
+              </Button>
+          ) : (
+            <>
+              <Button variant="ghost" asChild className="text-primary-foreground hover:bg-white hover:text-primary hidden sm:flex mr-2">
+                <Link href="/login">
+                  <LogIn className="ml-2 h-4 w-4" />
+                  تسجيل الدخول
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-white/10 sm:hidden">
+                <Link href="/login">
+                  <LogIn className="h-5 w-5" />
+                  <span className="sr-only">تسجيل الدخول</span>
+                </Link>
+              </Button>
+            </>
+          )}
 
-          <Button variant="ghost" asChild className="text-primary-foreground hover:bg-white hover:text-primary hidden sm:flex">
-            <Link href="/login">
-              <LogIn className="ml-2 h-4 w-4" />
-              تسجيل الدخول
-            </Link>
-          </Button>
-
-          <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-white/10 sm:hidden">
-            <Link href="/login">
-              <LogIn className="h-5 w-5" />
-               <span className="sr-only">تسجيل الدخول</span>
-            </Link>
-          </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
