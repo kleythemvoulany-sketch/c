@@ -10,7 +10,7 @@ import { CarCard } from "@/components/car-card";
 
 export default function Home() {
   const featuredCars = cars.filter((c) => c.featured).slice(0, 4);
-  const latestCars = cars.sort((a, b) => b.id - a.id).slice(0, 10);
+  const latestCars = cars.sort((a, b) => b.id - a.id).slice(0, 8);
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
@@ -76,9 +76,16 @@ export default function Home() {
       
       <section className="bg-background py-12 md:py-16">
         <div className="container">
-           <h2 className="mb-6 text-2xl font-semibold text-gray-800 md:text-3xl">
-            عروض مميزة
-          </h2>
+           <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800 md:text-3xl">
+              عروض مميزة
+            </h2>
+             <Button variant="link" asChild>
+              <Link href="/listings">
+                عرض الكل
+              </Link>
+            </Button>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredCars.map((car) => (
               <CarCard key={car.id} car={car} />
@@ -99,9 +106,9 @@ export default function Home() {
               </Link>
             </Button>
           </div>
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {latestCars.map((car) => (
-              <CarListItem key={car.id} car={car} />
+              <CarCard key={car.id} car={car} />
             ))}
           </div>
         </div>
