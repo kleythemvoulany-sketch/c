@@ -11,7 +11,10 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <Image src="https://i.ibb.co/Xz9w2sT/alboursa-logo.png" alt="AlBoursa Logo" width={140} height={45} />
+              <h1 className="text-2xl font-bold">
+                <span className="text-accent">Al</span>
+                <span className="text-primary-foreground">Boursa</span>
+              </h1>
             </Link>
             <p className="text-primary-foreground/70 text-sm">
               المنصة الأولى في موريتانيا لبيع وشراء السيارات بأمان وسهولة.

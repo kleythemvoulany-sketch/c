@@ -44,7 +44,10 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-card text-card-foreground p-6">
               <Link href="/" className="flex items-center space-x-2 mb-8">
-                 <Image src="https://i.ibb.co/Xz9w2sT/alboursa-logo.png" alt="AlBoursa Logo" width={120} height={40} />
+                 <h1 className="text-2xl font-bold">
+                    <span className="text-accent">Al</span>
+                    <span className="text-primary">Boursa</span>
+                 </h1>
               </Link>
               <nav className="flex flex-col gap-4">
                 {navLinks.map((link) => (
@@ -63,7 +66,10 @@ export function SiteHeader() {
         
         <div className="mr-4 flex flex-1">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="https://i.ibb.co/Xz9w2sT/alboursa-logo.png" alt="AlBoursa Logo" width={140} height={45} />
+            <h1 className="text-3xl font-bold">
+                <span className="text-accent">Al</span>
+                <span className="text-primary">Boursa</span>
+            </h1>
           </Link>
         </div>
 
