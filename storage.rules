@@ -1,16 +1,11 @@
 rules_version = '2';
+
 service firebase.storage {
   match /b/{bucket}/o {
-    // جميع الملفات داخل مجلد listings
-    match /listings/{allPaths=**} {
-      allow read: if true;                // السماح للجميع بعرض الصور
-      allow write: if request.auth != null; // فقط المستخدمين المسجلين يمكنهم الرفع
-    }
-
-    // باقي الملفات
     match /{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
+      // Diagnostic rule: Allow all reads and writes temporarily.
+      // This is not secure for production.
+      allow read, write: if true;
     }
   }
 }
