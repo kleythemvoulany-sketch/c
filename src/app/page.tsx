@@ -45,29 +45,32 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-primary/10 py-6 sm:py-8">
-        <h2 className="container mx-auto mb-3 max-w-screen-2xl px-4 text-start text-2xl font-bold text-gray-800 sm:mb-6 sm:text-3xl">
-          البورصة الموثوقة
-        </h2>
-        <div className="relative flex items-center justify-center">
-          <div className="scrollbar-hide container block max-w-screen-2xl snap-none overflow-y-hidden overflow-x-scroll">
-            <div className="flex min-w-max justify-start gap-6 px-6 md:px-4 xl:px-3">
+      <section className="bg-primary/10 py-8 sm:py-12">
+        <div className="container">
+           <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800 md:text-3xl">
+              البورصة الموثوقة
+            </h2>
+            <Button variant="link" asChild>
+              <Link href="/listings">
+                عرض الكل
+              </Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 sm:gap-6 justify-center">
               {categories.map((category) => (
                 <Link href="/listings" key={category.name}>
-                  <div className="group flex min-w-[52px] cursor-pointer flex-col items-center *:duration-200 hover:scale-105 sm:min-w-[100px]">
-                    <div className="relative size-20 rounded-full p-4 transition-transform sm:size-[90px] lg:size-[105px] xl:size-28 bg-accent/10">
-                      <div className="relative flex h-full w-full items-center justify-center">
+                  <div className="group flex cursor-pointer flex-col items-center text-center *:duration-200 hover:scale-105">
+                    <div className="relative size-20 sm:size-24 lg:size-28 rounded-full p-4 transition-transform bg-accent/10 flex items-center justify-center">
                         <category.icon className="h-full w-full text-accent" />
-                      </div>
                     </div>
-                    <p className="m-0 mt-2 whitespace-nowrap text-center text-[12px] transition-colors sm:text-sm md:text-base group-hover:text-accent">
+                    <p className="m-0 mt-3 font-medium whitespace-nowrap text-sm md:text-base group-hover:text-accent">
                       {category.name}
                     </p>
                   </div>
                 </Link>
               ))}
             </div>
-          </div>
         </div>
       </section>
       
