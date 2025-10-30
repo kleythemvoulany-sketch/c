@@ -100,6 +100,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
                 alt={`${car.make} ${car.model}`}
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 66vw"
               />
               {car.featured && (
                 <Badge
@@ -122,6 +123,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
                     alt={`Gallery image ${i + 1}`}
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 25vw, 16vw"
                   />
                 </div>
               ))}
@@ -190,6 +192,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
                     alt="Mauritania Flag"
                     width={16}
                     height={12}
+                    className="h-auto"
                   />
                   <span className="text-xs text-white/80">+222</span>
                 </div>

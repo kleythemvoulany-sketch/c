@@ -91,7 +91,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 justify-center">
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <Link href="/listings" key={category.name}>
                 <div className="group flex cursor-pointer flex-col items-center text-center *:duration-200 hover:scale-105">
                   <div className="relative size-28 sm:size-32 lg:size-40 rounded-full transition-transform border-4 border-accent/20 group-hover:border-accent/50 overflow-hidden">
@@ -100,6 +100,8 @@ export default function Home() {
                       alt={category.name}
                       fill
                       className="object-cover"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                      priority={index < 4}
                     />
                   </div>
                   <p className="m-0 mt-3 font-medium whitespace-nowrap text-sm md:text-base group-hover:text-accent">
