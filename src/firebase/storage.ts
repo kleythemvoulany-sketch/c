@@ -30,6 +30,10 @@ export async function uploadImages(
   const totalFiles = files.length;
 
   const updateOverallProgress = () => {
+    if (Object.keys(progressByFile).length === 0) {
+      onProgress(0);
+      return;
+    }
     const totalProgress = Object.values(progressByFile).reduce((acc, curr) => acc + curr, 0);
     const overallPercentage = totalProgress / totalFiles;
     onProgress(overallPercentage);
@@ -55,9 +59,6 @@ export async function uploadImages(
         },
         (error) => {
           console.error(`Upload failed for file ${file.name}:`, error);
-          // In case of error, we can decide how to handle progress.
-          // For simplicity, we'll just stop tracking this file.
-          // A more robust solution might require aborting all uploads.
           delete progressByFile[fileId];
           updateOverallProgress();
           reject(error);

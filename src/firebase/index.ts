@@ -9,13 +9,12 @@ import { getStorage, Storage } from 'firebase/storage';
 let firebaseApp: FirebaseApp;
 
 // Initialize Firebase
-if (getApps().length) {
-  firebaseApp = getApp();
+if (!getApps().length) {
+  firebaseApp = initializeApp(firebaseConfig);
 } else {
-    firebaseApp = initializeApp(firebaseConfig);
+  firebaseApp = getApp();
 }
 
-// Get service instances, correctly associating them with the app instance
 const auth: Auth = getAuth(firebaseApp);
 const firestore: Firestore = getFirestore(firebaseApp);
 const storage: Storage = getStorage(firebaseApp);
