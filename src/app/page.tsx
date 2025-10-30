@@ -79,9 +79,9 @@ export default function Home() {
            <h2 className="mb-6 text-2xl font-semibold text-gray-800 md:text-3xl">
             عروض مميزة
           </h2>
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredCars.map((car) => (
-              <CarListItem key={car.id} car={car} />
+              <CarCard key={car.id} car={car} />
             ))}
           </div>
         </div>
