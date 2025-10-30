@@ -17,50 +17,29 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const firestore = useFirestore();
-  const { isUserLoading } = useUser();
+  const { user, isUserLoading } = useUser();
 
-  const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
-  const [latestCars, setLatestCars] = useState<Car[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const featuredQuery = useMemoFirebase(
+    () =>
+      firestore && !isUserLoading
+        ? query(collectionGroup(firestore, 'listings'), where('featured', '==', true), limit(4))
+        : null,
+    [firestore, isUserLoading]
+  );
+  const { data: featuredCars, isLoading: isFeaturedLoading } = useCollection<Car>(featuredQuery);
 
-  useEffect(() => {
-    if (firestore && !isUserLoading) {
-      const fetchCars = async () => {
-        setIsLoading(true);
-        try {
-          // Fetch Featured Cars
-          const featuredQuery = query(
-            collectionGroup(firestore, 'listings'),
-            where('featured', '==', true),
-            limit(4)
-          );
-          const featuredSnapshot = await getDocs(featuredQuery);
-          const featuredData = featuredSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Car));
-          setFeaturedCars(featuredData);
+  const latestQuery = useMemoFirebase(
+    () =>
+      firestore && !isUserLoading
+        ? query(collectionGroup(firestore, 'listings'), orderBy('listingDate', 'desc'), limit(8))
+        : null,
+    [firestore, isUserLoading]
+  );
+  const { data: latestCars, isLoading: isLatestLoading } = useCollection<Car>(latestQuery);
 
-          // Fetch Latest Cars
-          const latestQuery = query(
-            collectionGroup(firestore, 'listings'),
-            orderBy('listingDate', 'desc'),
-            limit(8)
-          );
-          const latestSnapshot = await getDocs(latestQuery);
-          const latestData = latestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Car));
-          setLatestCars(latestData);
+  const showFeaturedSkeletons = isUserLoading || isFeaturedLoading;
+  const showLatestSkeletons = isUserLoading || isLatestLoading;
 
-        } catch (error) {
-          console.error("Error fetching cars:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchCars();
-    }
-  }, [firestore, isUserLoading]);
-
-
-  const showSkeletons = isLoading || isUserLoading;
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
@@ -139,7 +118,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {showSkeletons
+            {showFeaturedSkeletons
               ? Array.from({ length: 4 }).map((_, i) => (
                   <Card key={i}>
                     <Skeleton className="h-56 w-full" />
@@ -171,7 +150,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {showSkeletons
+            {showLatestSkeletons
               ? Array.from({ length: 8 }).map((_, i) => (
                    <Card key={i}>
                     <Skeleton className="h-56 w-full" />
