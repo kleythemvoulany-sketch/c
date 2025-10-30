@@ -9,6 +9,7 @@ import {
   PlusCircle,
   Sun,
   User,
+  UserPlus,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -94,6 +95,12 @@ export function SiteHeader() {
               </Button>
           ) : (
             <>
+              <Button variant="ghost" asChild className="text-primary-foreground hover:bg-white/10 hidden sm:flex">
+                <Link href="/signup">
+                  <UserPlus className="ml-2 h-4 w-4" />
+                  إنشاء حساب
+                </Link>
+              </Button>
               <Button variant="secondary" asChild className="bg-white text-primary hover:bg-white/90 hidden sm:flex">
                 <Link href="/login">
                   تسجيل الدخول
@@ -113,7 +120,7 @@ export function SiteHeader() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="text-primary-foreground hover:bg-white/10 px-2 sm:px-3">
                 <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={24} height={18} className="rounded-sm"/>
-                <span className="hidden sm:inline-block mr-2">العربية</span>
+                <span className="sm:inline-block mr-2 hidden">العربية</span>
                 <span className="sr-only">Change language</span>
               </Button>
             </DropdownMenuTrigger>
