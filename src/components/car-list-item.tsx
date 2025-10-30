@@ -46,7 +46,7 @@ export function CarListItem({ car }: CarListItemProps) {
               {car.make} {car.model}
             </h3>
             <p className="text-2xl font-bold text-accent mt-1 mb-3">
-              {new Intl.NumberFormat("ar-MR", { style: 'currency', currency: 'MRU', minimumFractionDigits: 0 }).format(car.price)}
+              {new Intl.NumberFormat("en-US", { style: 'currency', currency: 'MRU', minimumFractionDigits: 0 }).format(car.price)}
             </p>
           </Link>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm text-muted-foreground mb-4">
@@ -56,7 +56,7 @@ export function CarListItem({ car }: CarListItemProps) {
             </div>
             <div className="flex items-center gap-2">
               <Gauge className="w-4 h-4 text-primary/70" />
-              <span>{new Intl.NumberFormat().format(car.mileage)} كم</span>
+              <span>{new Intl.NumberFormat('en-US').format(car.mileage)} كم</span>
             </div>
             <div className="flex items-center gap-2">
               <Fuel className="w-4 h-4 text-primary/70" />

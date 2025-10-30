@@ -22,7 +22,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
     { label: "سنة الصنع", value: car.year, icon: Calendar },
     { label: "ناقل الحركة", value: car.transmission, icon: Wrench },
     { label: "الوقود", value: car.fuelType, icon: Fuel },
-    { label: "الكيلومترات", value: `${new Intl.NumberFormat().format(car.mileage)} كم`, icon: Gauge },
+    { label: "الكيلومترات", value: `${new Intl.NumberFormat('en-US').format(car.mileage)} كم`, icon: Gauge },
     { label: "اللون", value: car.color, icon: Palette },
     { label: "البلد", value: "موريتانيا", icon: MapPin },
     { label: "المدينة", value: car.location, icon: MapPin },
@@ -69,7 +69,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
             <h1 className="text-3xl font-bold font-headline text-primary">
                 {car.make} {car.model}
             </h1>
-            <p className="text-4xl font-bold text-accent">{new Intl.NumberFormat('ar-MR', { style: 'currency', currency: 'MRU', minimumFractionDigits: 0 }).format(car.price)}</p>
+            <p className="text-4xl font-bold text-accent">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MRU', minimumFractionDigits: 0 }).format(car.price)}</p>
 
             <Separator />
             
