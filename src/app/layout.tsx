@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Toaster } from "@/components/ui/toaster";
-import { Alexandria }from "next/font/google";
+import { Alexandria } from "next/font/google";
 
 const alexandria = Alexandria({
   subsets: ["arabic"],
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html lang="ar" dir="rtl">
       <body
         className={cn(
           "min-h-screen bg-background antialiased font-sans",
