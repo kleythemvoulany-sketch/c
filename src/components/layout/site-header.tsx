@@ -94,9 +94,8 @@ export function SiteHeader() {
               </Button>
           ) : (
             <>
-              <Button variant="ghost" asChild className="text-primary-foreground hover:bg-white hover:text-primary hidden sm:flex">
+              <Button variant="secondary" asChild className="bg-white text-primary hover:bg-white/90 hidden sm:flex">
                 <Link href="/login">
-                  <LogIn className="ml-2 h-4 w-4" />
                   تسجيل الدخول
                 </Link>
               </Button>
