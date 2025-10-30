@@ -50,7 +50,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
               {car.make} {car.model} - {car.year}
             </h3>
             <p className="text-2xl font-bold text-accent">
-              {new Intl.NumberFormat("ar-MR").format(car.price)} أوقية
+              {new Intl.NumberFormat("ar-MR", { style: 'currency', currency: 'MRU', minimumFractionDigits: 0 }).format(car.price)}
             </p>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
               <div className="flex items-center gap-2">

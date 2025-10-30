@@ -131,12 +131,12 @@ export default function Home() {
             المنصة الأولى في موريتانيا لبيع وشراء السيارات بأمان وسهولة.
           </p>
           <div className="mt-6 flex justify-center gap-4">
-            <Button size="lg" variant="secondary" className="bg-accent hover:bg-accent/90 text-primary-foreground" asChild>
+            <Button size="lg" variant="secondary" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
               <Link href="/listings/new">
                 أعلن عن سيارتك مجاناً
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-accent text-accent hover:bg-accent hover:text-primary-foreground">
+            <Button size="lg" variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
               اتصل بنا: 34949470
             </Button>
           </div>

@@ -18,7 +18,7 @@ export function SiteFooter() {
             <p className="text-muted-foreground text-sm">
               المنصة الأولى في موريتانيا لبيع وشراء السيارات بأمان وسهولة.
             </p>
-            <div className="flex space-x-4 mt-4">
+            <div className="flex space-x-4 mt-4" dir="ltr">
               <a href="#" target="_blank" rel="noopener noreferrer">
                 <Facebook className="h-6 w-6 text-muted-foreground hover:text-primary" />
               </a>
@@ -57,7 +57,7 @@ export function SiteFooter() {
             <p className="text-sm text-muted-foreground mb-3">اشترك لتصلك آخر العروض.</p>
             <div className="flex w-full max-w-sm items-center space-x-2 space-x-reverse">
               <Input type="email" placeholder="بريدك الإلكتروني" />
-              <Button type="submit" className="bg-accent hover:bg-accent/90 text-primary-foreground">اشتراك</Button>
+              <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground">اشتراك</Button>
             </div>
           </div>
         </div>
