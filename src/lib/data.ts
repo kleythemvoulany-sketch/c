@@ -1,4 +1,4 @@
-import { CarTaxiFront, LucideIcon, ShieldCheck, Snowflake, Truck, Car } from 'lucide-react';
+import { LucideIcon, ShieldCheck, Palmtree, Castle, Leaf } from 'lucide-react';
 
 export type Car = {
     id: number;
@@ -208,12 +208,10 @@ export const cars: Car[] = [
 ];
 
 export const categories: Category[] = [
-    { name: 'سيارات الدفع الرباعي', icon: Car },
-    { name: 'سيارات الصالون', icon: CarTaxiFront },
-    { name: 'سيارات فاخرة', icon: ShieldCheck },
-    { name: 'سيارات عائلية', icon: CarTaxiFront },
-    { name: 'شاحنات', icon: Truck },
-    { name: 'سيارات كهربائية', icon: Snowflake },
+    { name: 'بورصة النخيل', icon: Palmtree },
+    { name: 'بورصة الأندلس', icon: Castle },
+    { name: 'بورصة الأمانة', icon: ShieldCheck },
+    { name: 'بورصة الواحة', icon: Leaf },
 ];
 
 export const testimonials = [
