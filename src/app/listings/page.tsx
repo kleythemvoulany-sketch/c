@@ -13,28 +13,37 @@ import {
 import { Car } from '@/lib/data';
 import { Filter, List, LayoutGrid } from 'lucide-react';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection } from 'firebase/firestore';
+import { collection, getDocs, collectionGroup } from 'firebase/firestore';
 import { useFirestore, useUser } from '@/firebase';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMemoFirebase } from '@/firebase/provider';
+import { useEffect, useState } from 'react';
 
 export default function ListingsPage() {
   const firestore = useFirestore();
   const { isUserLoading } = useUser();
+  const [cars, setCars] = useState<Car[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const carsQuery = useMemoFirebase(
-    () =>
-      firestore && !isUserLoading
-        ? collection(firestore, 'vehicleListings')
-        : null,
-    [firestore, isUserLoading]
-  );
+  useEffect(() => {
+    if (firestore && !isUserLoading) {
+      const fetchAllListings = async () => {
+        setIsLoading(true);
+        try {
+          const listingsQuery = collectionGroup(firestore, 'listings');
+          const querySnapshot = await getDocs(listingsQuery);
+          const allCars = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Car));
+          setCars(allCars);
+        } catch (error) {
+          console.error("Error fetching all listings:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchAllListings();
+    }
+  }, [firestore, isUserLoading]);
 
-  const {
-    data: cars,
-    isLoading,
-    error,
-  } = useCollection<Car>(carsQuery);
 
   const showSkeletons = isLoading || isUserLoading;
 

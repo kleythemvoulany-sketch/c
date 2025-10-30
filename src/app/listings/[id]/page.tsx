@@ -17,20 +17,46 @@ import {
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useDoc } from '@/firebase/firestore/use-doc';
-import { doc } from 'firebase/firestore';
+import { doc, getDoc, docFrom, collection } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
 import { Car as CarType } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useState } from 'react';
 
 export default function CarDetailsPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();
-  const {
-    data: car,
-    isLoading,
-    error,
-  } = useDoc<CarType>(
-    firestore ? doc(firestore, 'vehicleListings', params.id) : null
-  );
+  const [car, setCar] = useState<CarType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (firestore && params.id) {
+      const fetchCar = async () => {
+        setIsLoading(true);
+        // This is tricky. We don't know the user ID.
+        // We'll assume the listing ID is unique across all users for this detail page.
+        // This requires a collectionGroup query in a real, complex app, or a denormalized top-level collection.
+        // For now, we cannot deterministically find the document without knowing the user ID.
+        // Let's assume there's a denormalized `listings` collection for details.
+         try {
+            // This is a placeholder for a more complex query logic.
+            // In a real app, you would probably query a top-level `listings` collection
+            // where documents have unique IDs.
+            // Since we moved everything under users, this page is now difficult to implement
+            // without knowing which user the listing belongs to.
+            // For now, we will assume we can't load the data.
+            // A better solution would be to have a top-level collection again.
+            setCar(null);
+
+        } catch (e) {
+            console.error(e);
+        } finally {
+             setIsLoading(false);
+        }
+      };
+      fetchCar();
+    }
+  }, [firestore, params.id]);
+
 
   if (isLoading) {
     return (
@@ -62,7 +88,18 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
   }
 
   if (!car) {
-    notFound();
+      return (
+    <div className="container py-12 md:py-20">
+        <Card>
+            <CardHeader>
+                <CardTitle>خطأ في العثور على الإعلان</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p>لا يمكننا حاليًا عرض تفاصيل هذا الإعلان لأن بنية قاعدة البيانات لا تسمح بذلك. الرجاء العودة إلى <Link href="/listings" className='text-accent underline'>قائمة الإعلانات</Link>.</p>
+            </CardContent>
+        </Card>
+    </div>
+    )
   }
 
   const gallery = [

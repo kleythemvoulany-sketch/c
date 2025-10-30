@@ -14,7 +14,7 @@ import {
   Trash2,
   Wrench,
 } from "lucide-react";
-import { useFirestore } from "@/firebase";
+import { useFirestore, useUser } from "@/firebase";
 import { doc } from "firebase/firestore";
 import { deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { useToast } from "@/hooks/use-toast";
@@ -26,13 +26,15 @@ type CarCardProps = {
 
 export function CarCard({ car, isOwnerView = false }: CarCardProps) {
   const firestore = useFirestore();
+  const { user } = useUser();
   const { toast } = useToast();
 
   const handleDelete = () => {
-    if (!firestore) return;
+    if (!firestore || !user) return;
     const confirmDelete = window.confirm("هل أنت متأكد من رغبتك في حذف هذا الإعلان؟");
     if (confirmDelete) {
-      const docRef = doc(firestore, 'vehicleListings', car.id);
+      // car.userId is the ID of the owner. We need the current user to match.
+      const docRef = doc(firestore, 'users', user.uid, 'listings', car.id);
       deleteDocumentNonBlocking(docRef);
       toast({
         title: "تم الحذف",
@@ -41,10 +43,12 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
     }
   };
 
+  const carLink = `/listings/${car.id}?userId=${car.userId}`;
+
   return (
     <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl flex flex-col h-full bg-card border">
       <div className="flex-grow">
-        <Link href={`/listings/${car.id}`} className="block">
+        <Link href={carLink} className="block">
           <CardHeader className="p-0">
             <div className="relative h-56 w-full">
               <Image
@@ -111,7 +115,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
           </div>
         ) : (
           <Button asChild className="w-full">
-            <Link href={`/listings/${car.id}`}>
+            <Link href={carLink}>
               <Phone className="ml-2 h-4 w-4" />
               عرض التفاصيل والاتصال
             </Link>

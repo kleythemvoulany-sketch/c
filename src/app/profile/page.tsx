@@ -38,10 +38,7 @@ export default function ProfilePage() {
   const userListingsQuery = useMemoFirebase(
     () =>
       firestore && user
-        ? query(
-            collection(firestore, 'vehicleListings'),
-            where('userId', '==', user.uid)
-          )
+        ? collection(firestore, 'users', user.uid, 'listings')
         : null,
     [firestore, user]
   );

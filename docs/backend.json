@@ -66,7 +66,7 @@
         },
         "fuelType": {
           "type": "string",
-          "description": "Type of fuel the vehicle uses (e.g., бенزين)."
+          "description": "Type of fuel the vehicle uses (e.g., бензин)."
         },
         "transmission": {
           "type": "string",
@@ -319,24 +319,8 @@
             }
           ]
         }
-      },
-      {
-        "path": "/listings/{listingId}",
-        "definition": {
-          "entityName": "VehicleListing",
-          "schema": {
-            "$ref": "#/backend/entities/VehicleListing"
-          },
-          "description": "Stores a denormalized collection of publicly accessible vehicle listings. This allows for efficient listing and filtering across all users without requiring complex security rules or `get()` calls.",
-          "params": [
-            {
-              "name": "listingId",
-              "description": "The unique identifier for the vehicle listing."
-            }
-          ]
-        }
       }
     ],
-    "reasoning": "The Firestore structure is designed to support AlBoursa Cars, a platform for buying and selling new and used cars in Mauritania. It prioritizes authorization independence, clarity, and security using path-based ownership for user-related data and segregated collections for different data types. Each listing is owned by a specific user, enabling straightforward security rules. This design avoids hierarchical `get()` calls in security rules, ensuring atomic operations and debuggability. Segregation of data with different access needs (e.g., user-owned listings vs. FAQs) into separate collections simplifies security rules and list operations.\n\n*   **Authorization Independence (CRITICAL):** Path-based ownership is used. The `VehicleListing` documents are stored within the `users/{userId}/listings/{listingId}` path, eliminating the need to fetch parent document attributes within the security rules.\n*   **DBAC:** There is no role-based access control required, given the application requirements. Authentication relies solely on `request.auth.uid`.\n*   **QAPs:** Listing operations for `users/{userId}/listings` are securely managed through path-based ownership. Public listing retrieval is supported by a separate `listings` collection, which can contain denormalized listing data to enable filtering and listing without complex rules.\n*   **Contact Messages:** Stored in a top-level `contactMessages` collection, allowing simple rules to manage access to these messages."
+    "reasoning": "The Firestore structure is designed to support AlBoursa Cars, a platform for buying and selling new and used cars in Mauritania. It prioritizes authorization independence, clarity, and security using path-based ownership for user-related data. Each listing is owned by a specific user and stored in a subcollection. This design allows for collectionGroup queries to fetch all listings publicly while enabling straightforward security rules for write operations (a user can only write to their own `listings` subcollection). This design avoids hierarchical `get()` calls in security rules, ensuring atomic operations and debuggability. Segregation of data with different access needs (e.g., user-owned listings vs. FAQs) into separate collections simplifies security rules and list operations.\n\n*   **Authorization Independence (CRITICAL):** Path-based ownership is used. The `VehicleListing` documents are stored within the `users/{userId}/listings/{listingId}` path.\n*   **DBAC:** There is no role-based access control required. Authentication relies solely on `request.auth.uid`.\n*   **QAPs:** Public listing is handled by a collectionGroup query on `listings`. Write operations are secured via `request.auth.uid == userId`."
   }
 }

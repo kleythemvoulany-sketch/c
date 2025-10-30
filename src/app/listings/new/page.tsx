@@ -160,10 +160,11 @@ export default function NewListingPage() {
     try {
       const imageUrls = await uploadImages(imageFiles, setUploadProgress);
       
-      const collectionRef = collection(firestore, 'listings');
-      await addDoc(collectionRef, {
+      // Create listing in the user's subcollection
+      const userListingsRef = collection(firestore, 'users', user.uid, 'listings');
+      await addDoc(userListingsRef, {
         ...values,
-        userId: user.uid,
+        userId: user.uid, // Keep for reference
         listingDate: serverTimestamp(),
         isFeatured: false,
         viewCount: 0,
@@ -172,6 +173,7 @@ export default function NewListingPage() {
         year: Number(values.year), // Convert year to number
         location: values.city, // Use city as location
       });
+
 
       toast({
         title: 'تم بنجاح!',

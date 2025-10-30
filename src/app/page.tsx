@@ -6,50 +6,61 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 import { categories } from '@/lib/data';
-import { CarListItem } from '@/components/car-list-item';
 import { CarCard } from '@/components/car-card';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, query, where, limit, orderBy } from 'firebase/firestore';
+import { collection, query, where, limit, orderBy, getDocs, collectionGroup } from 'firebase/firestore';
 import { useFirestore, useUser } from '@/firebase';
 import { Car } from '@/lib/data';
 import { useMemoFirebase } from '@/firebase/provider';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const firestore = useFirestore();
   const { isUserLoading } = useUser();
 
-  const featuredQuery = useMemoFirebase(
-    () =>
-      firestore && !isUserLoading
-        ? query(
-            collection(firestore, 'vehicleListings'),
-            where('isFeatured', '==', true),
-            limit(4)
-          )
-        : null,
-    [firestore, isUserLoading]
-  );
+  const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
+  const [latestCars, setLatestCars] = useState<Car[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const latestQuery = useMemoFirebase(
-    () =>
-      firestore && !isUserLoading
-        ? query(
-            collection(firestore, 'vehicleListings'),
+  useEffect(() => {
+    if (firestore && !isUserLoading) {
+      const fetchCars = async () => {
+        setIsLoading(true);
+        try {
+          // Fetch Featured Cars
+          const featuredQuery = query(
+            collectionGroup(firestore, 'listings'),
+            where('featured', '==', true),
+            limit(4)
+          );
+          const featuredSnapshot = await getDocs(featuredQuery);
+          const featuredData = featuredSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Car));
+          setFeaturedCars(featuredData);
+
+          // Fetch Latest Cars
+          const latestQuery = query(
+            collectionGroup(firestore, 'listings'),
             orderBy('listingDate', 'desc'),
             limit(8)
-          )
-        : null,
-    [firestore, isUserLoading]
-  );
+          );
+          const latestSnapshot = await getDocs(latestQuery);
+          const latestData = latestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Car));
+          setLatestCars(latestData);
 
-  const { data: featuredCars, isLoading: isLoadingFeatured } =
-    useCollection<Car>(featuredQuery);
-  const { data: latestCars, isLoading: isLoadingLatest } =
-    useCollection<Car>(latestQuery);
+        } catch (error) {
+          console.error("Error fetching cars:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
 
-  const showFeaturedSkeletons = isLoadingFeatured || isUserLoading;
-  const showLatestSkeletons = isLoadingLatest || isUserLoading;
+      fetchCars();
+    }
+  }, [firestore, isUserLoading]);
+
+
+  const showSkeletons = isLoading || isUserLoading;
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
@@ -103,7 +114,6 @@ export default function Home() {
                       src={category.image}
                       alt={category.name}
                       fill
-                      className="object-cover"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
                       priority={index < 4}
                     />
@@ -129,7 +139,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {showFeaturedSkeletons
+            {showSkeletons
               ? Array.from({ length: 4 }).map((_, i) => (
                   <Card key={i}>
                     <Skeleton className="h-56 w-full" />
@@ -161,7 +171,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {showLatestSkeletons
+            {showSkeletons
               ? Array.from({ length: 8 }).map((_, i) => (
                    <Card key={i}>
                     <Skeleton className="h-56 w-full" />
