@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Toaster } from "@/components/ui/toaster";
-import { Alexandria } from "next/font/google";
+import { Alexandria }from "next/font/google";
 
 const alexandria = Alexandria({
   subsets: ["arabic"],
@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-secondary antialiased",
+          "min-h-screen bg-secondary antialiased font-sans",
           alexandria.variable
         )}
       >
