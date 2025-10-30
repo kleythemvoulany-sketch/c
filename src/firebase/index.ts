@@ -7,29 +7,18 @@ import { getFirestore, Firestore } from 'firebase/firestore';
 import { getStorage, Storage } from 'firebase/storage';
 
 let firebaseApp: FirebaseApp;
-let auth: Auth;
-let firestore: Firestore;
-let storage: Storage;
 
 // Initialize Firebase
 if (getApps().length) {
   firebaseApp = getApp();
 } else {
-  try {
-    // This might fail in some environments (e.g. server-side) if env vars aren't set
-    firebaseApp = initializeApp();
-  } catch (e) {
-    if (process.env.NODE_ENV === "production") {
-      console.warn('Automatic initialization failed. Falling back to firebase config object.', e);
-    }
     firebaseApp = initializeApp(firebaseConfig);
-  }
 }
 
 // Get service instances, correctly associating them with the app instance
-auth = getAuth(firebaseApp);
-firestore = getFirestore(firebaseApp);
-storage = getStorage(firebaseApp);
+const auth: Auth = getAuth(firebaseApp);
+const firestore: Firestore = getFirestore(firebaseApp);
+const storage: Storage = getStorage(firebaseApp);
 
 export { firebaseApp, auth, firestore, storage };
 
