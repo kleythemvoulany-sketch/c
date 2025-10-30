@@ -32,12 +32,12 @@ export function SiteHeader() {
   const { setTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-card text-card-foreground">
+    <header className="sticky top-0 z-40 w-full border-b bg-primary text-primary-foreground">
       <div className="container flex h-16 items-center sm:h-20">
         <div className="md:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted/50">
+              <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle Menu</span>
               </Button>
@@ -68,7 +68,7 @@ export function SiteHeader() {
           <Link href="/" className="flex items-center space-x-2">
             <h1 className="text-3xl font-bold">
                 <span className="text-accent">Al</span>
-                <span className="text-primary">Boursa</span>
+                <span className="text-primary-foreground">Boursa</span>
             </h1>
           </Link>
         </div>
@@ -81,7 +81,7 @@ export function SiteHeader() {
             </Link>
           </Button>
 
-          <Button variant="ghost" size="icon" asChild className="text-foreground hover:bg-muted/50">
+          <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-white/10">
             <Link href="/profile">
               <User className="h-5 w-5" />
                <span className="sr-only">Profile</span>
@@ -90,27 +90,36 @@ export function SiteHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted/50">
+              <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10">
                 <Globe className="h-5 w-5" />
                 <span className="sr-only">Change language</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
-                العربية
+                <div className="flex items-center gap-2">
+                  <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
+                  <span>العربية</span>
+                </div>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                English
+                <div className="flex items-center gap-2">
+                   <Image src="https://flagcdn.com/gb.svg" alt="Great Britain Flag" width={20} height={15} />
+                  <span>English</span>
+                </div>
               </DropdownMenuItem>
                <DropdownMenuItem>
-                Français
+                <div className="flex items-center gap-2">
+                   <Image src="https://flagcdn.com/fr.svg" alt="France Flag" width={20} height={15} />
+                  <span>Français</span>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted/50">
+              <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10">
                 <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                 <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                 <span className="sr-only">Toggle theme</span>
