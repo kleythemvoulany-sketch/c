@@ -23,10 +23,17 @@ const initialState = {
   error: "",
 };
 
-function SubmitButton() {
+function SubmitButton({ formAction, currentDescription }: { formAction: (payload: FormData) => void; currentDescription: string; }) {
   const { pending } = useFormStatus();
+
+  const handleClick = () => {
+    const formData = new FormData();
+    formData.append('adDescription', currentDescription);
+    formAction(formData);
+  };
+
   return (
-    <Button type="submit" disabled={pending}>
+    <Button type="button" onClick={handleClick} disabled={pending}>
       {pending ? (
         <>
           <Sparkles className="mr-2 h-4 w-4 animate-spin" />
@@ -85,10 +92,7 @@ export function AiAdImprover({ currentDescription, onDescriptionChange }: AiAdIm
         onChange={(e) => onDescriptionChange(e.target.value)}
       />
        <div className="pt-2">
-         <div action={formAction}>
-           <input type="hidden" name="adDescription" value={currentDescription} />
-           <SubmitButton />
-         </div>
+          <SubmitButton formAction={formAction} currentDescription={currentDescription} />
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
