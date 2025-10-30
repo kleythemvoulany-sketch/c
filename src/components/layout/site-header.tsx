@@ -9,6 +9,7 @@ import {
   Sun,
   User,
 } from "lucide-react";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,7 +44,7 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-primary text-primary-foreground p-6">
               <Link href="/" className="flex items-center space-x-2 mb-8">
-                <span className="font-bold text-xl text-white">البورصة للسيارات</span>
+                 <Image src="https://i.ibb.co/fhZ6DLx/1-upscayl-5x-upscayl-standard-4x.png" alt="AlBoursa Logo" width={120} height={40} />
               </Link>
               <nav className="flex flex-col gap-4">
                 {navLinks.map((link) => (
@@ -62,7 +63,7 @@ export function SiteHeader() {
         
         <div className="mr-4 flex flex-1">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="font-bold text-xl text-white">البورصة للسيارات</span>
+            <Image src="https://i.ibb.co/fhZ6DLx/1-upscayl-5x-upscayl-standard-4x.png" alt="AlBoursa Logo" width={140} height={45} />
           </Link>
         </div>
 

@@ -2,6 +2,7 @@ import { Facebook, Instagram, Linkedin, MessageCircle, Twitter } from "lucide-re
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import Image from "next/image";
 
 export function SiteFooter() {
   return (
@@ -10,9 +11,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <span className="font-bold text-xl">
-                البورصة للسيارات
-              </span>
+              <Image src="https://i.ibb.co/fhZ6DLx/1-upscayl-5x-upscayl-standard-4x.png" alt="AlBoursa Logo" width={140} height={45} />
             </Link>
             <p className="text-primary-foreground/70 text-sm">
               المنصة الأولى في موريتانيا لبيع وشراء السيارات بأمان وسهولة.
