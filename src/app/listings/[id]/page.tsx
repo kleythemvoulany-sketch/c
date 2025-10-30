@@ -24,9 +24,10 @@ import { Car as CarType } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMemoFirebase } from '@/firebase/provider';
 
+// Corrected PageProps interface
 interface PageProps {
   params: { id: string };
-};
+}
 
 export default function CarDetailsPage({ params }: PageProps) {
   const firestore = useFirestore();
