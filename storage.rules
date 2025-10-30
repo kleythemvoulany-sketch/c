@@ -1,9 +1,13 @@
+// Version 1.1 - Final Rules for Upload
 rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
+    // Allow anyone to read any file. This is necessary for public listings.
     match /{allPaths=**} {
       allow read;
+      // Only allow authenticated users to write (upload, update, delete).
+      // This is the most critical rule to fix the "storage/unauthorized" error.
       allow write: if request.auth != null;
     }
   }
