@@ -1,5 +1,4 @@
 'use client';
-import { AiAdImprover } from '@/components/ai-ad-improver';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -32,7 +31,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth, useFirestore } from '@/firebase';
+import { useFirestore } from '@/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase/provider';
@@ -189,7 +188,8 @@ export default function NewListingPage() {
         title: 'حدث خطأ',
         description: 'فشل في نشر الإعلان. الرجاء المحاولة مرة أخرى.',
       });
-      setUploadProgress(null);
+    } finally {
+        setUploadProgress(null);
     }
   };
 
@@ -485,10 +485,14 @@ export default function NewListingPage() {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                         <AiAdImprover
-                          currentDescription={field.value}
-                          onDescriptionChange={(newDesc) => field.onChange(newDesc)}
-                        />
+                        <FormLabel>الوصف</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="مثال: سيارة نظيفة جدًا، بحالة ممتازة من الداخل والخارج، جاهزة للاستعمال..."
+                            rows={6}
+                            {...field}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
