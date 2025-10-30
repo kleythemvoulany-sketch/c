@@ -13,20 +13,19 @@ import {
 import { Car } from '@/lib/data';
 import { Filter, List, LayoutGrid } from 'lucide-react';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, getDocs, collectionGroup, query } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 import { useFirestore, useUser } from '@/firebase';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMemoFirebase } from '@/firebase/provider';
-import { useEffect, useState } from 'react';
 
 export default function ListingsPage() {
   const firestore = useFirestore();
-  const { user, isUserLoading } = useUser();
+  const { isUserLoading } = useUser();
 
   const allListingsQuery = useMemoFirebase(
     () =>
       firestore && !isUserLoading
-        ? query(collectionGroup(firestore, 'listings'))
+        ? query(collection(firestore, 'listings'))
         : null,
     [firestore, isUserLoading]
   );

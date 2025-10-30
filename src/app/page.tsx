@@ -8,21 +8,20 @@ import Link from 'next/link';
 import { categories } from '@/lib/data';
 import { CarCard } from '@/components/car-card';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, query, where, limit, orderBy, getDocs, collectionGroup } from 'firebase/firestore';
+import { collection, query, where, limit, orderBy } from 'firebase/firestore';
 import { useFirestore, useUser } from '@/firebase';
 import { Car } from '@/lib/data';
 import { useMemoFirebase } from '@/firebase/provider';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useEffect, useState } from 'react';
 
 export default function Home() {
   const firestore = useFirestore();
-  const { user, isUserLoading } = useUser();
+  const { isUserLoading } = useUser();
 
   const featuredQuery = useMemoFirebase(
     () =>
       firestore && !isUserLoading
-        ? query(collectionGroup(firestore, 'listings'), where('featured', '==', true), limit(4))
+        ? query(collection(firestore, 'listings'), where('featured', '==', true), limit(4))
         : null,
     [firestore, isUserLoading]
   );
@@ -31,7 +30,7 @@ export default function Home() {
   const latestQuery = useMemoFirebase(
     () =>
       firestore && !isUserLoading
-        ? query(collectionGroup(firestore, 'listings'), orderBy('listingDate', 'desc'), limit(8))
+        ? query(collection(firestore, 'listings'), orderBy('listingDate', 'desc'), limit(8))
         : null,
     [firestore, isUserLoading]
   );

@@ -160,11 +160,10 @@ export default function NewListingPage() {
     try {
       const imageUrls = await uploadImages(imageFiles, setUploadProgress);
       
-      // Create listing in the user's subcollection
-      const userListingsRef = collection(firestore, 'users', user.uid, 'listings');
-      await addDoc(userListingsRef, {
+      const listingsRef = collection(firestore, 'listings');
+      await addDoc(listingsRef, {
         ...values,
-        userId: user.uid, // Keep for reference
+        userId: user.uid,
         listingDate: serverTimestamp(),
         isFeatured: false,
         viewCount: 0,

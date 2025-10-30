@@ -253,18 +253,14 @@
         }
       },
       {
-        "path": "/users/{userId}/listings/{listingId}",
+        "path": "/listings/{listingId}",
         "definition": {
           "entityName": "VehicleListing",
           "schema": {
             "$ref": "#/backend/entities/VehicleListing"
           },
-          "description": "Stores vehicle listings owned by a specific user. This structure enables path-based ownership for secure access.",
+          "description": "Stores all vehicle listings in a single top-level collection.",
           "params": [
-            {
-              "name": "userId",
-              "description": "The unique identifier of the user who owns the listing."
-            },
             {
               "name": "listingId",
               "description": "The unique identifier for the vehicle listing."
@@ -321,6 +317,6 @@
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to support AlBoursa Cars, a platform for buying and selling new and used cars in Mauritania. It prioritizes authorization independence, clarity, and security using path-based ownership for user-related data. Each listing is owned by a specific user and stored in a subcollection. This design allows for collectionGroup queries to fetch all listings publicly while enabling straightforward security rules for write operations (a user can only write to their own `listings` subcollection). This design avoids hierarchical `get()` calls in security rules, ensuring atomic operations and debuggability. Segregation of data with different access needs (e.g., user-owned listings vs. FAQs) into separate collections simplifies security rules and list operations.\n\n*   **Authorization Independence (CRITICAL):** Path-based ownership is used. The `VehicleListing` documents are stored within the `users/{userId}/listings/{listingId}` path.\n*   **DBAC:** There is no role-based access control required. Authentication relies solely on `request.auth.uid`.\n*   **QAPs:** Public listing is handled by a collectionGroup query on `listings`. Write operations are secured via `request.auth.uid == userId`."
+    "reasoning": "The Firestore structure has been simplified to use a top-level `listings` collection. This change was made to resolve persistent permission issues related to collectionGroup queries in the development environment. This flat structure simplifies queries and security rules, making the application more robust and easier to debug. Public data (listings, faqs) is kept separate from private user data (users). Authorization for writes on listings is now handled within the security rules by checking if the listing's `userId` field matches the authenticated user's `uid`."
   }
 }

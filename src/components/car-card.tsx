@@ -31,10 +31,17 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
 
   const handleDelete = () => {
     if (!firestore || !user) return;
+    if (user.uid !== car.userId) {
+        toast({
+            variant: "destructive",
+            title: "خطأ",
+            description: "لا يمكنك حذف إعلان لا تملكه.",
+        });
+        return;
+    }
     const confirmDelete = window.confirm("هل أنت متأكد من رغبتك في حذف هذا الإعلان؟");
     if (confirmDelete) {
-      // car.userId is the ID of the owner. We need the current user to match.
-      const docRef = doc(firestore, 'users', user.uid, 'listings', car.id);
+      const docRef = doc(firestore, 'listings', car.id);
       deleteDocumentNonBlocking(docRef);
       toast({
         title: "تم الحذف",
@@ -43,7 +50,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
     }
   };
 
-  const carLink = `/listings/${car.id}?userId=${car.userId}`;
+  const carLink = `/listings/${car.id}`;
 
   return (
     <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl flex flex-col h-full bg-card border">
