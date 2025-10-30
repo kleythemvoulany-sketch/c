@@ -74,7 +74,7 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <div className="flex flex-none items-center justify-end space-x-2">
+        <div className="flex flex-none items-center justify-end space-x-4">
           <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground hidden sm:flex">
             <Link href="/listings/new">
               <PlusCircle className="mr-2 h-4 w-4" />
