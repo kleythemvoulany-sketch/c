@@ -11,10 +11,12 @@ let auth: Auth;
 let firestore: Firestore;
 let storage: Storage;
 
+// Initialize Firebase
 if (getApps().length) {
   firebaseApp = getApp();
 } else {
   try {
+    // This might fail in some environments (e.g. server-side) if env vars aren't set
     firebaseApp = initializeApp();
   } catch (e) {
     if (process.env.NODE_ENV === "production") {
@@ -24,6 +26,7 @@ if (getApps().length) {
   }
 }
 
+// Get service instances, correctly associating them with the app instance
 auth = getAuth(firebaseApp);
 firestore = getFirestore(firebaseApp);
 storage = getStorage(firebaseApp);
