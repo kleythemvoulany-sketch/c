@@ -70,7 +70,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
                 {car.make} {car.model}
             </h1>
              <div className="text-4xl font-bold text-accent">
-                {new Intl.NumberFormat("ar-MR").format(car.price)}
+                {new Intl.NumberFormat("en-US").format(car.price)}
                 <span className="text-base font-medium text-primary ml-1">أوقية جديدة</span>
             </div>
 
