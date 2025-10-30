@@ -1,35 +1,26 @@
-/**
- * @fileoverview Firestore Security Rules for AlBoursa Cars platform.
- *
- * Core Philosophy:
- * This ruleset enforces a strict user-ownership model for user profiles, vehicle listings,
- * and AI improvement suggestions.  Users can only access or modify data they own.
- *
- * Data Structure:
- * - /users/{userId}: Stores user profile data.
- * - /users/{userId}/vehicleListings/{vehicleListingId}: Stores vehicle listings created by a user.
- * - /users/{userId}/vehicleListings/{vehicleListingId}/aiImprovementSuggestions/{aiImprovementSuggestionId}: Stores AI improvement suggestions for vehicle listings.
- *
- * Key Security Decisions:
- * - Users can only create, read, update, and delete their own user profiles and vehicle listings.
- * - Listing of all users is disallowed.
- *
- * Denormalization for Authorization:
- * The `userId` field is denormalized within the `VehicleListing` and `AiImprovementSuggestion`
- * documents to allow direct authorization checks without additional `get()` operations.
- */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Allows users to manage their own profile.
+     * @description Controls access to user profile data.
      * @path /users/{userId}
-     * @allow (create) User with auth.uid == userId can create their profile.
-     * @allow (get, update, delete) User with auth.uid == userId can read, update, and delete their profile.
-     * @deny (create) User with auth.uid != userId cannot create a profile.
-     * @deny (get, update, delete) User with auth.uid != userId cannot read, update, or delete another user's profile.
-     * @principle Enforces document ownership for writes.
+     * @allow (create) User with ID 'user123' can create their profile.
+     *   - request.auth.uid: 'user123'
+     *   - request.resource.data.id: 'user123'
+     * @allow (get) User with ID 'user123' can read their profile.
+     *   - request.auth.uid: 'user123'
+     * @allow (update) User with ID 'user123' can update their profile.
+     *   - request.auth.uid: 'user123'
+     * @allow (delete) User with ID 'user123' can delete their profile.
+     *   - request.auth.uid: 'user123'
+     * @deny (create) User with ID 'user456' cannot create a profile for user 'user123'.
+     *   - request.auth.uid: 'user456'
+     *   - request.resource.data.id: 'user123'
+     * @deny (get) User with ID 'user456' cannot read user 'user123's profile.
+     *   - request.auth.uid: 'user456'
+     *   - request.resource.data.id: 'user123'
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId} {
       function isSignedIn() {
@@ -40,21 +31,39 @@ service cloud.firestore {
         return request.auth.uid == userId;
       }
 
+      function isExistingOwner(userId) {
+          return isOwner(userId) && existsAfter(/databases/$(database)/documents/users/$(userId));
+      }
+
       allow get: if isOwner(userId);
       allow list: if false;
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == request.auth.uid;
-      allow update: if isSignedIn() && isOwner(userId) && resource.data.id == request.auth.uid;
-      allow delete: if isSignedIn() && isOwner(userId) && resource.data.id == request.auth.uid;
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Allows users to manage their own vehicle listings.
+     * @description Controls access to vehicle listings for a specific user.
      * @path /users/{userId}/vehicleListings/{vehicleListingId}
-     * @allow (create) User with auth.uid == userId can create a vehicle listing.
-     * @allow (get, update, delete) User with auth.uid == userId can read, update, and delete their own vehicle listings.
-     * @deny (create) User with auth.uid != userId cannot create a vehicle listing for another user.
-     * @deny (get, update, delete) User with auth.uid != userId cannot read, update, or delete another user's vehicle listings.
-     * @principle Enforces document ownership for writes.
+     * @allow (create) User with ID 'user123' can create a listing under their ID.
+     *   - request.auth.uid: 'user123'
+     *   - request.resource.data.userId: 'user123'
+     * @allow (get) User with ID 'user123' can read their listing.
+     *   - request.auth.uid: 'user123'
+     *   - resource.data.userId: 'user123'
+     * @allow (update) User with ID 'user123' can update their listing.
+     *   - request.auth.uid: 'user123'
+     *   - resource.data.userId: 'user123'
+     * @allow (delete) User with ID 'user123' can delete their listing.
+     *   - request.auth.uid: 'user123'
+     *   - resource.data.userId: 'user123'
+     * @deny (create) User with ID 'user456' cannot create a listing for user 'user123'.
+     *   - request.auth.uid: 'user456'
+     *   - request.resource.data.userId: 'user123'
+     * @deny (get) User with ID 'user456' cannot read user 'user123's listing.
+     *   - request.auth.uid: 'user456'
+     *   - resource.data.userId: 'user123'
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId}/vehicleListings/{vehicleListingId} {
       function isSignedIn() {
@@ -65,21 +74,39 @@ service cloud.firestore {
         return request.auth.uid == userId;
       }
 
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if isSignedIn() && isOwner(userId);
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == request.auth.uid;
-      allow update: if isSignedIn() && isOwner(userId) && resource.data.userId == request.auth.uid;
-      allow delete: if isSignedIn() && isOwner(userId) && resource.data.userId == request.auth.uid;
+      function isExistingOwner(userId) {
+          return isOwner(userId) && get(/databases/$(database)/documents/users/$(userId)).data.userId == userId;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Allows users to manage AI improvement suggestions for their vehicle listings.
+     * @description Controls access to AI improvement suggestions for a specific vehicle listing.
      * @path /users/{userId}/vehicleListings/{vehicleListingId}/aiImprovementSuggestions/{aiImprovementSuggestionId}
-     * @allow (create) User with auth.uid == userId can create an AI improvement suggestion for their vehicle listing.
-     * @allow (get, update, delete) User with auth.uid == userId can read, update, and delete AI improvement suggestions for their vehicle listings.
-     * @deny (create) User with auth.uid != userId cannot create an AI improvement suggestion for another user's vehicle listing.
-     * @deny (get, update, delete) User with auth.uid != userId cannot read, update, or delete another user's AI improvement suggestions.
-     * @principle Enforces document ownership for writes.
+     * @allow (create) User with ID 'user123' can create a suggestion under their listing.
+     *   - request.auth.uid: 'user123'
+     *   - resource.data.userId: 'user123'
+     * @allow (get) User with ID 'user123' can read their suggestion.
+     *   - request.auth.uid: 'user123'
+     *   - resource.data.userId: 'user123'
+     * @allow (update) User with ID 'user123' can update their suggestion.
+     *   - request.auth.uid: 'user123'
+     *   - resource.data.userId: 'user123'
+     * @allow (delete) User with ID 'user123' can delete their suggestion.
+     *   - request.auth.uid: 'user123'
+     *   - resource.data.userId: 'user123'
+     * @deny (create) User with ID 'user456' cannot create a suggestion for user 'user123's listing.
+     *   - request.auth.uid: 'user456'
+     *   - resource.data.userId: 'user123'
+     * @deny (get) User with ID 'user456' cannot read user 'user123's suggestion.
+     *   - request.auth.uid: 'user456'
+     *   - resource.data.userId: 'user123'
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId}/vehicleListings/{vehicleListingId}/aiImprovementSuggestions/{aiImprovementSuggestionId} {
       function isSignedIn() {
@@ -90,11 +117,15 @@ service cloud.firestore {
         return request.auth.uid == userId;
       }
 
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if isSignedIn() && isOwner(userId);
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.vehicleListingId == vehicleListingId;
-      allow update: if isSignedIn() && isOwner(userId) && resource.data.vehicleListingId == vehicleListingId;
-      allow delete: if isSignedIn() && isOwner(userId) && resource.data.vehicleListingId == vehicleListingId;
+      function isExistingOwner(userId) {
+          return isOwner(userId) && get(/databases/$(database)/documents/users/$(userId)/vehicleListings/$(vehicleListingId)).data.userId == userId;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
     }
   }
 }

@@ -31,7 +31,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { firestore, useUser } from '@/firebase';
+import { useFirestore, useUser } from '@/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -81,6 +81,7 @@ const carColors = [
 export default function NewListingPage() {
   const { toast } = useToast();
   const { user } = useUser();
+  const firestore = useFirestore();
   const router = useRouter();
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -165,7 +166,7 @@ export default function NewListingPage() {
         ...values,
         userId: user.uid,
         listingDate: serverTimestamp(),
-        isFeatured: false,
+        featured: false,
         viewCount: 0,
         image: imageUrls[0], // Main image
         imageUrls: imageUrls,
