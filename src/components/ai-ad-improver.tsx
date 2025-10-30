@@ -91,9 +91,6 @@ export function AiAdImprover({ currentDescription, onDescriptionChange }: AiAdIm
         value={currentDescription}
         onChange={(e) => onDescriptionChange(e.target.value)}
       />
-       <div className="pt-2">
-          <SubmitButton formAction={formAction} currentDescription={currentDescription} />
-      </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-2xl" dir="rtl" aria-labelledby="ai-improver-dialog-title">
