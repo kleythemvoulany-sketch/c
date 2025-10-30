@@ -2,37 +2,34 @@
  * @fileoverview Firestore Security Rules for AlBoursa Cars platform.
  *
  * Core Philosophy:
- * This ruleset enforces a strict user-ownership model for user profiles and their vehicle listings.
- * Public read access is granted to FAQs, Contact Messages, and About Us content.
+ * This ruleset enforces a strict user-ownership model for user profiles, vehicle listings,
+ * and AI improvement suggestions.  Users can only access or modify data they own.
  *
  * Data Structure:
- * - /users/{userId}: Stores user profiles, accessible only to the user themselves.
- * - /users/{userId}/listings/{listingId}: Stores vehicle listings owned by a specific user.
- * - /faqs/{faqId}: Stores frequently asked questions, publicly readable.
- * - /contactMessages/{contactMessageId}: Stores contact messages, publicly readable.
- * - /aboutUs/{aboutUsId}: Stores 'About Us' content, publicly readable.
+ * - /users/{userId}: Stores user profile data.
+ * - /users/{userId}/vehicleListings/{vehicleListingId}: Stores vehicle listings created by a user.
+ * - /users/{userId}/vehicleListings/{vehicleListingId}/aiImprovementSuggestions/{aiImprovementSuggestionId}: Stores AI improvement suggestions for vehicle listings.
  *
  * Key Security Decisions:
- * - Users can only create, update, or delete their own user profile and listings.
- * - Public read access is granted for FAQs, Contact Messages, and About Us content.
- * - Listing of all documents is only enabled for user-scoped subcollections.
+ * - Users can only create, read, update, and delete their own user profiles and vehicle listings.
+ * - Listing of all users is disallowed.
  *
  * Denormalization for Authorization:
- *  - Vehicle listings are nested under the user's document to simplify ownership checks.
- *  - The `userId` is present in both the path and the document, allowing validation on create.
+ * The `userId` field is denormalized within the `VehicleListing` and `AiImprovementSuggestion`
+ * documents to allow direct authorization checks without additional `get()` operations.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Grants access to user profiles.
+     * @description Allows users to manage their own profile.
      * @path /users/{userId}
-     * @allow (create) User with matching UID can create their profile.
-     * @allow (get, update, delete) User with matching UID can get, update, or delete their profile.
-     * @deny (create) User cannot create a profile with a mismatched UID.
-     * @deny (get, update, delete) User cannot get, update, or delete another user's profile.
-     * @principle Enforces document ownership for user profiles.
+     * @allow (create) User with auth.uid == userId can create their profile.
+     * @allow (get, update, delete) User with auth.uid == userId can read, update, and delete their profile.
+     * @deny (create) User with auth.uid != userId cannot create a profile.
+     * @deny (get, update, delete) User with auth.uid != userId cannot read, update, or delete another user's profile.
+     * @principle Enforces document ownership for writes.
      */
     match /users/{userId} {
       function isSignedIn() {
@@ -43,27 +40,23 @@ service cloud.firestore {
         return request.auth.uid == userId;
       }
 
-      function isExistingOwner(userId) {
-        return isOwner(userId) && resource != null;
-      }
-
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == userId;
-      allow get: if isSignedIn() && isOwner(userId);
+      allow get: if isOwner(userId);
       allow list: if false;
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-      allow delete: if isExistingOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == request.auth.uid;
+      allow update: if isSignedIn() && isOwner(userId) && resource.data.id == request.auth.uid;
+      allow delete: if isSignedIn() && isOwner(userId) && resource.data.id == request.auth.uid;
     }
 
     /**
-     * @description Grants access to vehicle listings owned by a specific user.
-     * @path /users/{userId}/listings/{listingId}
-     * @allow (create) User with matching UID can create a listing under their profile.
-     * @allow (get, list, update, delete) User with matching UID can get, list, update, or delete their listings.
-     * @deny (create) User cannot create a listing under another user's profile.
-     * @deny (get, update, delete) User cannot get, update, or delete another user's listings.
-     * @principle Enforces document ownership for vehicle listings.
+     * @description Allows users to manage their own vehicle listings.
+     * @path /users/{userId}/vehicleListings/{vehicleListingId}
+     * @allow (create) User with auth.uid == userId can create a vehicle listing.
+     * @allow (get, update, delete) User with auth.uid == userId can read, update, and delete their own vehicle listings.
+     * @deny (create) User with auth.uid != userId cannot create a vehicle listing for another user.
+     * @deny (get, update, delete) User with auth.uid != userId cannot read, update, or delete another user's vehicle listings.
+     * @principle Enforces document ownership for writes.
      */
-    match /users/{userId}/listings/{listingId} {
+    match /users/{userId}/vehicleListings/{vehicleListingId} {
       function isSignedIn() {
         return request.auth != null;
       }
@@ -72,58 +65,36 @@ service cloud.firestore {
         return request.auth.uid == userId;
       }
 
-      function isExistingOwner(userId) {
-        return isOwner(userId) && resource != null;
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && isOwner(userId) && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && isOwner(userId) && resource.data.userId == request.auth.uid;
+    }
+
+    /**
+     * @description Allows users to manage AI improvement suggestions for their vehicle listings.
+     * @path /users/{userId}/vehicleListings/{vehicleListingId}/aiImprovementSuggestions/{aiImprovementSuggestionId}
+     * @allow (create) User with auth.uid == userId can create an AI improvement suggestion for their vehicle listing.
+     * @allow (get, update, delete) User with auth.uid == userId can read, update, and delete AI improvement suggestions for their vehicle listings.
+     * @deny (create) User with auth.uid != userId cannot create an AI improvement suggestion for another user's vehicle listing.
+     * @deny (get, update, delete) User with auth.uid != userId cannot read, update, or delete another user's AI improvement suggestions.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/vehicleListings/{vehicleListingId}/aiImprovementSuggestions/{aiImprovementSuggestionId} {
+      function isSignedIn() {
+        return request.auth != null;
       }
 
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == userId;
-      allow get: if true;
-      allow list: if isOwner(userId);
-      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-      allow delete: if isExistingOwner(userId);
-    }
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
 
-    /**
-     * @description Grants public read access to FAQs.
-     * @path /faqs/{faqId}
-     * @allow (get, list) Anyone can read FAQs.
-     * @deny (create, update, delete) No one can create, update, or delete FAQs.
-     * @principle Allows public read access for FAQs.
-     */
-    match /faqs/{faqId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
-    }
-
-    /**
-     * @description Grants public read access to Contact Messages.
-     * @path /contactMessages/{contactMessageId}
-     * @allow (get, list) Anyone can read contact messages.
-     * @deny (create, update, delete) No one can create, update, or delete contact messages.
-     */
-    match /contactMessages/{contactMessageId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
-    }
-
-    /**
-     * @description Grants public read access to About Us content.
-     * @path /aboutUs/{aboutUsId}
-     * @allow (get, list) Anyone can read About Us content.
-     * @deny (create, update, delete) No one can create, update, or delete About Us content.
-     */
-    match /aboutUs/{aboutUsId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.vehicleListingId == vehicleListingId;
+      allow update: if isSignedIn() && isOwner(userId) && resource.data.vehicleListingId == vehicleListingId;
+      allow delete: if isSignedIn() && isOwner(userId) && resource.data.vehicleListingId == vehicleListingId;
     }
   }
 }

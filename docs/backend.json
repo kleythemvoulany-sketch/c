@@ -8,7 +8,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the user entity."
+          "description": "Unique identifier for the User entity."
         },
         "email": {
           "type": "string",
@@ -27,15 +27,27 @@
           "type": "string",
           "description": "Last name of the user."
         },
-        "language": {
+        "profilePicture": {
           "type": "string",
-          "description": "Preferred language of the user (e.g., 'ar', 'en', 'fr')."
+          "description": "URL of the user's profile picture.",
+          "format": "uri"
+        },
+        "preferredLanguage": {
+          "type": "string",
+          "description": "Preferred language of the user (e.g., ar, en, fr)."
+        },
+        "registrationDate": {
+          "type": "string",
+          "description": "Date and time the user registered.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
         "email",
-        "phoneNumber"
+        "phoneNumber",
+        "firstName",
+        "lastName"
       ]
     },
     "VehicleListing": {
@@ -46,19 +58,19 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the vehicle listing."
+          "description": "Unique identifier for the VehicleListing entity."
         },
         "userId": {
           "type": "string",
           "description": "Reference to User. (Relationship: User 1:N VehicleListing)"
         },
-        "make": {
+        "brand": {
           "type": "string",
-          "description": "Make of the vehicle (e.g., Hyundai)."
+          "description": "Brand of the vehicle (e.g., Hyundai, Toyota)."
         },
         "model": {
           "type": "string",
-          "description": "Model of the vehicle (e.g., SantaFe)."
+          "description": "Model of the vehicle (e.g., Santa Fe)."
         },
         "year": {
           "type": "number",
@@ -66,15 +78,15 @@
         },
         "fuelType": {
           "type": "string",
-          "description": "Type of fuel the vehicle uses (e.g., бензин)."
+          "description": "Type of fuel the vehicle uses (e.g., gasoline, diesel)."
         },
-        "transmission": {
+        "transmissionType": {
           "type": "string",
-          "description": "Transmission type of the vehicle (e.g., أوتوماتيكي)."
+          "description": "Type of transmission (e.g., automatic, manual)."
         },
         "city": {
           "type": "string",
-          "description": "City where the vehicle is located (e.g., نواكشوط)."
+          "description": "City where the vehicle is located."
         },
         "price": {
           "type": "number",
@@ -82,149 +94,105 @@
         },
         "description": {
           "type": "string",
-          "description": "Description of the vehicle listing."
-        },
-        "imageUrl": {
-          "type": "array",
-          "description": "Urls of images",
-          "items": {
-            "type": "string"
-          }
+          "description": "Description of the vehicle."
         },
         "mileage": {
           "type": "number",
-          "description": "Mileage of the vehicle in kilometers."
+          "description": "Mileage of the vehicle."
         },
         "color": {
           "type": "string",
           "description": "Color of the vehicle."
         },
+        "numberOfOwners": {
+          "type": "number",
+          "description": "Number of previous owners of the vehicle."
+        },
+        "condition": {
+          "type": "string",
+          "description": "Condition of the vehicle (e.g., used, new)."
+        },
+        "images": {
+          "type": "array",
+          "description": "Array of URLs of the vehicle's images.",
+          "items": {
+            "type": "string"
+          }
+        },
         "contactNumber": {
           "type": "string",
-          "description": "Contact phone number for the seller."
+          "description": "Contact phone number for the listing."
         },
         "isFeatured": {
           "type": "boolean",
-          "description": "Indicates whether the listing is featured."
+          "description": "Indicates if the listing is featured."
         },
-        "viewCount": {
-          "type": "number",
-          "description": "Number of times the listing has been viewed."
-        },
-        "postedDate": {
+        "postDate": {
           "type": "string",
-          "description": "Date and time when the listing was posted.",
+          "description": "Date and time the listing was posted.",
           "format": "date-time"
         }
       },
       "required": [
         "id",
         "userId",
-        "make",
+        "brand",
         "model",
         "year",
         "fuelType",
-        "transmission",
+        "transmissionType",
         "city",
         "price",
         "description",
         "contactNumber"
       ]
     },
-    "FAQ": {
+    "AiImprovementSuggestion": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "FAQ",
+      "title": "AiImprovementSuggestion",
       "type": "object",
-      "description": "Represents a frequently asked question.",
+      "description": "Represents AI powered suggestion for a vehicle listing.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the FAQ."
+          "description": "Unique identifier for the AiImprovementSuggestion entity."
         },
-        "question": {
+        "vehicleListingId": {
           "type": "string",
-          "description": "The question text."
+          "description": "Reference to VehicleListing. (Relationship: VehicleListing 1:N AiImprovementSuggestion)"
         },
-        "answer": {
+        "field": {
           "type": "string",
-          "description": "The answer to the question."
+          "description": "The field the suggestion applies to.  For example 'description'."
         },
-        "language": {
+        "originalValue": {
           "type": "string",
-          "description": "The language of the FAQ (e.g., 'ar', 'en', 'fr')."
-        }
-      },
-      "required": [
-        "id",
-        "question",
-        "answer",
-        "language"
-      ]
-    },
-    "ContactMessage": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ContactMessage",
-      "type": "object",
-      "description": "Represents a contact message sent by a user.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the contact message."
+          "description": "The original value of the field, before the suggestion."
         },
-        "name": {
+        "suggestedValue": {
           "type": "string",
-          "description": "Name of the person sending the message."
+          "description": "The value suggested by the AI."
         },
-        "email": {
+        "reason": {
           "type": "string",
-          "description": "Email address of the person sending the message.",
-          "format": "email"
+          "description": "The reasoning behind why the AI made this suggestion."
         },
-        "phoneNumber": {
-          "type": "string",
-          "description": "Phone number of the person sending the message."
+        "confidenceScore": {
+          "type": "number",
+          "description": "A score representing how confident the AI is that this is a good suggestion."
         },
-        "message": {
+        "suggestionDate": {
           "type": "string",
-          "description": "The message content."
-        },
-        "sentDate": {
-          "type": "string",
-          "description": "Date and time when the message was sent.",
+          "description": "Date and time the suggestion was generated.",
           "format": "date-time"
         }
       },
       "required": [
         "id",
-        "name",
-        "email",
-        "message",
-        "sentDate"
-      ]
-    },
-    "AboutUs": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "AboutUs",
-      "type": "object",
-      "description": "Represents the About Us information.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the About Us information."
-        },
-        "content": {
-          "type": "string",
-          "description": "The content of the About Us page."
-        },
-        "language": {
-          "type": "string",
-          "description": "The language of the About Us content (e.g., 'ar', 'en', 'fr')."
-        }
-      },
-      "required": [
-        "id",
-        "content",
-        "language"
+        "vehicleListingId",
+        "field",
+        "suggestedValue",
+        "reason"
       ]
     }
   },
@@ -243,80 +211,60 @@
           "schema": {
             "$ref": "#/backend/entities/User"
           },
-          "description": "Stores user profile information. User's id is derived from Firebase Authentication.",
+          "description": "Stores user profiles. Access is restricted to the user themselves, based on their `userId` matching `request.auth.uid`.",
           "params": [
             {
               "name": "userId",
-              "description": "The unique identifier of the user, derived from Firebase Authentication."
+              "description": "The unique identifier for the user."
             }
           ]
         }
       },
       {
-        "path": "/listings/{listingId}",
+        "path": "/users/{userId}/vehicleListings/{vehicleListingId}",
         "definition": {
           "entityName": "VehicleListing",
           "schema": {
             "$ref": "#/backend/entities/VehicleListing"
           },
-          "description": "Stores all vehicle listings in a single top-level collection.",
+          "description": "Stores vehicle listings created by users. Includes denormalized 'userId' field for authorization independence, ensuring only the listing owner can manage it.",
           "params": [
             {
-              "name": "listingId",
+              "name": "userId",
+              "description": "The unique identifier for the user (owner of the listing)."
+            },
+            {
+              "name": "vehicleListingId",
               "description": "The unique identifier for the vehicle listing."
             }
           ]
         }
       },
       {
-        "path": "/faqs/{faqId}",
+        "path": "/users/{userId}/vehicleListings/{vehicleListingId}/aiImprovementSuggestions/{aiImprovementSuggestionId}",
         "definition": {
-          "entityName": "FAQ",
+          "entityName": "AiImprovementSuggestion",
           "schema": {
-            "$ref": "#/backend/entities/FAQ"
+            "$ref": "#/backend/entities/AiImprovementSuggestion"
           },
-          "description": "Stores frequently asked questions for different languages.",
+          "description": "Stores AI improvement suggestions for vehicle listings. The path enforces that suggestions are associated with a specific vehicle listing. The 'userId' and 'vehicleListingId' are denormalized to support authorization independence.",
           "params": [
             {
-              "name": "faqId",
-              "description": "The unique identifier for the FAQ."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/contactMessages/{contactMessageId}",
-        "definition": {
-          "entityName": "ContactMessage",
-          "schema": {
-            "$ref": "#/backend/entities/ContactMessage"
-          },
-          "description": "Stores contact messages sent by users.",
-          "params": [
+              "name": "userId",
+              "description": "The unique identifier for the user (owner of the listing)."
+            },
             {
-              "name": "contactMessageId",
-              "description": "The unique identifier for the contact message."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/aboutUs/{aboutUsId}",
-        "definition": {
-          "entityName": "AboutUs",
-          "schema": {
-            "$ref": "#/backend/entities/AboutUs"
-          },
-          "description": "Stores 'About Us' content for different languages.",
-          "params": [
+              "name": "vehicleListingId",
+              "description": "The unique identifier for the vehicle listing."
+            },
             {
-              "name": "aboutUsId",
-              "description": "The unique identifier for the About Us content."
+              "name": "aiImprovementSuggestionId",
+              "description": "The unique identifier for the AI improvement suggestion."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure has been simplified to use a top-level `listings` collection. This change was made to resolve persistent permission issues related to collectionGroup queries in the development environment. This flat structure simplifies queries and security rules, making the application more robust and easier to debug. Public data (listings, faqs) is kept separate from private user data (users). Authorization for writes on listings is now handled within the security rules by checking if the listing's `userId` field matches the authenticated user's `uid`."
+    "reasoning": "This Firestore structure is designed to support the AlBoursa Cars platform, focusing on secure, scalable, and maintainable data management. It leverages path-based ownership for user data and vehicle listings, ensuring clear ownership and simplified security rules. By avoiding hierarchical authorization dependencies, it also enables atomic operations (transactions/batches) and enhances debuggability. Furthermore, denormalization is strategically employed to eliminate `get()` calls in security rules.\n\n*   **Users:** User data is stored under `/users/{userId}`, allowing easy management of user profiles and enabling straightforward security rules based on `request.auth.uid`.\n*   **Vehicle Listings:** Vehicle listings are stored under `/users/{userId}/vehicleListings/{vehicleListingId}`, ensuring that listings are associated with a specific user.  The `userId` is denormalized into the `VehicleListing` document itself to support authorization independence.\n*   **AI Improvement Suggestions:** AI improvement suggestions are nested under the specific vehicle listing at `/users/{userId}/vehicleListings/{vehicleListingId}/aiImprovementSuggestions/{aiImprovementSuggestionId}`, associating each suggestion with its parent listing. The `userId` and `vehicleListingId` are both denormalized to support authorization independence. This supports the QAP of only allowing the vehicle listing owner to read, write, or list AI Improvement suggestions. This ensures that only authorized users can access and modify suggestions related to their listings.\n\nThis design allows for simple and robust security rules based on ownership, facilitating secure `list` operations and maintaining data integrity."
   }
 }
