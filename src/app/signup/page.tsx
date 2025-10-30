@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export default function SignupPage() {
   return (
-    <div className="container flex h-[calc(100vh-200px)] items-center justify-center py-12">
+    <div className="container flex min-h-[calc(100vh-160px)] items-center justify-center py-12">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-headline">إنشاء حساب جديد</CardTitle>
