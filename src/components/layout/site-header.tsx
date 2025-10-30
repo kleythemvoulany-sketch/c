@@ -77,7 +77,7 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <div className="flex flex-none items-center justify-end space-x-2">
+        <div className="flex flex-none items-center justify-end space-x-4">
           <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground hidden sm:flex">
             <Link href="/listings/new">
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -94,7 +94,7 @@ export function SiteHeader() {
               </Button>
           ) : (
             <>
-              <Button variant="ghost" asChild className="text-primary-foreground hover:bg-white hover:text-primary hidden sm:flex mr-2">
+              <Button variant="ghost" asChild className="text-primary-foreground hover:bg-white hover:text-primary hidden sm:flex">
                 <Link href="/login">
                   <LogIn className="ml-2 h-4 w-4" />
                   تسجيل الدخول
