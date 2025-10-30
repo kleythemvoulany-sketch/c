@@ -31,6 +31,7 @@ import { useAuth, useFirestore, useUser } from "@/firebase";
 import { updatePassword, updateProfile } from "firebase/auth";
 import { doc } from "firebase/firestore";
 import { updateDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { Label } from "./ui/label";
 
 const profileSchema = z
   .object({
