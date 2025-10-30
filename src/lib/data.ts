@@ -43,7 +43,8 @@ export type Category = {
     image: string;
 };
 
-// This mock data is now for reference and will be replaced by Firestore data.
+// This mock data is for reference and will be replaced by Firestore data.
+// A minor change to trigger a backend rule update.
 export const cars: Car[] = [
     {
         id: '1',
