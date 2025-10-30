@@ -71,7 +71,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
             </h1>
              <div className="text-4xl font-bold text-accent">
                 {new Intl.NumberFormat("en-US").format(car.price)}
-                <span className="text-base font-medium text-primary ml-2">أوقية جديدة</span>
+                <span className="text-base font-medium text-primary mr-2">أوقية جديدة</span>
             </div>
 
             <Separator />
