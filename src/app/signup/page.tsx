@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,8 +17,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function SignupPage() {
+  const [accountType, setAccountType] = useState("personal");
+
   return (
-    <div className="container flex min-h-[calc(100vh-160px)] items-center justify-center py-12">
+    <div className="container flex items-center justify-center py-12">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-headline">إنشاء حساب جديد</CardTitle>
@@ -26,7 +31,12 @@ export default function SignupPage() {
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
             <Label>نوع الحساب</Label>
-            <RadioGroup defaultValue="personal" dir="rtl" className="grid grid-cols-2 gap-4">
+            <RadioGroup
+              value={accountType}
+              onValueChange={setAccountType}
+              dir="rtl"
+              className="grid grid-cols-2 gap-4"
+            >
               <div>
                 <RadioGroupItem value="personal" id="personal" className="peer sr-only" />
                 <Label
@@ -47,18 +57,33 @@ export default function SignupPage() {
               </div>
             </RadioGroup>
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="name">الاسم الكامل</Label>
-            <Input id="name" placeholder="محمد سالم" required />
-          </div>
+
+          {accountType === 'personal' ? (
+            <div className="grid gap-2">
+              <Label htmlFor="name">الاسم الكامل</Label>
+              <Input id="name" placeholder="محمد سالم" required />
+            </div>
+          ) : (
+            <>
+              <div className="grid gap-2">
+                <Label htmlFor="dealerName">اسم البورصة</Label>
+                <Input id="dealerName" placeholder="مثال: بورصة الأمانة" required />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="ownerName">الاسم الكامل للمالك</Label>
+                <Input id="ownerName" placeholder="محمد سالم" required />
+              </div>
+            </>
+          )}
+
           <div className="grid gap-2">
             <Label htmlFor="phone">رقم الهاتف</Label>
             <div className="flex items-center gap-2">
-                <Input id="phone" type="tel" placeholder="رقم الهاتف" required dir="ltr" className="text-left flex-1"/>
-                <div className="flex h-10 items-center rounded-md border border-input bg-background px-3">
-                  <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
-                  <span className="mr-2 text-sm text-muted-foreground">+222</span>
-                </div>
+              <Input id="phone" type="tel" placeholder="رقم الهاتف" required dir="ltr" className="text-left flex-1" />
+              <div className="flex h-10 items-center rounded-md border border-input bg-background px-3">
+                <span className="mr-2 text-sm text-muted-foreground">+222</span>
+                <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
+              </div>
             </div>
           </div>
           <div className="grid gap-2">
@@ -69,14 +94,14 @@ export default function SignupPage() {
             <Label htmlFor="password">كلمة المرور</Label>
             <Input id="password" type="password" required />
           </div>
-           <div className="grid gap-2">
+          <div className="grid gap-2">
             <Label htmlFor="confirm-password">تأكيد كلمة المرور</Label>
             <Input id="confirm-password" type="password" required />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col">
           <Button className="w-full">إنشاء حساب</Button>
-           <p className="mt-4 text-center text-sm text-muted-foreground">
+          <p className="mt-4 text-center text-sm text-muted-foreground">
             لديك حساب بالفعل؟{' '}
             <Link href="/login" className="underline">
               تسجيل الدخول
