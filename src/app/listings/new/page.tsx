@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { UploadCloud } from 'lucide-react';
+import { UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -37,6 +37,9 @@ import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase/provider';
+import React, { useState } from 'react';
+import { uploadImages } from '@/firebase/storage';
+import { Progress } from '@/components/ui/progress';
 
 const listingSchema = z.object({
   make: z.string().min(1, 'الرجاء اختيار الماركة'),
@@ -78,12 +81,15 @@ const carColors = [
   'أصفر',
 ];
 
-
 export default function NewListingPage() {
   const { toast } = useToast();
   const firestore = useFirestore();
   const { user } = useUser();
   const router = useRouter();
+
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
   const form = useForm<z.infer<typeof listingSchema>>({
     resolver: zodResolver(listingSchema),
@@ -104,6 +110,38 @@ export default function NewListingPage() {
 
   const selectedMake = form.watch('make');
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      const currentImageCount = imageFiles.length;
+      const remainingSlots = 15 - currentImageCount;
+
+      if (files.length > remainingSlots) {
+        toast({
+          variant: 'destructive',
+          title: 'الحد الأقصى للصور',
+          description: `يمكنك رفع ${remainingSlots} صور إضافية فقط.`,
+        });
+        return;
+      }
+      
+      const newFiles = [...imageFiles, ...files];
+      setImageFiles(newFiles);
+
+      const newPreviews = files.map(file => URL.createObjectURL(file));
+      setImagePreviews(prev => [...prev, ...newPreviews]);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => {
+      const newPreviews = prev.filter((_, i) => i !== index);
+      URL.revokeObjectURL(prev[index]);
+      return newPreviews;
+    });
+  };
+
   const onSubmit = async (values: z.infer<typeof listingSchema>) => {
     if (!firestore || !user) {
       toast({
@@ -113,7 +151,20 @@ export default function NewListingPage() {
       });
       return;
     }
+    if (imageFiles.length === 0) {
+      toast({
+        variant: 'destructive',
+        title: 'خطأ',
+        description: 'يجب رفع صورة واحدة على الأقل.',
+      });
+      return;
+    }
+
     try {
+      setUploadProgress(0);
+      const imageUrls = await uploadImages(imageFiles, (progress) => setUploadProgress(progress));
+      setUploadProgress(100);
+
       const collectionRef = collection(firestore, 'vehicleListings');
       await addDocumentNonBlocking(collectionRef, {
         ...values,
@@ -121,8 +172,8 @@ export default function NewListingPage() {
         listingDate: serverTimestamp(),
         isFeatured: false,
         viewCount: 0,
-        image: 'https://picsum.photos/seed/new/600/400', // Placeholder
-        imageUrls: [],
+        image: imageUrls[0], // Main image
+        imageUrls: imageUrls,
       });
 
       toast({
@@ -137,8 +188,11 @@ export default function NewListingPage() {
         title: 'حدث خطأ',
         description: 'فشل في نشر الإعلان. الرجاء المحاولة مرة أخرى.',
       });
+      setUploadProgress(null);
     }
   };
+
+  const isSubmitting = form.formState.isSubmitting || uploadProgress !== null;
 
   return (
     <div className="container py-12 md:py-20">
@@ -442,7 +496,10 @@ export default function NewListingPage() {
 
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold font-headline">الصور</h3>
-                <div className="border-2 border-dashed border-muted-foreground/50 rounded-lg p-12 text-center bg-background hover:bg-muted/50 cursor-pointer">
+                <Label
+                  htmlFor="image-upload"
+                  className="border-2 border-dashed border-muted-foreground/50 rounded-lg p-12 text-center bg-background hover:bg-muted/50 cursor-pointer block"
+                >
                   <UploadCloud className="mx-auto h-12 w-12 text-muted-foreground" />
                   <p className="mt-4 text-muted-foreground">
                     اسحب وأفلت الصور هنا، أو انقر للتصفح
@@ -450,16 +507,60 @@ export default function NewListingPage() {
                   <p className="text-xs text-muted-foreground/80 mt-1">
                     يمكنك رفع حتى 15 صورة (PNG, JPG, WEBP)
                   </p>
-                </div>
+                </Label>
+                <Input
+                  id="image-upload"
+                  type="file"
+                  multiple
+                  accept="image/png, image/jpeg, image/webp"
+                  className="hidden"
+                  onChange={handleImageChange}
+                  disabled={isSubmitting}
+                />
+                 {imagePreviews.length > 0 && (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 mt-4">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="relative aspect-square">
+                        <Image
+                          src={preview}
+                          alt={`معاينة الصورة ${index + 1}`}
+                          fill
+                          className="object-cover rounded-md"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
+                          onClick={() => removeImage(index)}
+                          disabled={isSubmitting}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
+
+              {uploadProgress !== null && (
+                <div className="space-y-2">
+                  <Label>
+                    {uploadProgress < 100
+                      ? `جاري رفع الصور... ${Math.round(uploadProgress)}%`
+                      : 'اكتمل رفع الصور!'}
+                  </Label>
+                  <Progress value={uploadProgress} className="w-full" />
+                </div>
+              )}
 
               <Button
                 type="submit"
                 size="lg"
                 className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
-                disabled={form.formState.isSubmitting}
+                disabled={isSubmitting}
               >
-                {form.formState.isSubmitting ? 'جاري النشر...' : 'نشر الإعلان الآن'}
+                {isSubmitting ? 'جاري النشر...' : 'نشر الإعلان الآن'}
               </Button>
             </form>
           </Form>
