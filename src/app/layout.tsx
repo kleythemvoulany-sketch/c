@@ -23,12 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background antialiased font-sans",
           alexandria.variable
         )}
+        suppressHydrationWarning
       >
         <ThemeProvider
           attribute="class"
