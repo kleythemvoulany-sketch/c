@@ -22,7 +22,7 @@ type CarCardProps = {
 
 export function CarCard({ car, isOwnerView = false }: CarCardProps) {
   return (
-    <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full">
+    <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full bg-card">
       <div className="flex-grow">
         <Link href={`/listings/${car.id}`} className="block">
           <CardHeader className="p-0">
@@ -37,7 +37,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
               {car.featured && (
                 <Badge
                   variant="default"
-                  className="absolute top-3 right-3 bg-accent text-accent-foreground"
+                  className="absolute top-3 right-3 bg-accent text-accent-foreground border-2 border-white/50"
                 >
                   <Gem className="ml-1 h-3 w-3" />
                   مميزة
@@ -49,8 +49,8 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
             <h3 className="text-lg font-bold font-headline text-primary truncate">
               {car.make} {car.model} - {car.year}
             </h3>
-            <p className="text-xl font-bold text-accent">
-              {new Intl.NumberFormat("ar-MR").format(car.price)} أوقية جديدة
+            <p className="text-2xl font-bold text-accent">
+              {new Intl.NumberFormat("ar-MR").format(car.price)} أوقية
             </p>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
               <div className="flex items-center gap-2">
@@ -73,10 +73,10 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
           </CardContent>
         </Link>
       </div>
-      <CardFooter className="p-4 bg-primary/5 mt-auto">
+      <CardFooter className="p-2 bg-secondary mt-auto">
         {isOwnerView ? (
           <div className="w-full flex gap-2">
-            <Button asChild variant="outline" className="w-full">
+            <Button asChild variant="outline" className="w-full bg-background">
               {/* In a real app, this would link to an edit page e.g. /listings/edit/${car.id} */}
               <Link href="#">
                 <Pencil className="ml-2 h-4 w-4" />
@@ -89,7 +89,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
             </Button>
           </div>
         ) : (
-          <Button asChild className="w-full bg-primary hover:bg-primary/90">
+          <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
             <Link href={`/listings/${car.id}`}>
               <Phone className="ml-2 h-4 w-4" />
               عرض التفاصيل والاتصال
