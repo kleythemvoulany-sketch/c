@@ -9,6 +9,7 @@ import {
   Sun,
   User,
   UserPlus,
+  LogOut
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,10 +18,15 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useUser } from "@/firebase/provider";
+import { useAuth } from "@/firebase";
+import { signOut } from "firebase/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const navLinks = [
   { href: "/listings", label: "السيارات" },
@@ -31,9 +37,14 @@ const navLinks = [
 
 export function SiteHeader() {
   const { setTheme } = useTheme();
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
 
-  // A simplified check for authentication status
-  const isAuthenticated = false;
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
+
+  const isAuthenticated = !!user;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-primary text-primary-foreground">
@@ -85,13 +96,42 @@ export function SiteHeader() {
             </Link>
           </Button>
             
-          {isAuthenticated ? (
-             <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-white/10">
-                <Link href="/profile">
-                  <User className="h-5 w-5" />
-                  <span className="sr-only">Profile</span>
-                </Link>
-              </Button>
+          {isUserLoading ? (
+            <div className="h-10 w-10 bg-white/20 rounded-full animate-pulse" />
+          ) : isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full text-primary-foreground hover:bg-white/10">
+                   <Avatar className="h-9 w-9">
+                      <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                      <AvatarFallback>
+                        <User className="h-5 w-5" />
+                      </AvatarFallback>
+                    </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.displayName}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/profile">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>الملف الشخصي</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>تسجيل الخروج</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <>
               <Button variant="secondary" asChild className="bg-white text-primary hover:bg-white/90 hidden sm:flex">

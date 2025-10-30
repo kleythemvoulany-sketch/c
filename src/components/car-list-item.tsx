@@ -22,7 +22,7 @@ export function CarListItem({ car }: CarListItemProps) {
       <Link href={`/listings/${car.id}`} className="block relative sm:w-1/3 md:w-1/4">
         <div className="relative h-48 sm:h-full w-full">
           <Image
-            src={car.image}
+            src={car.image || "https://picsum.photos/seed/placeholder/600/400"}
             alt={`${car.make} ${car.model}`}
             fill
             className="object-cover"

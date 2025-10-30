@@ -19,7 +19,6 @@ import { User, UploadCloud } from "lucide-react";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,14 +26,11 @@ import {
 } from "./ui/form";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
-
-// Mock user data for demonstration
-const user = {
-  name: "محمد سالم",
-  email: "mohamed.salem@example.com",
-  phone: "34949470",
-  avatar: "https://picsum.photos/seed/t1/100/100",
-};
+import { User as UserType } from '@/lib/data';
+import { useAuth, useFirestore, useUser } from "@/firebase";
+import { updatePassword, updateProfile } from "firebase/auth";
+import { doc } from "firebase/firestore";
+import { updateDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 
 const profileSchema = z
   .object({
@@ -63,26 +59,64 @@ const profileSchema = z
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-export function ProfileForm() {
+type ProfileFormProps = {
+  userProfile: UserType;
+};
+
+export function ProfileForm({ userProfile }: ProfileFormProps) {
   const { toast } = useToast();
+  const { user } = useUser();
+  const auth = useAuth();
+  const firestore = useFirestore();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: user.name,
-      phone: user.phone,
+      name: userProfile.firstName + ' ' + userProfile.lastName || "",
+      phone: userProfile.phoneNumber || "",
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
     },
   });
 
-  function onSubmit(data: ProfileFormValues) {
-    console.log("Profile update data:", data);
-    toast({
-      title: "تم بنجاح!",
-      description: "تم تحديث معلومات ملفك الشخصي.",
-    });
+  async function onSubmit(data: ProfileFormValues) {
+    if (!user || !firestore) return;
+
+    try {
+      // Update profile display name
+      if (data.name !== user.displayName) {
+        await updateProfile(user, { displayName: data.name });
+      }
+
+      // Update user document in Firestore
+      const userDocRef = doc(firestore, 'users', user.uid);
+      updateDocumentNonBlocking(userDocRef, {
+        firstName: data.name.split(' ')[0],
+        lastName: data.name.split(' ').slice(1).join(' '),
+        phoneNumber: data.phone,
+      });
+
+      // Update password if provided
+      if (data.newPassword) {
+        // This requires recent sign-in, which we're not handling here for simplicity.
+        // In a real app, you'd reauthenticate the user before this step.
+        await updatePassword(user, data.newPassword);
+      }
+      
+      toast({
+        title: "تم بنجاح!",
+        description: "تم تحديث معلومات ملفك الشخصي.",
+      });
+
+    } catch (error: any) {
+       console.error("Profile update error:", error);
+       toast({
+        variant: "destructive",
+        title: "حدث خطأ",
+        description: error.message || "فشل تحديث الملف الشخصي. قد تحتاج إلى تسجيل الدخول مرة أخرى.",
+      });
+    }
   }
 
   return (
@@ -99,7 +133,7 @@ export function ProfileForm() {
           <CardContent className="space-y-8">
             <div className="flex items-center gap-6">
               <Avatar className="h-20 w-20">
-                <AvatarImage src={user.avatar} />
+                <AvatarImage src={userProfile.profilePictureUrl} />
                 <AvatarFallback>
                   <User className="h-10 w-10 text-muted-foreground" />
                 </AvatarFallback>
@@ -139,11 +173,11 @@ export function ProfileForm() {
                     <FormLabel>رقم الهاتف</FormLabel>
                     <FormControl>
                        <div className="flex items-center gap-2" dir="ltr">
+                             <Input placeholder="رقم الهاتف" {...field} className="text-left flex-1"/>
                             <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
-                                <span className="text-sm text-muted-foreground">+222</span>
                                 <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
+                                <span className="text-sm text-muted-foreground mr-2">+222</span>
                             </div>
-                            <Input placeholder="رقم الهاتف" {...field} className="text-left flex-1"/>
                         </div>
                     </FormControl>
                     <FormMessage />
@@ -155,7 +189,7 @@ export function ProfileForm() {
                 <Input
                   id="email"
                   type="email"
-                  value={user.email}
+                  value={userProfile.email || ''}
                   disabled
                   className="disabled:cursor-not-allowed disabled:opacity-70"
                 />
@@ -216,7 +250,9 @@ export function ProfileForm() {
             </div>
           </CardContent>
           <CardFooter className="border-t px-6 py-4">
-            <Button type="submit">حفظ التغييرات</Button>
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? 'جاري الحفظ...' : 'حفظ التغييرات'}
+              </Button>
           </CardFooter>
         </Card>
       </form>

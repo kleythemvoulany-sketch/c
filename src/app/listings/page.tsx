@@ -1,18 +1,32 @@
-import { CarListItem } from "@/components/car-list-item";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+'use client';
+import { CarListItem } from '@/components/car-list-item';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cars } from "@/lib/data";
-import { Filter, List, LayoutGrid } from "lucide-react";
+} from '@/components/ui/select';
+import { Car } from '@/lib/data';
+import { Filter, List, LayoutGrid } from 'lucide-react';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { collection } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ListingsPage() {
+  const firestore = useFirestore();
+  const {
+    data: cars,
+    isLoading,
+    error,
+  } = useCollection<Car>(
+    firestore ? collection(firestore, 'vehicleListings') : null
+  );
+
   return (
     <div className="bg-background">
       <div className="container py-8 md:py-12">
@@ -100,8 +114,10 @@ export default function ListingsPage() {
               <p className="text-muted-foreground flex items-center gap-2">
                 <List className="w-5 h-5 text-primary" />
                 <span>
-                  تم العثور على{" "}
-                  <span className="font-bold text-primary">{cars.length}</span>{" "}
+                  تم العثور على{' '}
+                  <span className="font-bold text-primary">
+                    {isLoading ? '...' : cars?.length ?? 0}
+                  </span>{' '}
                   سيارة
                 </span>
               </p>
@@ -129,15 +145,35 @@ export default function ListingsPage() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                 <Button variant="outline" size="icon" className="bg-background">
-                    <LayoutGrid className="w-5 h-5" />
+                <Button variant="outline" size="icon" className="bg-background">
+                  <LayoutGrid className="w-5 h-5" />
                 </Button>
               </div>
             </div>
             <div className="space-y-4">
-              {cars.map((car) => (
-                <CarListItem key={car.id} car={car} />
-              ))}
+              {isLoading ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="bg-card border rounded-lg overflow-hidden flex flex-col sm:flex-row">
+                     <Skeleton className="h-48 sm:h-auto sm:w-1/3 md:w-1/4" />
+                     <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between">
+                        <Skeleton className="h-6 w-3/4 mb-2" />
+                        <Skeleton className="h-8 w-1/2 mb-4" />
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                           <Skeleton className="h-5 w-full" />
+                           <Skeleton className="h-5 w-full" />
+                           <Skeleton className="h-5 w-full" />
+                           <Skeleton className="h-5 w-full" />
+                           <Skeleton className="h-5 w-full" />
+                        </div>
+                         <Skeleton className="h-5 w-1/4 mt-auto self-end" />
+                     </div>
+                  </div>
+                ))
+              ) : cars && cars.length > 0 ? (
+                cars.map((car) => <CarListItem key={car.id} car={car} />)
+              ) : (
+                <p>لا توجد إعلانات لعرضها.</p>
+              )}
             </div>
           </main>
         </div>

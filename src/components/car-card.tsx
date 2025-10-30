@@ -14,6 +14,10 @@ import {
   Trash2,
   Wrench,
 } from "lucide-react";
+import { useFirestore } from "@/firebase";
+import { doc } from "firebase/firestore";
+import { deleteDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { useToast } from "@/hooks/use-toast";
 
 type CarCardProps = {
   car: CarType;
@@ -21,6 +25,22 @@ type CarCardProps = {
 };
 
 export function CarCard({ car, isOwnerView = false }: CarCardProps) {
+  const firestore = useFirestore();
+  const { toast } = useToast();
+
+  const handleDelete = () => {
+    if (!firestore) return;
+    const confirmDelete = window.confirm("هل أنت متأكد من رغبتك في حذف هذا الإعلان؟");
+    if (confirmDelete) {
+      const docRef = doc(firestore, 'vehicleListings', car.id);
+      deleteDocumentNonBlocking(docRef);
+      toast({
+        title: "تم الحذف",
+        description: "تم حذف إعلانك بنجاح.",
+      });
+    }
+  };
+
   return (
     <Card className="overflow-hidden group transition-all duration-300 hover:shadow-xl flex flex-col h-full bg-card border">
       <div className="flex-grow">
@@ -28,7 +48,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
           <CardHeader className="p-0">
             <div className="relative h-56 w-full">
               <Image
-                src={car.image}
+                src={car.image || "https://picsum.photos/seed/placeholder/600/400"}
                 alt={`${car.make} ${car.model}`}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -84,7 +104,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
                 تعديل
               </Link>
             </Button>
-            <Button variant="destructive" className="w-full">
+            <Button variant="destructive" className="w-full" onClick={handleDelete}>
               <Trash2 className="ml-2 h-4 w-4" />
               حذف
             </Button>
