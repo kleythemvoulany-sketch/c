@@ -237,11 +237,15 @@
       {
         "path": "/vehicleListings/{vehicleListingId}",
         "definition": {
-            "entityName": "VehicleListing",
-            "schema": {
-                "$ref": "#/backend/entities/VehicleListing"
-            },
-            "description": "Stores all vehicle listings. Publicly readable, but only writable by the owning user."
+          "entityName": "VehicleListing",
+          "schema": {
+            "$ref": "#/backend/entities/VehicleListing"
+          },
+          "description": "Stores all vehicle listings. Publicly readable, but only writable by the owning user.",
+          "rules": {
+            "read": "if true;",
+            "write": "if request.auth != null && request.auth.uid == request.resource.data.userId;"
+          }
         }
       },
       {
@@ -264,9 +268,6 @@
           "description": "Stores contact messages sent by users. Access controlled by backend functions."
         }
       }
-    ],
-    "reasoning": "The Firestore structure is designed to support AlBoursa Cars' multi-faceted requirements, focusing on security, scalability, and maintainability. The design incorporates key principles like Authorization Independence and Structural Segregation to create a robust and easily manageable database. It addresses key application requirements like vehicle listings, user profiles, FAQs, and contact messages, while also preparing the groundwork for features such as admin dashboards and multilingual support.\n\n**Authorization Independence:** Authorization independence is achieved through path-based ownership for private user data (users and their listings). \n\n**Structural Segregation:** Collections are segregated based on their access needs. User-specific data resides under `/users/{userId}`, ensuring that rules for user data don't interfere with global data like FAQs. Vehicle listings are stored under `/vehicleListings/{vehicleListingId}` to allow public read access while maintaining ownership-based write access.\n\n**QAPs Support:** The structure supports secure `list` operations (QAPs) by segregating data into homogeneous collections (Structural Segregation). Path-based ownership ensures listings can only be listed by authorized users. All `/vehicleListings` are owned by a single user. This removes the need for complex filtering in rules.\n\n**Additional Considerations**\n\n*   **Global Data:** FAQs are stored in a root-level collection (`/faqs`) accessible by all users. This is appropriate since they're designed to be publicly available.\n*   **Contact Messages:** Contact messages are stored in a root-level collection (`/contactMessages`). Access is controlled by backend functions.\n*   **Scalability:** The structure is designed to scale. User-specific data is organized under the user's ID, allowing for efficient data retrieval and management as the user base grows.\n*   **Future Features:** The structure can accommodate future features, such as admin panels and multilingual support. For example, the `/users/{userId}` structure allows storing user-specific preferences, including language settings."
+    ]
   }
 }
-
-    
