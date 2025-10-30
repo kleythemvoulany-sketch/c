@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 
 export default function SignupPage() {
@@ -22,6 +23,29 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
+          <div className="grid gap-2">
+            <Label>نوع الحساب</Label>
+            <RadioGroup defaultValue="personal" dir="rtl" className="grid grid-cols-2 gap-4">
+              <div>
+                <RadioGroupItem value="personal" id="personal" className="peer sr-only" />
+                <Label
+                  htmlFor="personal"
+                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                >
+                  حساب شخصي
+                </Label>
+              </div>
+              <div>
+                <RadioGroupItem value="dealer" id="dealer" className="peer sr-only" />
+                <Label
+                  htmlFor="dealer"
+                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                >
+                  حساب بورصة
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="name">الاسم الكامل</Label>
             <Input id="name" placeholder="محمد سالم" required />
