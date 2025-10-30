@@ -29,7 +29,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
   ];
 
   return (
-    <div className="container py-12 md:py-20 bg-secondary">
+    <div className="container py-12 md:py-20 bg-background">
       <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
         <div className="md:col-span-2">
           {/* Gallery */}

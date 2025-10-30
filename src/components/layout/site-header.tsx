@@ -9,7 +9,6 @@ import {
   Sun,
   User,
 } from "lucide-react";
-import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 const navLinks = [
   { href: "/listings", label: "السيارات" },
@@ -44,7 +44,7 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-card text-card-foreground p-6">
               <Link href="/" className="flex items-center space-x-2 mb-8">
-                 <Image src="https://i.ibb.co/fhZ6DLx/1-upscayl-5x-upscayl-standard-4x.png" alt="AlBoursa Logo" width={120} height={40} />
+                 <Image src="https://i.ibb.co/Xz9w2sT/alboursa-logo.png" alt="AlBoursa Logo" width={120} height={40} />
               </Link>
               <nav className="flex flex-col gap-4">
                 {navLinks.map((link) => (
@@ -63,7 +63,7 @@ export function SiteHeader() {
         
         <div className="mr-4 flex flex-1">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="https://i.ibb.co/fhZ6DLx/1-upscayl-5x-upscayl-standard-4x.png" alt="AlBoursa Logo" width={140} height={45} />
+            <Image src="https://i.ibb.co/Xz9w2sT/alboursa-logo.png" alt="AlBoursa Logo" width={140} height={45} />
           </Link>
         </div>
 

@@ -14,7 +14,7 @@ import { Filter, List, LayoutGrid } from "lucide-react";
 
 export default function ListingsPage() {
   return (
-    <div className="bg-secondary">
+    <div className="bg-background">
       <div className="container py-8 md:py-12">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           <aside className="col-span-1 lg:sticky top-24 h-fit">

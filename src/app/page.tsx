@@ -13,12 +13,12 @@ export default function Home() {
   const latestCars = cars.sort((a, b) => b.id - a.id).slice(0, 10);
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-secondary">
+    <div className="flex flex-col min-h-[100dvh] bg-background">
       <section className="w-full bg-white pt-8 pb-8">
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center rounded-md border bg-white flex-row-reverse shadow-sm">
-                <Button className="flex h-12 items-center px-3 py-3 border-l rounded-none bg-primary hover:bg-primary/90 text-primary-foreground">
+                <Button className="flex h-14 items-center px-3 py-3 border-l rounded-none bg-primary hover:bg-primary/90 text-primary-foreground">
                   <Search className="text-white" />
                   <span className="mr-2 hidden md:block">ابحث عن سيارتك</span>
                 </Button>
@@ -72,7 +72,7 @@ export default function Home() {
         </div>
       </section>
       
-      <section className="bg-secondary py-12 md:py-16">
+      <section className="bg-background py-12 md:py-16">
         <div className="container">
            <h2 className="mb-6 text-2xl font-semibold text-gray-800 md:text-3xl">
             عروض مميزة

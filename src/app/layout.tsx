@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-secondary antialiased font-sans",
+          "min-h-screen bg-background antialiased font-sans",
           alexandria.variable
         )}
       >
