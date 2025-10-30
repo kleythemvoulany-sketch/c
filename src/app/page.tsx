@@ -30,12 +30,11 @@ export default function Home() {
                 />
                  <div className="relative hidden md:block">
                   <Button
-                    variant="link"
-                    className="flex h-12 items-center justify-between border-l px-4"
+                    className="flex h-12 items-center justify-between border-l px-4 bg-accent text-accent-foreground hover:bg-accent/90 rounded-none"
                     asChild
                   >
                     <Link href="/listings">
-                      <span className="whitespace-nowrap text-sm ml-4 text-primary hover:text-accent">
+                      <span className="whitespace-nowrap text-sm ml-4">
                         بحث متقدم
                       </span>
                     </Link>
