@@ -45,8 +45,8 @@ export function SiteHeader() {
             <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-card text-card-foreground p-6">
               <Link href="/" className="flex items-center space-x-2 mb-8">
                  <h1 className="text-2xl font-bold">
-                    <span className="text-accent">Al</span>
-                    <span className="text-primary">Boursa</span>
+                    <span className="text-accent">ال</span>
+                    <span className="text-primary">بورصة</span>
                  </h1>
               </Link>
               <nav className="flex flex-col gap-4">
@@ -67,8 +67,8 @@ export function SiteHeader() {
         <div className="mr-4 flex flex-1">
           <Link href="/" className="flex items-center space-x-2">
             <h1 className="text-3xl font-bold">
-                <span className="text-accent">Al</span>
-                <span className="text-primary-foreground">Boursa</span>
+                <span className="text-accent">ال</span>
+                <span className="text-primary-foreground">بورصة</span>
             </h1>
           </Link>
         </div>

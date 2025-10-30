@@ -12,8 +12,8 @@ export function SiteFooter() {
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <h1 className="text-2xl font-bold">
-                <span className="text-accent">Al</span>
-                <span className="text-primary-foreground">Boursa</span>
+                <span className="text-accent">ال</span>
+                <span className="text-primary-foreground">بورصة</span>
               </h1>
             </Link>
             <p className="text-primary-foreground/70 text-sm">
