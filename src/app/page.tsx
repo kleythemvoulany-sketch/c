@@ -18,10 +18,10 @@ export default function Home() {
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center rounded-md border bg-white flex-row-reverse shadow-sm">
-                <div
-                className="flex h-12 items-center px-3 py-3 border-l">
-                  <Search className="text-muted-foreground" />
-                </div>
+                <Button className="flex h-12 items-center px-3 py-3 border-l rounded-none bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <Search className="text-white" />
+                  <span className="mr-2 hidden md:block">ابحث عن سيارتك</span>
+                </Button>
                 <Input
                   type="text"
                   placeholder="ابحث عن أي شيء..."
