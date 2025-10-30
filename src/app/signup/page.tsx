@@ -20,7 +20,7 @@ export default function SignupPage() {
   const [accountType, setAccountType] = useState("personal");
 
   return (
-    <div className="container flex items-center justify-center py-12">
+    <div className="container flex min-h-[calc(100vh-200px)] items-center justify-center py-12">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-headline">إنشاء حساب جديد</CardTitle>
@@ -78,12 +78,12 @@ export default function SignupPage() {
 
           <div className="grid gap-2">
             <Label htmlFor="phone">رقم الهاتف</Label>
-            <div className="flex items-center gap-2">
-              <Input id="phone" type="tel" placeholder="رقم الهاتف" required dir="ltr" className="text-left flex-1" />
-              <div className="flex h-10 items-center rounded-md border border-input bg-background px-3">
-                <span className="mr-2 text-sm text-muted-foreground">+222</span>
+            <div className="flex items-center gap-2" dir="ltr">
+              <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
+                <span className="text-sm text-muted-foreground">+222</span>
                 <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
               </div>
+              <Input id="phone" type="tel" placeholder="رقم الهاتف" required className="text-left flex-1" />
             </div>
           </div>
           <div className="grid gap-2">

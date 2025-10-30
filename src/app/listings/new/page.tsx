@@ -90,12 +90,12 @@ export default function NewListingPage() {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="phone">رقم الهاتف</Label>
-                        <div className="flex items-center gap-2">
-                            <Input id="phone" type="tel" placeholder="رقم الهاتف" dir="ltr" className="text-left flex-1"/>
-                             <div className="flex h-10 items-center rounded-md border border-input bg-background px-3">
+                        <div className="flex items-center gap-2" dir="ltr">
+                            <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
+                                <span className="text-sm text-muted-foreground">+222</span>
                                 <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
-                                <span className="mr-2 text-sm text-muted-foreground">+222</span>
                             </div>
+                            <Input id="phone" type="tel" placeholder="رقم الهاتف" className="text-left flex-1"/>
                         </div>
                     </div>
                      <div className="space-y-2">
