@@ -111,8 +111,9 @@ export function SiteHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10">
+              <Button variant="ghost" className="text-primary-foreground hover:bg-white/10 px-2 sm:px-3">
                 <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={24} height={18} className="rounded-sm"/>
+                <span className="hidden sm:inline-block mr-2">العربية</span>
                 <span className="sr-only">Change language</span>
               </Button>
             </DropdownMenuTrigger>
