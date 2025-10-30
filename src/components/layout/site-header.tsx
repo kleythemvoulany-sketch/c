@@ -78,7 +78,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex flex-none items-center justify-end space-x-4">
-          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground hidden sm:flex">
+          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground hidden sm:flex ml-4">
             <Link href="/listings/new">
               <PlusCircle className="mr-2 h-4 w-4" />
               بيع على البورصة
