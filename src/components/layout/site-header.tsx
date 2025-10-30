@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   Globe,
+  LogIn,
   Menu,
   Moon,
   PlusCircle,
@@ -82,9 +83,9 @@ export function SiteHeader() {
           </Button>
 
           <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-white/10">
-            <Link href="/profile">
-              <User className="h-5 w-5" />
-               <span className="sr-only">Profile</span>
+            <Link href="/login">
+              <LogIn className="h-5 w-5" />
+               <span className="sr-only">تسجيل الدخول</span>
             </Link>
           </Button>
 
