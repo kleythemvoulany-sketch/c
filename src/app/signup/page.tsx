@@ -42,7 +42,7 @@ const signupSchema = z
     fullName: z.string().optional(),
     dealerName: z.string().optional(),
     ownerName: z.string().optional(),
-    phoneNumber: z.string().min(8, 'رقم الهاتف يجب أن يكون 8 أرقام.'),
+    phoneNumber: z.string().min(1, 'رقم الهاتف إجباري.'),
     email: z.string().email('بريد إلكتروني غير صالح.').optional().or(z.literal('')),
     password: z.string().min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل.'),
     confirmPassword: z.string(),
@@ -100,7 +100,11 @@ export default function SignupPage() {
     resolver: zodResolver(signupSchema),
     defaultValues: {
       accountType: 'personal',
+      fullName: '',
+      dealerName: '',
+      ownerName: '',
       phoneNumber: '',
+      email: '',
       password: '',
       confirmPassword: '',
     },
@@ -109,6 +113,10 @@ export default function SignupPage() {
   const accountType = form.watch('accountType');
 
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
+    if (!auth || !firestore) {
+        toast({ variant: 'destructive', title: "خطأ", description: "خدمات Firebase غير متاحة." });
+        return;
+    }
     if (!values.email) {
       toast({ variant: 'destructive', title: "خطأ", description: "البريد الإلكتروني مطلوب للتسجيل." });
       return;
@@ -163,7 +171,7 @@ export default function SignupPage() {
 
   return (
     <div className="container flex items-center justify-center py-12 min-h-screen">
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-headline">
             إنشاء حساب جديد
@@ -290,7 +298,7 @@ export default function SignupPage() {
                         />
                          <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
                            <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
-                          <span className="text-sm text-muted-foreground mr-2">+222</span>
+                          <span className="text-sm text-muted-foreground">+222</span>
                         </div>
                       </div>
                     </FormControl>

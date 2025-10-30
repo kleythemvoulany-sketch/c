@@ -36,22 +36,33 @@ const profileSchema = z
   .object({
     name: z.string().min(3, { message: "الاسم يجب أن يكون 3 أحرف على الأقل." }),
     phone: z.string().min(8, { message: "رقم الهاتف غير صالح." }),
-    currentPassword: z.string().min(6, { message: "كلمة المرور يجب أن تكون 6 أحرف على الأقل."}).optional().or(z.literal('')),
-    newPassword: z.string().min(6, { message: "كلمة المرور يجب أن تكون 6 أحرف على الأقل."}).optional().or(z.literal('')),
+    currentPassword: z.string().optional().or(z.literal('')),
+    newPassword: z.string().optional().or(z.literal('')),
     confirmPassword: z.string().optional(),
   })
   .refine(
     (data) => {
-      if (data.newPassword && !data.currentPassword) {
+      // if new password is set, current password must be set
+      if (data.newPassword && (!data.currentPassword || data.currentPassword.length < 6)) {
         return false;
       }
       return true;
     },
     {
-      message: "الرجاء إدخال كلمة المرور الحالية لتغييرها.",
+      message: "الرجاء إدخال كلمة المرور الحالية (6 أحرف على الأقل) لتغييرها.",
       path: ["currentPassword"],
     }
   )
+  .refine((data) => {
+    // if new password is set, it must match confirmation
+    if(data.newPassword && data.newPassword.length < 6) {
+        return false;
+    }
+    return true;
+  },{
+    message: "كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل.",
+    path: ["newPassword"],
+  })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "كلمتا المرور الجديدتان غير متطابقتين.",
     path: ["confirmPassword"],
@@ -72,7 +83,7 @@ export function ProfileForm({ userProfile }: ProfileFormProps) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: userProfile.firstName + ' ' + userProfile.lastName || "",
+      name: (userProfile.firstName || "") + ' ' + (userProfile.lastName || ""),
       phone: userProfile.phoneNumber || "",
       currentPassword: "",
       newPassword: "",
@@ -81,10 +92,10 @@ export function ProfileForm({ userProfile }: ProfileFormProps) {
   });
 
   async function onSubmit(data: ProfileFormValues) {
-    if (!user || !firestore) return;
+    if (!user || !firestore || !auth) return;
 
     try {
-      // Update profile display name
+      // Update profile display name in Firebase Auth
       if (data.name !== user.displayName) {
         await updateProfile(user, { displayName: data.name });
       }
@@ -98,23 +109,41 @@ export function ProfileForm({ userProfile }: ProfileFormProps) {
       });
 
       // Update password if provided
-      if (data.newPassword) {
-        // This requires recent sign-in, which we're not handling here for simplicity.
-        // In a real app, you'd reauthenticate the user before this step.
+      if (data.newPassword && data.currentPassword) {
+        // This requires recent sign-in, which we are not re-authenticating for simplicity.
+        // Firebase SDK will throw an error if re-authentication is needed.
         await updatePassword(user, data.newPassword);
+         toast({
+          title: "تم تغيير كلمة المرور!",
+          description: "تم تحديث كلمة المرور بنجاح.",
+        });
+        // Clear password fields after successful update
+        form.reset({
+            ...form.getValues(),
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: ""
+        });
+      } else {
+         toast({
+            title: "تم بنجاح!",
+            description: "تم تحديث معلومات ملفك الشخصي.",
+        });
       }
       
-      toast({
-        title: "تم بنجاح!",
-        description: "تم تحديث معلومات ملفك الشخصي.",
-      });
 
     } catch (error: any) {
        console.error("Profile update error:", error);
+       let description = "فشل تحديث الملف الشخصي. قد تحتاج إلى تسجيل الدخول مرة أخرى للمتابعة.";
+        if (error.code === 'auth/requires-recent-login') {
+            description = 'لتغيير كلمة المرور، يجب عليك تسجيل الدخول مرة أخرى أولاً.';
+        } else if (error.code === 'auth/wrong-password') {
+            description = 'كلمة المرور الحالية غير صحيحة.';
+        }
        toast({
         variant: "destructive",
         title: "حدث خطأ",
-        description: error.message || "فشل تحديث الملف الشخصي. قد تحتاج إلى تسجيل الدخول مرة أخرى.",
+        description: description,
       });
     }
   }
@@ -176,7 +205,7 @@ export function ProfileForm({ userProfile }: ProfileFormProps) {
                              <Input placeholder="رقم الهاتف" {...field} className="text-left flex-1"/>
                             <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
                                 <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
-                                <span className="text-sm text-muted-foreground mr-2">+222</span>
+                                <span className="text-sm text-muted-foreground">+222</span>
                             </div>
                         </div>
                     </FormControl>
