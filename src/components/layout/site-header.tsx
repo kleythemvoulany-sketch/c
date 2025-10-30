@@ -32,17 +32,17 @@ export function SiteHeader() {
   const { setTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-primary text-primary-foreground">
+    <header className="sticky top-0 z-40 w-full border-b bg-card text-card-foreground">
       <div className="container flex h-16 items-center sm:h-20">
         <div className="md:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+              <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted/50">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-primary text-primary-foreground p-6">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-card text-card-foreground p-6">
               <Link href="/" className="flex items-center space-x-2 mb-8">
                  <Image src="https://i.ibb.co/fhZ6DLx/1-upscayl-5x-upscayl-standard-4x.png" alt="AlBoursa Logo" width={120} height={40} />
               </Link>
@@ -75,7 +75,7 @@ export function SiteHeader() {
             </Link>
           </Button>
 
-          <Button variant="ghost" size="icon" asChild className="text-white hover:bg-white/10">
+          <Button variant="ghost" size="icon" asChild className="text-foreground hover:bg-muted/50">
             <Link href="/profile">
               <User className="h-5 w-5" />
                <span className="sr-only">Profile</span>
@@ -84,7 +84,7 @@ export function SiteHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+              <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted/50">
                 <Globe className="h-5 w-5" />
                 <span className="sr-only">Change language</span>
               </Button>
@@ -104,7 +104,7 @@ export function SiteHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+              <Button variant="ghost" size="icon" className="text-foreground hover:bg-muted/50">
                 <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                 <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                 <span className="sr-only">Toggle theme</span>
