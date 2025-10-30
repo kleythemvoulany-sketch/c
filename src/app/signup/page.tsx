@@ -51,8 +51,12 @@ export default function SignupPage() {
             <Input id="name" placeholder="محمد سالم" required />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="email">البريد الإلكتروني</Label>
-            <Input id="email" type="email" placeholder="m@example.com" required />
+            <Label htmlFor="phone">رقم الهاتف</Label>
+            <Input id="phone" type="tel" placeholder="مثال: 34949470" required />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="email">البريد الإلكتروني (اختياري)</Label>
+            <Input id="email" type="email" placeholder="m@example.com" />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">كلمة المرور</Label>
