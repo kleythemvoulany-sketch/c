@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -48,7 +49,7 @@ type AiAdImproverProps = {
 };
 
 export function AiAdImprover({ currentDescription, onDescriptionChange }: AiAdImproverProps) {
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     improveAdDescriptionAction,
     initialState
   );
