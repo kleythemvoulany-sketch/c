@@ -29,10 +29,15 @@ export default function Home() {
                 />
                  <div className="relative hidden md:block">
                   <Button
-                  variant="ghost"
-                  className="flex h-12 items-center justify-between border-l px-4">
-                  <span
-                  className="w-[95px] whitespace-nowrap text-sm ml-4">الكل</span>
+                    variant="link"
+                    className="flex h-12 items-center justify-between border-l px-4"
+                    asChild
+                  >
+                    <Link href="/listings">
+                      <span className="whitespace-nowrap text-sm ml-4 text-primary hover:text-accent">
+                        بحث متقدم
+                      </span>
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -48,7 +53,7 @@ export default function Home() {
           <div className="scrollbar-hide container block max-w-screen-2xl snap-none overflow-y-hidden overflow-x-scroll">
             <div className="flex min-w-max justify-start gap-6 px-6 md:px-4 xl:px-3">
               {categories.map((category) => (
-                <Link href="#" key={category.name}>
+                <Link href="/listings" key={category.name}>
                   <div className="group flex min-w-[52px] cursor-pointer flex-col items-center *:duration-200 hover:scale-105 sm:min-w-[100px]">
                     <div className="relative size-20 rounded-full p-4 transition-transform sm:size-[90px] lg:size-[105px] xl:size-28 bg-accent/10">
                       <div className="relative flex h-full w-full items-center justify-center">
