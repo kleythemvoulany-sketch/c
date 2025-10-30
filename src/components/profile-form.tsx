@@ -139,7 +139,7 @@ export function ProfileForm() {
                     <FormLabel>رقم الهاتف</FormLabel>
                     <FormControl>
                        <div className="flex items-center gap-2">
-                            <Input placeholder="رقم هاتفك" {...field} dir="ltr" className="text-left flex-1"/>
+                            <Input placeholder="رقم الهاتف" {...field} dir="ltr" className="text-left flex-1"/>
                             <div className="flex h-10 items-center rounded-md border border-input bg-background px-3">
                                 <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
                                 <span className="mr-2 text-sm text-muted-foreground">+222</span>
