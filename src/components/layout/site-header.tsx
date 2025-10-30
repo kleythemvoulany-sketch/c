@@ -62,30 +62,18 @@ export function SiteHeader() {
           </Sheet>
         </div>
         
-        <div className="mr-4 hidden md:flex">
+        <div className="mr-4 flex flex-1">
           <Link href="/" className="flex items-center space-x-2">
             <Car className="h-8 w-8 text-accent" />
             <span className="font-bold text-xl text-white">البورصة للسيارات</span>
           </Link>
         </div>
 
-        <nav className="hidden md:flex items-center gap-4 text-sm ml-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="transition-colors hover:text-white/80 text-white/70 font-medium"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground hidden sm:flex">
+        <div className="flex flex-none items-center justify-end space-x-2">
+          <Button asChild className="bg-yellow-400 hover:bg-yellow-400/90 text-primary hidden sm:flex">
             <Link href="/listings/new">
               <PlusCircle className="mr-2 h-4 w-4" />
-              أضف إعلان
+              بيع على البورصة
             </Link>
           </Button>
 
@@ -95,6 +83,26 @@ export function SiteHeader() {
                <span className="sr-only">Profile</span>
             </Link>
           </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+                <Globe className="h-5 w-5" />
+                <span className="sr-only">Change language</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                العربية
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                English
+              </DropdownMenuItem>
+               <DropdownMenuItem>
+                Français
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
