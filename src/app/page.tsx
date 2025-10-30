@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import { cars, categories } from "@/lib/data";
 import { CarListItem } from "@/components/car-list-item";
+import { CarCard } from "@/components/car-card";
 
 export default function Home() {
   const featuredCars = cars.filter((c) => c.featured).slice(0, 4);
@@ -76,7 +77,7 @@ export default function Home() {
            <h2 className="mb-6 text-2xl font-semibold text-gray-800 md:text-3xl">
             عروض مميزة
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="space-y-4">
             {featuredCars.map((car) => (
               <CarListItem key={car.id} car={car} />
             ))}
