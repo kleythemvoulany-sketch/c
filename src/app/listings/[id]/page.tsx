@@ -24,7 +24,12 @@ import { Car as CarType } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMemoFirebase } from '@/firebase/provider';
 
-export default function CarDetailsPage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default function CarDetailsPage({ params }: PageProps) {
   const firestore = useFirestore();
 
   const carDocRef = useMemoFirebase(
