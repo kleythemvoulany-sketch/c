@@ -141,7 +141,7 @@ export default function Home() {
       <section className="py-12 md:py-16">
         <div className="container">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800 md:text-3xl">
+            <h2 className="text-2xl font-semibold text-gray-800 md:text  -3xl">
               أحدث الإعلانات
             </h2>
             <Button variant="link" asChild>
