@@ -4,10 +4,14 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
-  Storage,
+  getStorage,
 } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
-import { storage } from '@/firebase'; // Directly import the initialized storage instance
+import { initializeFirebase } from '@/firebase';
+
+// Get a reference to the storage service, which is used to create references in your storage bucket
+// This is done once and exported for use in other files
+const { storage } = initializeFirebase();
 
 /**
  * Uploads multiple images to Firebase Storage and reports aggregated progress.
@@ -33,6 +37,10 @@ export async function uploadImages(
   }
 
   const updateOverallProgress = () => {
+    if (totalFiles === 0) {
+        onProgress(100);
+        return;
+    }
     const totalProgress = Object.values(progressByFile).reduce(
       (acc, curr) => acc + curr,
       0
@@ -43,7 +51,9 @@ export async function uploadImages(
 
   // Initialize progress for all files to 0 and report initial progress
   files.forEach(file => {
-    progressByFile[file.name] = 0;
+    // Use a unique key for each file, e.g., file.name + file.lastModified
+    const fileKey = `${file.name}-${file.lastModified}`;
+    progressByFile[fileKey] = 0;
   });
   updateOverallProgress(); // Reports 0% at the start
 
@@ -54,6 +64,7 @@ export async function uploadImages(
     const storageRef = ref(storage, fileName);
 
     const uploadTask = uploadBytesResumable(storageRef, file);
+    const fileKey = `${file.name}-${file.lastModified}`;
 
     const promise = new Promise<string>((resolve, reject) => {
       uploadTask.on(
@@ -61,20 +72,20 @@ export async function uploadImages(
         (snapshot) => {
           // Calculate progress for this single file
           const singleFileProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          progressByFile[file.name] = singleFileProgress;
+          progressByFile[fileKey] = singleFileProgress;
           updateOverallProgress();
         },
         (error) => {
           console.error(`Upload failed for file ${file.name}:`, error);
-          // Mark this file's progress as 100 to not block the overall progress, but the promise will still reject.
-          // Or better, handle the failure gracefully. For now, we let it fail.
+          // When an error occurs, we reject the promise for this file.
+          // Promise.all will then fail fast.
           reject(error);
         },
         async () => {
           try {
             // On successful upload, get the download URL
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            progressByFile[file.name] = 100; // Mark as complete
+             progressByFile[fileKey] = 100; // Ensure this file is marked as 100% complete
             updateOverallProgress();
             resolve(downloadURL);
           } catch (error) {
@@ -88,8 +99,9 @@ export async function uploadImages(
   });
 
   try {
+    // Promise.all will reject as soon as one of the promises rejects.
     const urls = await Promise.all(uploadPromises);
-    onProgress(100);
+    onProgress(100); // Ensure it reaches 100% on success
     return urls;
   } catch (error) {
     console.error('One or more image uploads failed.', error);

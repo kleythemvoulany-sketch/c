@@ -17,9 +17,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { UploadCloud, X, Wand2 } from 'lucide-react';
+import { UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
@@ -158,9 +158,9 @@ export default function NewListingPage() {
 
     setUploadProgress(0);
     try {
-      const imageUrls = await uploadImages(imageFiles, (progress) => setUploadProgress(progress));
+      const imageUrls = await uploadImages(imageFiles, setUploadProgress);
       
-      const collectionRef = collection(firestore, 'vehicleListings');
+      const collectionRef = collection(firestore, 'listings');
       await addDoc(collectionRef, {
         ...values,
         userId: user.uid,
@@ -436,7 +436,7 @@ export default function NewListingPage() {
                               className="text-left flex-1"
                             />
                              <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
-                               <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} className="h-auto"/>
+                               <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} style={{width:'auto', height:'auto'}}/>
                               <span className="text-sm text-muted-foreground">+222</span>
                             </div>
                           </div>
