@@ -34,6 +34,7 @@ export type Car = {
     listingDate: Timestamp | Date | string;
     viewCount?: number;
     imageUrls?: string[];
+    contact?: string; // Adding contact for car details page
 };
 
 export type Category = {
