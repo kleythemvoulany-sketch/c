@@ -34,7 +34,7 @@ import { useToast } from '@/hooks/use-toast';
 import { firestore, storage } from '@/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/firebase/provider';
+import { useUser, useStorage } from '@/firebase/provider';
 import React, { useState } from 'react';
 import { uploadImages } from '@/firebase/storage';
 import { Progress } from '@/components/ui/progress';
@@ -83,6 +83,7 @@ export default function NewListingPage() {
   const { toast } = useToast();
   const { user } = useUser();
   const router = useRouter();
+  const storage = useStorage();
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -572,3 +573,5 @@ export default function NewListingPage() {
     </div>
   );
 }
+
+    
