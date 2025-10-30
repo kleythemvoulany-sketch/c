@@ -26,7 +26,6 @@ import { useMemoFirebase } from '@/firebase/provider';
 
 type PageProps = {
   params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export default function CarDetailsPage({ params }: PageProps) {
