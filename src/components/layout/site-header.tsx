@@ -82,7 +82,14 @@ export function SiteHeader() {
             </Link>
           </Button>
 
-          <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-white/10">
+          <Button variant="ghost" asChild className="text-primary-foreground hover:bg-white/10 hidden sm:flex">
+            <Link href="/login">
+              <LogIn className="ml-2 h-4 w-4" />
+              تسجيل الدخول
+            </Link>
+          </Button>
+
+          <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-white/10 sm:hidden">
             <Link href="/login">
               <LogIn className="h-5 w-5" />
                <span className="sr-only">تسجيل الدخول</span>
