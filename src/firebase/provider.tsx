@@ -4,7 +4,7 @@ import React, { DependencyList, createContext, useContext, ReactNode, useMemo, u
 import { FirebaseApp } from 'firebase/app';
 import { Firestore } from 'firebase/firestore';
 import { Auth, User, onAuthStateChanged } from 'firebase/auth';
-import { Storage } from 'firebase/storage';
+import { getStorage, Storage } from 'firebase/storage';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
 
 interface FirebaseProviderProps {
@@ -158,6 +158,9 @@ export const useFirestore = (): Firestore => {
 /** Hook to access Firebase Storage instance. */
 export const useStorage = (): Storage => {
     const { storage } = useFirebase();
+    if (!storage) {
+      throw new Error('Storage service not available. Check FirebaseProvider setup.');
+    }
     return storage;
 }
 

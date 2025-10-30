@@ -1,6 +1,6 @@
 'use client';
 
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, Storage } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL, Storage } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 
 /**

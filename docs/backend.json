@@ -43,7 +43,6 @@
         }
       },
       "required": [
-        "id",
         "email",
         "firstName",
         "lastName",
@@ -167,7 +166,6 @@
         }
       },
       "required": [
-        "id",
         "question",
         "answer",
         "language"
@@ -207,7 +205,6 @@
         }
       },
       "required": [
-        "id",
         "name",
         "email",
         "message",
