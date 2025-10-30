@@ -105,7 +105,7 @@ export function SiteHeader() {
                   تسجيل الدخول
                 </Link>
               </Button>
-              <Button variant="secondary" size="icon" asChild className="bg-white text-primary hover:bg-white/90 sm:hidden">
+              <Button variant="secondary" size="icon" asChild className="bg-white text-primary hover:bg-white/90 sm:hidden rounded-full">
                 <Link href="/login">
                   <User className="h-5 w-5" />
                   <span className="sr-only">تسجيل الدخول</span>
