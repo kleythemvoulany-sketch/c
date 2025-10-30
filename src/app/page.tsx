@@ -45,9 +45,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white py-6 sm:py-8">
+      <section className="bg-primary/10 py-6 sm:py-8">
         <h2 className="container mx-auto mb-3 max-w-screen-2xl px-4 text-start text-2xl font-bold text-gray-800 sm:mb-6 sm:text-3xl">
-          الفئات
+          البورصة الموثوقة
         </h2>
         <div className="relative flex items-center justify-center">
           <div className="scrollbar-hide container block max-w-screen-2xl snap-none overflow-y-hidden overflow-x-scroll">
