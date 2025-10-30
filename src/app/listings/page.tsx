@@ -10,16 +10,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cars } from "@/lib/data";
-import { Filter, List, LayoutGrid, View } from "lucide-react";
+import { Filter, List, LayoutGrid } from "lucide-react";
 
 export default function ListingsPage() {
   return (
     <div className="bg-background">
-      <div className="container py-12 md:py-16">
+      <div className="container py-8 md:py-12">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           <aside className="col-span-1 lg:sticky top-24 h-fit">
-            <div className="bg-secondary rounded-lg p-6">
-              <h3 className="text-xl font-headline font-semibold mb-6 flex items-center gap-2 text-primary">
+            <div className="rounded-lg p-6">
+              <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-primary">
                 <Filter className="w-5 h-5" />
                 تصفية النتائج
               </h3>
@@ -96,7 +96,7 @@ export default function ListingsPage() {
           </aside>
 
           <main className="col-span-1 lg:col-span-3">
-            <div className="bg-secondary rounded-lg px-6 py-4 flex flex-wrap justify-between items-center gap-4 mb-8">
+            <div className="bg-card border rounded-lg px-6 py-4 flex flex-wrap justify-between items-center gap-4 mb-8">
               <p className="text-muted-foreground flex items-center gap-2">
                 <List className="w-5 h-5 text-primary" />
                 <span>

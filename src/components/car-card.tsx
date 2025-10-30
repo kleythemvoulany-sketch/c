@@ -46,7 +46,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
             </div>
           </CardHeader>
           <CardContent className="p-4 space-y-2">
-            <h3 className="text-lg font-bold font-headline text-primary truncate">
+            <h3 className="text-lg font-bold text-primary truncate">
               {car.make} {car.model} - {car.year}
             </h3>
             <p className="text-2xl font-bold text-accent">
@@ -73,7 +73,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
           </CardContent>
         </Link>
       </div>
-      <CardFooter className="p-2 bg-secondary mt-auto">
+      <CardFooter className="p-2 bg-secondary/50 mt-auto">
         {isOwnerView ? (
           <div className="w-full flex gap-2">
             <Button asChild variant="outline" className="w-full bg-background">

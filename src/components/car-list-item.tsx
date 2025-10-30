@@ -42,7 +42,7 @@ export function CarListItem({ car }: CarListItemProps) {
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>
           <Link href={`/listings/${car.id}`} className="block">
-            <h3 className="text-lg font-bold font-headline text-primary truncate">
+            <h3 className="text-lg font-bold text-primary truncate">
               {car.make} {car.model}
             </h3>
             <p className="text-2xl font-bold text-accent mt-1 mb-3">

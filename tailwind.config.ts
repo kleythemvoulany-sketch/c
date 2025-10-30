@@ -19,8 +19,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ["var(--font-tajawal)", ...fontFamily.sans],
-        headline: ["var(--font-poppins)", "var(--font-tajawal)", ...fontFamily.sans],
+        sans: ["Arial", "Helvetica", "sans-serif"],
+        body: ["Arial", "Helvetica", "sans-serif"],
+        headline: ["Arial", "Helvetica", "sans-serif"],
       },
       colors: {
         background: 'hsl(var(--background))',

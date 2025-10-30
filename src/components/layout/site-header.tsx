@@ -32,12 +32,12 @@ export function SiteHeader() {
   const { setTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-primary text-primary-foreground">
       <div className="container flex h-16 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="flex items-center space-x-2">
-            <Car className="h-6 w-6 text-primary" />
-            <span className="font-bold font-headline text-lg text-primary">
+            <Car className="h-6 w-6 text-accent" />
+            <span className="font-bold text-lg">
               البورصة للسيارات
             </span>
           </Link>
@@ -70,7 +70,7 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              className="transition-colors hover:text-primary-foreground/80 text-primary-foreground/60"
             >
               {link.label}
             </Link>
@@ -79,7 +79,7 @@ export function SiteHeader() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:bg-primary/50">
                 <Globe className="h-[1.2rem] w-[1.2rem]" />
                 <span className="sr-only">Switch Language</span>
               </Button>
@@ -93,7 +93,7 @@ export function SiteHeader() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:bg-primary/50">
                 <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                 <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                 <span className="sr-only">Toggle theme</span>
@@ -112,18 +112,18 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="ghost" asChild className="hidden sm:inline-flex">
+          <Button variant="ghost" asChild className="hidden sm:inline-flex hover:bg-primary/50">
             <Link href="/profile">
               <User className="mr-2 h-4 w-4" />
               ملفي الشخصي
             </Link>
           </Button>
-           <Button variant="ghost" size="icon" asChild className="sm:hidden">
+           <Button variant="ghost" size="icon" asChild className="sm:hidden hover:bg-primary/50">
             <Link href="/profile">
               <User className="h-5 w-5" />
             </Link>
           </Button>
-          <Button asChild className="bg-accent hover:bg-accent/90 text-primary-foreground">
+          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
             <Link href="/listings/new">
               <PlusCircle className="mr-2 h-4 w-4" />
               أضف إعلان

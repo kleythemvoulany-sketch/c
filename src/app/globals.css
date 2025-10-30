@@ -20,13 +20,13 @@ body {
     --secondary-foreground: 213 80% 10%;
     --muted: 220 17% 92%;
     --muted-foreground: 0 0% 45.1%; /* #555555 is ~40%, using a slightly lighter shadcn default */
-    --accent: 30 90% 50%; /* #F2711C */
+    --accent: 142 76% 36%; /* #22A55A - Green from image */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 220 13% 85%;
     --input: 220 13% 91%;
-    --ring: 30 90% 50%;
+    --ring: 142 76% 36%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -55,13 +55,13 @@ body {
     --secondary-foreground: 0 0% 98%;
     --muted: 213 80% 20%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 30 90% 50%;
+    --accent: 142 76% 36%; /* #22A55A */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 213 80% 25%;
     --input: 213 80% 25%;
-    --ring: 30 90% 50%;
+    --ring: 142 76% 36%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
