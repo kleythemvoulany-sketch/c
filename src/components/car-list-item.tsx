@@ -47,7 +47,7 @@ export function CarListItem({ car }: CarListItemProps) {
             </h3>
             <div className="text-2xl font-bold text-accent mt-1 mb-3">
               {new Intl.NumberFormat("en-US").format(car.price)}
-              <span className="text-sm font-medium text-primary ml-1">أوقية جديدة</span>
+              <span className="text-sm font-medium text-primary ml-2">أوقية جديدة</span>
             </div>
           </Link>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm text-muted-foreground mb-4">
