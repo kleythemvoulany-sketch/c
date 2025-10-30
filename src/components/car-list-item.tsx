@@ -45,9 +45,10 @@ export function CarListItem({ car }: CarListItemProps) {
             <h3 className="text-lg font-bold text-primary truncate hover:text-accent transition-colors">
               {car.make} {car.model}
             </h3>
-            <p className="text-2xl font-bold text-accent mt-1 mb-3">
-              {new Intl.NumberFormat("en-US", { style: 'currency', currency: 'MRU', minimumFractionDigits: 0 }).format(car.price)}
-            </p>
+            <div className="text-2xl font-bold text-accent mt-1 mb-3">
+              {new Intl.NumberFormat("ar-MR").format(car.price)}
+              <span className="text-sm font-medium text-primary ml-1">أوقية جديدة</span>
+            </div>
           </Link>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm text-muted-foreground mb-4">
             <div className="flex items-center gap-2">

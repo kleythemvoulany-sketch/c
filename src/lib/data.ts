@@ -26,8 +26,8 @@ export type Category = {
 export const cars: Car[] = [
     {
         id: 1,
-        make: 'Hyundai',
-        model: 'SantaFe',
+        make: 'هيونداي',
+        model: 'سنتافي',
         year: 2017,
         price: 320000,
         mileage: 160000,
@@ -43,8 +43,8 @@ export const cars: Car[] = [
     },
     {
         id: 2,
-        make: 'Toyota',
-        model: 'Camry',
+        make: 'تويوتا',
+        model: 'كامري',
         year: 2020,
         price: 450000,
         mileage: 80000,
@@ -60,8 +60,8 @@ export const cars: Car[] = [
     },
     {
         id: 3,
-        make: 'Mercedes-Benz',
-        model: 'C-Class',
+        make: 'مرسيدس-بنز',
+        model: 'الفئة C',
         year: 2019,
         price: 650000,
         mileage: 95000,
@@ -77,8 +77,8 @@ export const cars: Car[] = [
     },
     {
         id: 4,
-        make: 'Nissan',
-        model: 'Patrol',
+        make: 'نيسان',
+        model: 'باترول',
         year: 2022,
         price: 980000,
         mileage: 30000,
@@ -94,8 +94,8 @@ export const cars: Car[] = [
     },
     {
         id: 5,
-        make: 'Kia',
-        model: 'Sportage',
+        make: 'كيا',
+        model: 'سبورتاج',
         year: 2018,
         price: 280000,
         mileage: 120000,
@@ -111,8 +111,8 @@ export const cars: Car[] = [
     },
     {
         id: 6,
-        make: 'Toyota',
-        model: 'Land Cruiser',
+        make: 'تويوتا',
+        model: 'لاند كروزر',
         year: 2015,
         price: 700000,
         mileage: 210000,
@@ -127,8 +127,8 @@ export const cars: Car[] = [
     },
     {
         id: 7,
-        make: 'Tesla',
-        model: 'Model 3',
+        make: 'تسلا',
+        model: 'موديل 3',
         year: 2023,
         price: 800000,
         mileage: 15000,
@@ -143,8 +143,8 @@ export const cars: Car[] = [
     },
     {
         id: 8,
-        make: 'Renault',
-        model: 'Duster',
+        make: 'رينو',
+        model: 'داستر',
         year: 2019,
         price: 230000,
         mileage: 90000,
@@ -159,7 +159,7 @@ export const cars: Car[] = [
     },
     {
         id: 9,
-        make: 'Ford',
+        make: 'فورد',
         model: 'F-150',
         year: 2018,
         price: 550000,
@@ -175,8 +175,8 @@ export const cars: Car[] = [
     },
     {
         id: 10,
-        make: 'Hyundai',
-        model: 'Accent',
+        make: 'هيونداي',
+        model: 'أكسنت',
         year: 2021,
         price: 290000,
         mileage: 60000,
@@ -191,8 +191,8 @@ export const cars: Car[] = [
     },
      {
         id: 11,
-        make: 'Toyota',
-        model: 'Hilux',
+        make: 'تويوتا',
+        model: 'هايلكس',
         year: 2016,
         price: 480000,
         mileage: 190000,
