@@ -94,9 +94,15 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
             </Card>
 
             <div className="sticky top-24">
-                <Button size="lg" className="w-full text-lg h-14 bg-accent hover:bg-accent/90 text-accent-foreground">
-                    <Phone className="ml-3 h-6 w-6" />
-                    اتصل بالبائع: {car.contact}
+                <Button size="lg" className="w-full text-lg h-14 bg-accent hover:bg-accent/90 text-accent-foreground dir-ltr items-center justify-center">
+                    <span className="flex items-center gap-2">
+                         <span className="text-lg font-semibold">{car.contact}</span>
+                         <div className="flex items-center gap-1.5 rounded-md bg-white/20 px-2 py-1">
+                            <span className="text-xs text-white/80">+222</span>
+                             <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={16} height={12} />
+                         </div>
+                    </span>
+                    <Phone className="mr-3 h-6 w-6" />
                 </Button>
                  <Button size="lg" variant="outline" className="w-full text-lg h-14 mt-3">
                     <svg className="ml-3 h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16.75 13.96c.25.13.41.2.5.28.09.08.16.18.2.28.04.1.06.2.06.28.01.23-.14.48-.4.73-.25.25-.5.48-.75.73-.25.24-.5.48-.73.72-.24.24-.48.45-.73.66-.25.21-.5.4-.75.56-.25.16-.5.3-.75.42s-.5.2-.75.25c-.25.04-.5.06-.75.06s-.5-.02-.75-.06a7.6 7.6 0 0 1-2.94-1.18c-.5-.28-.96-.6-1.4-1-.4-.4-.78-.8-1.1-1.28-.35-.48-.63-.9-.86-1.3-.23-.4-.4-.78-.5-1.15s-.14-.75-.14-1.12.03-.7.1-1.04.16-.65.28-.95c.12-.3.26-.58.42-.83s.34-.48.5-.68c.18-.2.34-.38.48-.5.15-.13.28-.2.38-.2s.18-.02.25-.02.13.01.2.04.13.06.2.12c.04.03.1.1.18.2.08.1.15.2.2.3.1.18.18.35.25.5.07.16.1.3.1.4s-.01.28-.04.4c-.03.13-.08.25-.15.38s-.16.25-.25.38c-.09.12-.2.23-.3.3-.1.08-.2.15-.28.2-.08.05-.14.1-.2.13-.03.02-.05.03-.06.03a.2.2 0 0 0-.08.06c-.03.03-.04.06-.04.08s0 .05.01.08a.6.6 0 0 0 .08.18c.05.1.1.18.15.25.2.3.4.6.63.9.23.3.48.6.73.88.25.3.5.58.78.85.28.27.55.52.83.75.28.23.55.45.83.65.28.2.55.4.8.58.08.04.15.08.2.1.08.03.14.05.2.06.03,0,.05,0,.06-.01s.03-.02.04-.03a.24.24 0 0 0 .1-.15.2.2 0 0 0 .01-.13v-.02c-.01-.08-.03-.15-.06-.2s-.08-.14-.13-.2c-.1-.18-.15-.35-.18-.5-.03-.15-.03-.28-.03-.4s.03-.25.08-.35c.05-.1.1-.2.18-.28.15-.15.3-.28.48-.38.18-.1.35-.2.5-.25.15-.06.3-.1.4-.1s.2,0,.3.02Z" transform="translate(-.25 -.42)"/></svg>
