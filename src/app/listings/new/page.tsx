@@ -33,8 +33,7 @@ import {
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth, useFirestore } from '@/firebase';
-import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
-import { collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase/provider';
 import React, { useState } from 'react';
@@ -43,7 +42,7 @@ import { Progress } from '@/components/ui/progress';
 
 const listingSchema = z.object({
   make: z.string().min(1, 'الرجاء اختيار الماركة'),
-  model: z.string().min(1, 'الرجاء إدخال الموديل'),
+  model: z.string().min(1, 'الرجاء اختيار الموديل'),
   year: z.string().min(4, 'الرجاء اختيار سنة الصنع'),
   fuelType: z.string().min(1, 'الرجاء اختيار نوع الوقود'),
   transmission: z.string().min(1, 'الرجاء اختيار ناقل الحركة'),
@@ -52,7 +51,7 @@ const listingSchema = z.object({
   contactNumber: z.string().min(8, 'الرجاء إدخال رقم هاتف صحيح'),
   city: z.string().min(1, 'الرجاء اختيار المدينة'),
   description: z.string().min(10, 'يجب أن يكون الوصف 10 أحرف على الأقل.'),
-  color: z.string().min(1, 'الرجاء إدخال اللون'),
+  color: z.string().min(1, 'الرجاء اختيار اللون'),
 });
 
 const carModelsByMake: Record<string, string[]> = {
@@ -160,13 +159,12 @@ export default function NewListingPage() {
       return;
     }
 
+    setUploadProgress(0);
     try {
-      setUploadProgress(0);
       const imageUrls = await uploadImages(imageFiles, (progress) => setUploadProgress(progress));
-      setUploadProgress(100);
-
+      
       const collectionRef = collection(firestore, 'vehicleListings');
-      await addDocumentNonBlocking(collectionRef, {
+      await addDoc(collectionRef, {
         ...values,
         userId: user.uid,
         listingDate: serverTimestamp(),
@@ -174,6 +172,9 @@ export default function NewListingPage() {
         viewCount: 0,
         image: imageUrls[0], // Main image
         imageUrls: imageUrls,
+        year: Number(values.year), // Convert year to number
+        location: values.city, // Use city as location
+        contact: values.contactNumber, // Use contactNumber as contact
       });
 
       toast({
@@ -543,12 +544,10 @@ export default function NewListingPage() {
                 )}
               </div>
 
-              {uploadProgress !== null && (
+              {uploadProgress !== null && uploadProgress < 100 && (
                 <div className="space-y-2">
                   <Label>
-                    {uploadProgress < 100
-                      ? `جاري رفع الصور... ${Math.round(uploadProgress)}%`
-                      : 'اكتمل رفع الصور!'}
+                    {`جاري رفع الصور... ${Math.round(uploadProgress)}%`}
                   </Label>
                   <Progress value={uploadProgress} className="w-full" />
                 </div>
