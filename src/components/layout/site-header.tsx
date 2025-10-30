@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import {
-  Globe,
   LogIn,
   Menu,
   Moon,
@@ -95,7 +94,7 @@ export function SiteHeader() {
               </Button>
           ) : (
             <>
-              <Button variant="ghost" asChild className="text-primary-foreground hover:bg-white/10 hidden sm:flex">
+              <Button variant="secondary" asChild className="bg-white text-primary hover:bg-white/90 hidden sm:flex">
                 <Link href="/signup">
                   <UserPlus className="ml-2 h-4 w-4" />
                   إنشاء حساب
