@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import {
-  Car,
   Globe,
   Menu,
   Moon,
@@ -44,7 +43,6 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-primary text-primary-foreground p-6">
               <Link href="/" className="flex items-center space-x-2 mb-8">
-                <Car className="h-8 w-8 text-accent" />
                 <span className="font-bold text-xl text-white">البورصة للسيارات</span>
               </Link>
               <nav className="flex flex-col gap-4">
@@ -64,7 +62,6 @@ export function SiteHeader() {
         
         <div className="mr-4 flex flex-1">
           <Link href="/" className="flex items-center space-x-2">
-            <Car className="h-8 w-8 text-accent" />
             <span className="font-bold text-xl text-white">البورصة للسيارات</span>
           </Link>
         </div>

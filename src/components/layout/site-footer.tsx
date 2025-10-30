@@ -1,4 +1,4 @@
-import { Car, Facebook, Instagram, Linkedin, MessageCircle, Twitter } from "lucide-react";
+import { Facebook, Instagram, Linkedin, MessageCircle, Twitter } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -10,7 +10,6 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <Car className="h-8 w-8 text-accent" />
               <span className="font-bold text-xl">
                 البورصة للسيارات
               </span>
