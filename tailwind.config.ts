@@ -19,9 +19,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-noto-sans-arabic)", ...fontFamily.sans],
-        body: ["var(--font-noto-sans-arabic)", ...fontFamily.sans],
-        headline: ["var(--font-noto-sans-arabic)", ...fontFamily.sans],
+        sans: ["var(--font-alexandria)", ...fontFamily.sans],
+        body: ["var(--font-alexandria)", ...fontFamily.sans],
+        headline: ["var(--font-alexandria)", ...fontFamily.sans],
       },
       colors: {
         background: 'hsl(var(--background))',

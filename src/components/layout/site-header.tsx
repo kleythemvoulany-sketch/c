@@ -70,7 +70,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex flex-none items-center justify-end space-x-2">
-          <Button asChild className="bg-yellow-400 hover:bg-yellow-400/90 text-primary hidden sm:flex">
+          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground hidden sm:flex">
             <Link href="/listings/new">
               <PlusCircle className="mr-2 h-4 w-4" />
               بيع على البورصة

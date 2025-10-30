@@ -5,16 +5,16 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Toaster } from "@/components/ui/toaster";
-import { Noto_Sans_Arabic } from "next/font/google";
+import { Alexandria } from "next/font/google";
 
-const noto = Noto_Sans_Arabic({
+const alexandria = Alexandria({
   subsets: ["arabic"],
-  variable: "--font-noto-sans-arabic",
+  variable: "--font-alexandria",
 });
 
 export const metadata: Metadata = {
   title: "البورصة للسيارات | AlBoursa Cars",
-  description: "المنصة الأولى في موريتANIA لبيع وشراء السيارات بأمان وسهولة.",
+  description: "المنصة الأولى في موريتانيا لبيع وشراء السيارات بأمان وسهولة.",
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-secondary antialiased",
-          noto.variable
+          alexandria.variable
         )}
       >
         <ThemeProvider
