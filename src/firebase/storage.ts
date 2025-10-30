@@ -1,18 +1,17 @@
 'use client';
 
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, Storage } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
-
-// Initialize Firebase and get storage instance
-const storage = getStorage();
 
 /**
  * Uploads multiple images to Firebase Storage and reports aggregated progress.
+ * @param storage - The Firebase Storage instance.
  * @param files - An array of File objects to upload.
  * @param onProgress - A callback function to track the overall upload progress (0-100).
  * @returns A promise that resolves with an array of image download URLs.
  */
 export async function uploadImages(
+  storage: Storage,
   files: File[],
   onProgress: (progress: number) => void
 ): Promise<string[]> {

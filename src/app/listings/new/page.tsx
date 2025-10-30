@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { UploadCloud, X } from 'lucide-react';
+import { UploadCloud, X, Wand2 } from 'lucide-react';
 import Image from 'next/image';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,7 +31,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useStorage } from '@/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase/provider';
@@ -82,6 +82,7 @@ const carColors = [
 export default function NewListingPage() {
   const { toast } = useToast();
   const firestore = useFirestore();
+  const storage = useStorage();
   const { user } = useUser();
   const router = useRouter();
 
@@ -141,7 +142,7 @@ export default function NewListingPage() {
   };
 
   const onSubmit = async (values: z.infer<typeof listingSchema>) => {
-    if (!firestore || !user) {
+    if (!firestore || !user || !storage) {
       toast({
         variant: 'destructive',
         title: 'خطأ',
@@ -160,7 +161,7 @@ export default function NewListingPage() {
 
     setUploadProgress(0);
     try {
-      const imageUrls = await uploadImages(imageFiles, (progress) => setUploadProgress(progress));
+      const imageUrls = await uploadImages(storage, imageFiles, (progress) => setUploadProgress(progress));
       
       const collectionRef = collection(firestore, 'vehicleListings');
       await addDoc(collectionRef, {
@@ -173,7 +174,6 @@ export default function NewListingPage() {
         imageUrls: imageUrls,
         year: Number(values.year), // Convert year to number
         location: values.city, // Use city as location
-        contactNumber: values.contactNumber, // Use contactNumber as contact
       });
 
       toast({
@@ -485,7 +485,9 @@ export default function NewListingPage() {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>الوصف</FormLabel>
+                        <div className="flex justify-between items-center">
+                          <FormLabel>الوصف</FormLabel>
+                        </div>
                         <FormControl>
                           <Textarea
                             placeholder="مثال: سيارة نظيفة جدًا، بحالة ممتازة من الداخل والخارج، جاهزة للاستعمال..."
