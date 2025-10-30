@@ -7,7 +7,6 @@ import {
   Menu,
   Moon,
   PlusCircle,
-  Search,
   Sun,
   User,
 } from "lucide-react";
@@ -21,7 +20,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
-import { Input } from "../ui/input";
 
 const navLinks = [
   { href: "/listings", label: "السيارات" },
@@ -34,31 +32,27 @@ export function SiteHeader() {
   const { setTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-primary text-primary-foreground">
-      <div className="container flex h-16 items-center">
-        <div className="mr-4 hidden md:flex">
-          <Link href="/" className="flex items-center space-x-2">
-            <Car className="h-8 w-8 text-accent" />
-            <span className="font-bold text-xl text-white">
-              البورصة للسيارات
-            </span>
-          </Link>
-        </div>
+    <header className="sticky top-0 z-40 w-full border-b bg-primary text-primary-foreground">
+      <div className="container flex h-16 items-center sm:h-20">
         <div className="md:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-primary text-primary-foreground">
-              <nav className="flex flex-col gap-4 mt-8">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-primary text-primary-foreground p-6">
+              <Link href="/" className="flex items-center space-x-2 mb-8">
+                <Car className="h-8 w-8 text-accent" />
+                <span className="font-bold text-xl text-white">البورصة للسيارات</span>
+              </Link>
+              <nav className="flex flex-col gap-4">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="block px-2 py-1 text-lg hover:text-accent"
+                    className="block px-2 py-2 text-lg rounded-md hover:bg-accent hover:text-accent-foreground"
                   >
                     {link.label}
                   </Link>
@@ -67,35 +61,44 @@ export function SiteHeader() {
             </SheetContent>
           </Sheet>
         </div>
-        <nav className="hidden md:flex items-center gap-4 text-sm flex-1">
+        
+        <div className="mr-4 hidden md:flex">
+          <Link href="/" className="flex items-center space-x-2">
+            <Car className="h-8 w-8 text-accent" />
+            <span className="font-bold text-xl text-white">البورصة للسيارات</span>
+          </Link>
+        </div>
+
+        <nav className="hidden md:flex items-center gap-4 text-sm ml-6">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="transition-colors hover:text-white/80 text-white/70"
+              className="transition-colors hover:text-white/80 text-white/70 font-medium"
             >
               {link.label}
             </Link>
           ))}
         </nav>
+
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="hover:bg-white/10">
-                <Globe className="h-[1.2rem] w-[1.2rem]" />
-                <span className="sr-only">Switch Language</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>🇲🇷 العربية</DropdownMenuItem>
-              <DropdownMenuItem>🇬🇧 English</DropdownMenuItem>
-              <DropdownMenuItem>🇫🇷 Français</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground hidden sm:flex">
+            <Link href="/listings/new">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              أضف إعلان
+            </Link>
+          </Button>
+
+          <Button variant="ghost" size="icon" asChild className="text-white hover:bg-white/10">
+            <Link href="/profile">
+              <User className="h-5 w-5" />
+               <span className="sr-only">Profile</span>
+            </Link>
+          </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="hover:bg-white/10">
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                 <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                 <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                 <span className="sr-only">Toggle theme</span>
@@ -113,28 +116,6 @@ export function SiteHeader() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="بحث..." className="w-64 bg-background/20 text-white placeholder:text-white/70 border-0" />
-          </div>
-
-          <Button variant="ghost" asChild className="hidden sm:inline-flex hover:bg-white/10">
-            <Link href="/profile">
-              <User className="mr-2 h-4 w-4" />
-              ملفي الشخصي
-            </Link>
-          </Button>
-           <Button variant="ghost" size="icon" asChild className="sm:hidden hover:bg-white/10">
-            <Link href="/profile">
-              <User className="h-5 w-5" />
-            </Link>
-          </Button>
-          <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-            <Link href="/listings/new">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              أضف إعلان
-            </Link>
-          </Button>
         </div>
       </div>
     </header>

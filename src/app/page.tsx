@@ -1,155 +1,99 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Car, ChevronsRight, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
-import { cars, categories, testimonials } from "@/lib/data";
-import { CarCard } from "@/components/car-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Star } from "lucide-react";
-
+import { cars, categories } from "@/lib/data";
+import { CarListItem } from "@/components/car-list-item";
 
 export default function Home() {
-  const featuredCars = cars.filter(c => c.featured);
-  const latestCars = cars.sort((a, b) => b.id - a.id).slice(0, 6);
+  const featuredCars = cars.filter((c) => c.featured).slice(0, 4);
+  const latestCars = cars.sort((a, b) => b.id - a.id).slice(0, 10);
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-secondary">
-      <section className="w-full pt-12 md:pt-24 lg:pt-32 bg-primary/5">
-        <div className="container px-4 md:px-6 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-primary">
-              البورصة – سوق السيارات في موريتانيا
-            </h1>
-            <p className="mt-4 text-lg text-muted-foreground md:text-xl">
-              بيع، اشترِ، وتصفح أحدث السيارات بأسهل تجربة في البلاد
-            </p>
-          </div>
-          <Card className="max-w-5xl mx-auto mt-8 p-4 bg-background/90 backdrop-blur-sm shadow-xl border-0">
-             <form className="grid grid-cols-1 gap-4 md:grid-cols-12 md:items-end">
-              <div className="md:col-span-8 lg:col-span-9 relative">
-                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input type="text" placeholder="ابحث عن سيارة بالاسم، الماركة، أو الموديل..." className="h-14 text-lg w-full pr-12 bg-white dark:bg-zinc-800"/>
+      <section className="w-full bg-white pt-8 pb-8">
+        <div className="container px-4 md:px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center rounded-md border bg-white flex-row-reverse shadow-sm">
+                <div
+                className="flex h-12 items-center px-3 py-3 border-l">
+                  <Search className="text-muted-foreground" />
+                </div>
+                <Input
+                  type="text"
+                  placeholder="ابحث عن أي شيء..."
+                  className="h-14 flex-grow appearance-none py-2 focus:outline-none pr-2 text-right border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg"
+                  dir="rtl"
+                />
+                 <div className="relative hidden md:block">
+                  <Button
+                  variant="ghost"
+                  className="flex h-12 items-center justify-between border-l px-4">
+                  <span
+                  className="w-[95px] whitespace-nowrap text-sm ml-4">الكل</span>
+                  </Button>
+                </div>
               </div>
-              <div className="md:col-span-4 lg:col-span-3">
-                <Button size="lg" className="h-14 text-lg w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                  <Search className="ml-2 h-6 w-6" />
-                  بحث
-                </Button>
-              </div>
-            </form>
-          </Card>
-        </div>
-      </section>
-      
-       <section className="bg-secondary py-12 md:py-20">
-        <div className="container">
-          <h2 className="text-3xl font-bold text-center mb-8 text-primary">تصفح حسب الفئة</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {categories.map((category) => (
-              <Link href="#" key={category.name}>
-                <Card className="group overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1 bg-card border-border/20">
-                  <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-                    <div className="bg-accent/10 p-4 rounded-full mb-3">
-                       <category.icon className="h-8 w-8 text-accent" />
-                    </div>
-                    <h3 className="font-semibold text-lg text-primary">{category.name}</h3>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
           </div>
         </div>
       </section>
 
-      <section className="py-12 md:py-20 bg-primary/5">
-        <div className="container">
-          <h2 className="text-3xl font-bold text-center mb-2 text-primary">عروض مميزة</h2>
-          <p className="text-center text-muted-foreground mb-8">سيارات مختارة بعناية لك</p>
-          <Carousel opts={{ loop: true, direction: 'rtl' }} className="w-full max-w-6xl mx-auto">
-            <CarouselContent>
-              {featuredCars.map((car) => (
-                <CarouselItem key={car.id} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
-                    <CarCard car={car} />
+      <section className="bg-white py-6 sm:py-8">
+        <h2 className="container mx-auto mb-3 max-w-screen-2xl px-4 text-start text-2xl font-bold text-gray-800 sm:mb-6 sm:text-3xl">
+          الفئات
+        </h2>
+        <div className="relative flex items-center justify-center">
+          <div className="scrollbar-hide container block max-w-screen-2xl snap-none overflow-y-hidden overflow-x-scroll">
+            <div className="flex min-w-max justify-start gap-6 px-6 md:px-4 xl:px-3">
+              {categories.map((category) => (
+                <Link href="#" key={category.name}>
+                  <div className="group flex min-w-[52px] cursor-pointer flex-col items-center *:duration-200 hover:scale-105 sm:min-w-[100px]">
+                    <div className="relative size-20 rounded-full p-4 transition-transform sm:size-[90px] lg:size-[105px] xl:size-28 bg-accent/10">
+                      <div className="relative flex h-full w-full items-center justify-center">
+                        <category.icon className="h-full w-full text-accent" />
+                      </div>
+                    </div>
+                    <p className="m-0 mt-2 whitespace-nowrap text-center text-[12px] transition-colors sm:text-sm md:text-base group-hover:text-accent">
+                      {category.name}
+                    </p>
                   </div>
-                </CarouselItem>
+                </Link>
               ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute start-0 top-1/2 -translate-y-1/2" />
-            <CarouselNext className="absolute end-0 top-1/2 -translate-y-1/2" />
-          </Carousel>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-20 bg-secondary">
-        <div className="container">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h2 className="text-3xl font-bold text-primary">أحدث الإعلانات</h2>
-              <p className="text-muted-foreground">اكتشف آخر ما تم إضافته لمنصتنا</p>
             </div>
-            <Button variant="ghost" asChild>
-              <Link href="/listings" className="text-accent">
-                عرض الكل <ChevronsRight className="mr-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {latestCars.map((car) => (
-              <CarCard key={car.id} car={car} />
-            ))}
           </div>
         </div>
       </section>
       
-      <section className="bg-primary text-primary-foreground py-12 md:py-20">
-        <div className="container text-center">
-          <h2 className="text-3xl font-bold">انضم إلى أكثر من 100,000 مستخدم يثقون في البورصة</h2>
-          <p className="mt-4 max-w-3xl mx-auto text-primary-foreground/80">
-            المنصة الأولى في موريتانيا لبيع وشراء السيارات بأمان وسهولة.
-          </p>
-          <div className="mt-6 flex justify-center gap-4">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
-              <Link href="/listings/new">
-                أعلن عن سيارتك مجاناً
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-              اتصل بنا: 34949470
-            </Button>
+      <section className="bg-secondary py-12 md:py-16">
+        <div className="container">
+           <h2 className="mb-6 text-2xl font-semibold text-gray-800 md:text-3xl">
+            عروض مميزة
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {featuredCars.map((car) => (
+              <CarListItem key={car.id} car={car} />
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="py-12 md:py-20 bg-secondary">
+      <section className="py-12 md:py-16">
         <div className="container">
-          <h2 className="text-3xl font-bold text-center mb-8 text-primary">ماذا يقول عملاؤنا؟</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-card">
-                <CardContent className="p-6">
-                  <div className="flex items-start">
-                    <Avatar className="h-12 w-12 ml-4 border-2 border-accent">
-                      <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                      <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h3 className="font-bold text-lg">{testimonial.name}</h3>
-                      <p className="text-sm text-muted-foreground">{testimonial.location}</p>
-                    </div>
-                  </div>
-                  <div className="flex my-3">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className={`h-5 w-5 ${i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground'}`} />
-                    ))}
-                  </div>
-                  <p className="text-foreground/80">"{testimonial.comment}"</p>
-                </CardContent>
-              </Card>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800 md:text-3xl">
+              أحدث الإعلانات
+            </h2>
+            <Button variant="link" asChild>
+              <Link href="/listings">
+                عرض الكل
+              </Link>
+            </Button>
+          </div>
+          <div className="space-y-4">
+            {latestCars.map((car) => (
+              <CarListItem key={car.id} car={car} />
             ))}
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Car, Facebook, Instagram, Linkedin, MessageCircle } from "lucide-react";
+import { Car, Facebook, Instagram, Linkedin, MessageCircle, Twitter } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -6,8 +6,8 @@ import { Input } from "../ui/input";
 export function SiteFooter() {
   return (
     <footer className="bg-primary text-primary-foreground border-t">
-      <div className="container py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="container py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <Car className="h-8 w-8 text-accent" />
@@ -18,50 +18,37 @@ export function SiteFooter() {
             <p className="text-primary-foreground/70 text-sm">
               المنصة الأولى في موريتانيا لبيع وشراء السيارات بأمان وسهولة.
             </p>
-            <div className="flex space-x-4 mt-4" dir="ltr">
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                <Facebook className="h-6 w-6 text-primary-foreground/70 hover:text-accent" />
-              </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                <Instagram className="h-6 w-6 text-primary-foreground/70 hover:text-accent" />
-              </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="h-6 w-6 text-primary-foreground/70 hover:text-accent" />
-              </a>
-               <a href="https://wa.me/22234949470" target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-6 w-6 text-primary-foreground/70 hover:text-accent" />
-              </a>
-            </div>
           </div>
-          <div>
+          
+          <div className="lg:col-start-3">
             <h4 className="font-semibold mb-4">روابط سريعة</h4>
-            <ul className="space-y-2">
-              <li><Link href="/listings" className="text-sm text-primary-foreground/70 hover:text-accent">السيارات</Link></li>
-              <li><Link href="/listings/new" className="text-sm text-primary-foreground/70 hover:text-accent">أضف إعلان</Link></li>
-              <li><Link href="/about" className="text-sm text-primary-foreground/70 hover:text-accent">من نحن</Link></li>
-              <li><Link href="/contact" className="text-sm text-primary-foreground/70 hover:text-accent">تواصل معنا</Link></li>
-              <li><Link href="/privacy" className="text-sm text-primary-foreground/70 hover:text-accent">سياسة الخصوصية</Link></li>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/listings" className="text-primary-foreground/70 hover:text-accent">السيارات</Link></li>
+              <li><Link href="/listings/new" className="text-primary-foreground/70 hover:text-accent">أضف إعلان</Link></li>
+              <li><Link href="#" className="text-primary-foreground/70 hover:text-accent">من نحن</Link></li>
+              <li><Link href="#" className="text-primary-foreground/70 hover:text-accent">تواصل معنا</Link></li>
             </ul>
           </div>
+          
           <div>
-            <h4 className="font-semibold mb-4">بيانات الاتصال</h4>
-            <ul className="space-y-2 text-sm text-primary-foreground/70">
-                <li>الهاتف: 34949470</li>
-                <li>الهاتف 2: 31151507</li>
-                <li>البريد: support@alboursa.com</li>
-                <li>العنوان: نواكشوط – موريتانيا</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">النشرة الإخبارية</h4>
-            <p className="text-sm text-primary-foreground/70 mb-3">اشترك لتصلك آخر العروض.</p>
-            <div className="flex w-full max-w-sm items-center space-x-2 space-x-reverse">
-              <Input type="email" placeholder="بريدك الإلكتروني" className="bg-primary/50 border-border/50 text-primary-foreground placeholder:text-primary-foreground/60" />
-              <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground">اشتراك</Button>
+            <h4 className="font-semibold mb-4">تابعنا</h4>
+             <div className="flex space-x-4" dir="ltr">
+              <a href="#" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/70 hover:text-accent">
+                <Facebook className="h-6 w-6" />
+              </a>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/70 hover:text-accent">
+                <Twitter className="h-6 w-6" />
+              </a>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/70 hover:text-accent">
+                <Instagram className="h-6 w-6" />
+              </a>
+               <a href="#" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/70 hover:text-accent">
+                <MessageCircle className="h-6 w-6" />
+              </a>
             </div>
           </div>
         </div>
-        <div className="mt-8 border-t border-border/50 pt-6 text-center text-sm text-primary-foreground/70">
+        <div className="mt-12 border-t border-primary-foreground/10 pt-8 text-center text-sm text-primary-foreground/60">
           <p>© {new Date().getFullYear()} جميع الحقوق محفوظة لموقع البورصة</p>
         </div>
       </div>
