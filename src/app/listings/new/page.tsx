@@ -31,7 +31,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { firestore, storage, useUser } from '@/firebase';
+import { firestore, useUser } from '@/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -139,7 +139,7 @@ export default function NewListingPage() {
   };
 
   const onSubmit = async (values: z.infer<typeof listingSchema>) => {
-    if (!firestore || !user || !storage) {
+    if (!firestore || !user) {
       toast({
         variant: 'destructive',
         title: 'خطأ',
@@ -158,7 +158,7 @@ export default function NewListingPage() {
 
     setUploadProgress(0);
     try {
-      const imageUrls = await uploadImages(storage, imageFiles, (progress) => setUploadProgress(progress));
+      const imageUrls = await uploadImages(imageFiles, (progress) => setUploadProgress(progress));
       
       const collectionRef = collection(firestore, 'vehicleListings');
       await addDoc(collectionRef, {
