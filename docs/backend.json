@@ -130,7 +130,6 @@
         }
       },
       "required": [
-        "id",
         "userId",
         "make",
         "model",
