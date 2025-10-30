@@ -173,7 +173,7 @@ export default function NewListingPage() {
         imageUrls: imageUrls,
         year: Number(values.year), // Convert year to number
         location: values.city, // Use city as location
-        contact: values.contactNumber, // Use contactNumber as contact
+        contactNumber: values.contactNumber, // Use contactNumber as contact
       });
 
       toast({

@@ -183,7 +183,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
               className="w-full text-lg h-14 bg-accent hover:bg-accent/90 text-accent-foreground dir-ltr items-center justify-center"
             >
               <span className="flex items-center gap-2">
-                <span className="text-lg font-semibold">{car.contact}</span>
+                <span className="text-lg font-semibold">{car.contactNumber}</span>
                 <div className="flex items-center gap-1.5 rounded-md bg-white/20 px-2 py-1">
                   <Image
                     src="https://flagcdn.com/mr.svg"
