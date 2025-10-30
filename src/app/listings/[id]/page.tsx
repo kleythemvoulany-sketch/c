@@ -1,4 +1,3 @@
-'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -17,56 +16,29 @@ import {
   Wrench,
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { useDoc } from '@/firebase/firestore/use-doc';
-import { doc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
 import { Car as CarType } from '@/lib/data';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useMemoFirebase } from '@/firebase/provider';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
+import { initializeFirebase } from '@/firebase';
 
-// Corrected PageProps interface
+// This is a server-side utility function to fetch data
+async function getListingById(id: string): Promise<CarType | null> {
+    // We need to initialize firebase services here because this is a server component
+    const { firestore } = initializeFirebase();
+    const carDocRef = doc(firestore, 'listings', id);
+    const carSnap = await getDoc(carDocRef);
+
+    if (!carSnap.exists()) {
+        return null;
+    }
+    return { id: carSnap.id, ...carSnap.data() } as CarType;
+}
+
 interface PageProps {
   params: { id: string };
 }
 
-export default function CarDetailsPage({ params }: PageProps) {
-  const firestore = useFirestore();
-
-  const carDocRef = useMemoFirebase(
-    () => (firestore && params.id ? doc(firestore, 'listings', params.id) : null),
-    [firestore, params.id]
-  );
-  const { data: car, isLoading } = useDoc<CarType>(carDocRef);
-
-
-  if (isLoading) {
-    return (
-      <div className="container py-12 md:py-20">
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-          <div className="md:col-span-2">
-            <Skeleton className="aspect-video w-full rounded-lg mb-4" />
-            <div className="grid grid-cols-4 gap-2">
-              <Skeleton className="aspect-video w-full" />
-              <Skeleton className="aspect-video w-full" />
-              <Skeleton className="aspect-video w-full" />
-              <Skeleton className="aspect-video w-full" />
-            </div>
-          </div>
-          <div className="md:col-span-1 space-y-6">
-            <Skeleton className="h-10 w-3/4" />
-            <Skeleton className="h-12 w-1/2" />
-            <Skeleton className="h-px w-full" />
-            <div className="space-y-4">
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-8 w-full" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+export default async function CarDetailsPage({ params }: PageProps) {
+  const car = await getListingById(params.id);
 
   if (!car) {
       return (
