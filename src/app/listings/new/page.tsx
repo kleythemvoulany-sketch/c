@@ -547,10 +547,10 @@ export default function NewListingPage() {
                 )}
               </div>
 
-              {uploadProgress !== null && uploadProgress < 100 && (
+              {uploadProgress !== null && (
                 <div className="space-y-2">
                   <Label>
-                    {`جاري رفع الصور... ${Math.round(uploadProgress)}%`}
+                    {uploadProgress < 100 ? `جاري رفع الصور... ${Math.round(uploadProgress)}%` : 'اكتمل رفع الصور، جاري النشر...'}
                   </Label>
                   <Progress value={uploadProgress} className="w-full" />
                 </div>

@@ -8,7 +8,7 @@ import { getStorage, Storage } from 'firebase/storage';
 
 let firebaseApp: FirebaseApp;
 
-// Initialize Firebase
+// Securely initialize Firebase app
 if (!getApps().length) {
   firebaseApp = initializeApp(firebaseConfig);
 } else {

@@ -20,32 +20,31 @@ export async function uploadImages(
   files: File[],
   onProgress: (progress: number) => void
 ): Promise<string[]> {
-  if (!files || files.length === 0) {
-    onProgress(100);
-    return [];
-  }
-  
   const uploadPromises: Promise<string>[] = [];
   const progressByFile: { [key: string]: number } = {};
   const totalFiles = files.length;
 
-  const updateOverallProgress = () => {
-    if (Object.keys(progressByFile).length === 0) {
-      onProgress(0);
-      return;
-    }
-    const totalProgress = Object.values(progressByFile).reduce((acc, curr) => acc + curr, 0);
+  if (totalFiles === 0) {
+    onProgress(100);
+    return [];
+  }
+
+  const calculateAndReportProgress = () => {
+    const totalProgress = Object.values(progressByFile).reduce(
+      (acc, curr) => acc + curr,
+      0
+    );
     const overallPercentage = totalProgress / totalFiles;
     onProgress(overallPercentage);
   };
-  
+
+  onProgress(0); // Report 0% progress at the very beginning
+
   files.forEach(file => {
     const fileId = uuidv4();
-    progressByFile[fileId] = 0; // Initialize progress for this file
-    
     const fileExtension = file.name.split('.').pop();
-    const fileName = `${fileId}.${fileExtension}`;
-    const storageRef = ref(storage, `listings/${fileName}`);
+    const fileName = `listings/${fileId}.${fileExtension}`;
+    const storageRef = ref(storage, fileName);
 
     const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -54,20 +53,22 @@ export async function uploadImages(
         'state_changed',
         (snapshot) => {
           const singleFileProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          progressByFile[fileId] = singleFileProgress;
-          updateOverallProgress();
+          progressByFile[file.name] = singleFileProgress;
+          calculateAndReportProgress();
         },
         (error) => {
           console.error(`Upload failed for file ${file.name}:`, error);
-          delete progressByFile[fileId];
-          updateOverallProgress();
-          reject(error);
+          // In case of error, we can decide how to handle progress.
+          // For simplicity, we'll mark its progress as 0 and let others continue.
+          progressByFile[file.name] = 0;
+          calculateAndReportProgress();
+          reject(error); // Reject the promise for this file
         },
         async () => {
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            progressByFile[fileId] = 100;
-            updateOverallProgress();
+            progressByFile[file.name] = 100; // Mark as complete
+            calculateAndReportProgress();
             resolve(downloadURL);
           } catch (error) {
             console.error(`Failed to get download URL for ${file.name}:`, error);
@@ -79,10 +80,14 @@ export async function uploadImages(
     uploadPromises.push(promise);
   });
 
-  // Initially set progress to 0
-  updateOverallProgress();
-
-  const urls = await Promise.all(uploadPromises);
-  onProgress(100); // Ensure it completes at 100%
-  return urls;
+  try {
+    const urls = await Promise.all(uploadPromises);
+    onProgress(100); // Ensure it completes at 100%
+    return urls;
+  } catch (error) {
+    console.error('One or more image uploads failed.', error);
+    // Even if some fail, we can return the URLs of the ones that succeeded, or re-throw.
+    // For now, re-throwing seems appropriate to signal a failure in the form.
+    throw new Error('Image upload failed.');
+  }
 }
