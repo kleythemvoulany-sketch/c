@@ -19,9 +19,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Arial", "Helvetica", "sans-serif"],
-        body: ["Arial", "Helvetica", "sans-serif"],
-        headline: ["Arial", "Helvetica", "sans-serif"],
+        sans: ["var(--font-noto-sans-arabic)", ...fontFamily.sans],
+        body: ["var(--font-noto-sans-arabic)", ...fontFamily.sans],
+        headline: ["var(--font-noto-sans-arabic)", ...fontFamily.sans],
       },
       colors: {
         background: 'hsl(var(--background))',
