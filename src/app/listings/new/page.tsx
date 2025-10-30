@@ -63,6 +63,21 @@ const carModelsByMake: Record<string, string[]> = {
   تسلا: ['Model S', 'Model 3', 'Model X', 'Model Y'],
 };
 
+const carColors = [
+  'أبيض',
+  'أسود',
+  'فضي',
+  'رمادي',
+  'أحمر',
+  'أزرق',
+  'بني',
+  'أخضر',
+  'بيج',
+  'ذهبي',
+  'برتقالي',
+  'أصفر',
+];
+
 
 export default function NewListingPage() {
   const { toast } = useToast();
@@ -307,9 +322,24 @@ export default function NewListingPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>اللون</FormLabel>
-                        <FormControl>
-                          <Input placeholder="مثال: أبيض، أسود" {...field} />
-                        </FormControl>
+                        <Select
+                          dir="rtl"
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="اختر اللون" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {carColors.map((color) => (
+                              <SelectItem key={color} value={color}>
+                                {color}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -438,5 +468,3 @@ export default function NewListingPage() {
     </div>
   );
 }
-
-    
