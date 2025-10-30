@@ -27,26 +27,15 @@
           "type": "string",
           "description": "Last name of the user."
         },
-        "profilePictureUrl": {
+        "language": {
           "type": "string",
-          "description": "URL of the user's profile picture.",
-          "format": "uri"
-        },
-        "registrationDate": {
-          "type": "string",
-          "description": "Date and time when the user registered.",
-          "format": "date-time"
-        },
-        "preferredLanguage": {
-          "type": "string",
-          "description": "The user's preferred language (e.g., 'ar', 'en', 'fr')."
+          "description": "Preferred language of the user (e.g., 'ar', 'en', 'fr')."
         }
       },
       "required": [
+        "id",
         "email",
-        "firstName",
-        "lastName",
-        "registrationDate"
+        "phoneNumber"
       ]
     },
     "VehicleListing": {
@@ -57,11 +46,11 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the vehicle listing entity."
+          "description": "Unique identifier for the vehicle listing."
         },
         "userId": {
           "type": "string",
-          "description": "Reference to the User who created the listing. (Relationship: User 1:N VehicleListing)"
+          "description": "Reference to User. (Relationship: User 1:N VehicleListing)"
         },
         "make": {
           "type": "string",
@@ -77,15 +66,15 @@
         },
         "fuelType": {
           "type": "string",
-          "description": "Type of fuel the vehicle uses (e.g., Gasoline)."
+          "description": "Type of fuel the vehicle uses (e.g., бенزين)."
         },
         "transmission": {
           "type": "string",
-          "description": "Type of transmission (e.g., Automatic)."
+          "description": "Transmission type of the vehicle (e.g., أوتوماتيكي)."
         },
         "city": {
           "type": "string",
-          "description": "City where the vehicle is located."
+          "description": "City where the vehicle is located (e.g., نواكشوط)."
         },
         "price": {
           "type": "number",
@@ -93,42 +82,43 @@
         },
         "description": {
           "type": "string",
-          "description": "Description of the vehicle."
+          "description": "Description of the vehicle listing."
         },
-        "mileage": {
-          "type": "number",
-          "description": "The mileage of the vehicle in kilometers."
-        },
-        "color": {
-          "type": "string",
-          "description": "The color of the vehicle."
-        },
-        "contactNumber": {
-          "type": "string",
-          "description": "Contact phone number for the listing."
-        },
-        "imageUrls": {
+        "imageUrl": {
           "type": "array",
-          "description": "Array of URLs for the vehicle's images.",
+          "description": "Urls of images",
           "items": {
             "type": "string"
           }
         },
-        "listingDate": {
+        "mileage": {
+          "type": "number",
+          "description": "Mileage of the vehicle in kilometers."
+        },
+        "color": {
           "type": "string",
-          "description": "Date and time when the listing was created.",
-          "format": "date-time"
+          "description": "Color of the vehicle."
+        },
+        "contactNumber": {
+          "type": "string",
+          "description": "Contact phone number for the seller."
         },
         "isFeatured": {
           "type": "boolean",
-          "description": "Indicates if the listing is featured."
+          "description": "Indicates whether the listing is featured."
         },
         "viewCount": {
           "type": "number",
           "description": "Number of times the listing has been viewed."
+        },
+        "postedDate": {
+          "type": "string",
+          "description": "Date and time when the listing was posted.",
+          "format": "date-time"
         }
       },
       "required": [
+        "id",
         "userId",
         "make",
         "model",
@@ -138,8 +128,7 @@
         "city",
         "price",
         "description",
-        "contactNumber",
-        "listingDate"
+        "contactNumber"
       ]
     },
     "FAQ": {
@@ -150,7 +139,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the FAQ entity."
+          "description": "Unique identifier for the FAQ."
         },
         "question": {
           "type": "string",
@@ -158,14 +147,15 @@
         },
         "answer": {
           "type": "string",
-          "description": "The answer text."
+          "description": "The answer to the question."
         },
         "language": {
           "type": "string",
-          "description": "Language of the FAQ (e.g., 'ar', 'en', 'fr')."
+          "description": "The language of the FAQ (e.g., 'ar', 'en', 'fr')."
         }
       },
       "required": [
+        "id",
         "question",
         "answer",
         "language"
@@ -179,20 +169,20 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the contact message entity."
+          "description": "Unique identifier for the contact message."
         },
         "name": {
           "type": "string",
-          "description": "Name of the sender."
+          "description": "Name of the person sending the message."
         },
         "email": {
           "type": "string",
-          "description": "Email address of the sender.",
+          "description": "Email address of the person sending the message.",
           "format": "email"
         },
         "phoneNumber": {
           "type": "string",
-          "description": "Phone number of the sender."
+          "description": "Phone number of the person sending the message."
         },
         "message": {
           "type": "string",
@@ -205,10 +195,36 @@
         }
       },
       "required": [
+        "id",
         "name",
         "email",
         "message",
         "sentDate"
+      ]
+    },
+    "AboutUs": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AboutUs",
+      "type": "object",
+      "description": "Represents the About Us information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the About Us information."
+        },
+        "content": {
+          "type": "string",
+          "description": "The content of the About Us page."
+        },
+        "language": {
+          "type": "string",
+          "description": "The language of the About Us content (e.g., 'ar', 'en', 'fr')."
+        }
+      },
+      "required": [
+        "id",
+        "content",
+        "language"
       ]
     }
   },
@@ -219,29 +235,108 @@
     ]
   },
   "firestore": {
-    "/users/{userId}": {
-      "schema": {
-        "$ref": "#/entities/User"
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile information. User's id is derived from Firebase Authentication.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user, derived from Firebase Authentication."
+            }
+          ]
+        }
       },
-      "description": "Stores user profile data. Path-based ownership ensures only the user can access their data."
-    },
-    "/vehicleListings/{vehicleListingId}": {
-      "schema": {
-        "$ref": "#/entities/VehicleListing"
+      {
+        "path": "/users/{userId}/listings/{listingId}",
+        "definition": {
+          "entityName": "VehicleListing",
+          "schema": {
+            "$ref": "#/backend/entities/VehicleListing"
+          },
+          "description": "Stores vehicle listings owned by a specific user. This structure enables path-based ownership for secure access.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the listing."
+            },
+            {
+              "name": "listingId",
+              "description": "The unique identifier for the vehicle listing."
+            }
+          ]
+        }
       },
-      "description": "Stores all vehicle listings. Publicly readable, but only writable by the owning user."
-    },
-    "/faqs/{faqId}": {
-      "schema": {
-        "$ref": "#/entities/FAQ"
+      {
+        "path": "/faqs/{faqId}",
+        "definition": {
+          "entityName": "FAQ",
+          "schema": {
+            "$ref": "#/backend/entities/FAQ"
+          },
+          "description": "Stores frequently asked questions for different languages.",
+          "params": [
+            {
+              "name": "faqId",
+              "description": "The unique identifier for the FAQ."
+            }
+          ]
+        }
       },
-      "description": "Stores frequently asked questions. Accessible to all users."
-    },
-    "/contactMessages/{contactMessageId}": {
-      "schema": {
-        "$ref": "#/entities/ContactMessage"
+      {
+        "path": "/contactMessages/{contactMessageId}",
+        "definition": {
+          "entityName": "ContactMessage",
+          "schema": {
+            "$ref": "#/backend/entities/ContactMessage"
+          },
+          "description": "Stores contact messages sent by users.",
+          "params": [
+            {
+              "name": "contactMessageId",
+              "description": "The unique identifier for the contact message."
+            }
+          ]
+        }
       },
-      "description": "Stores contact messages sent by users. Access controlled by backend functions."
-    }
+      {
+        "path": "/aboutUs/{aboutUsId}",
+        "definition": {
+          "entityName": "AboutUs",
+          "schema": {
+            "$ref": "#/backend/entities/AboutUs"
+          },
+          "description": "Stores 'About Us' content for different languages.",
+          "params": [
+            {
+              "name": "aboutUsId",
+              "description": "The unique identifier for the About Us content."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/listings/{listingId}",
+        "definition": {
+          "entityName": "VehicleListing",
+          "schema": {
+            "$ref": "#/backend/entities/VehicleListing"
+          },
+          "description": "Stores a denormalized collection of publicly accessible vehicle listings. This allows for efficient listing and filtering across all users without requiring complex security rules or `get()` calls.",
+          "params": [
+            {
+              "name": "listingId",
+              "description": "The unique identifier for the vehicle listing."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to support AlBoursa Cars, a platform for buying and selling new and used cars in Mauritania. It prioritizes authorization independence, clarity, and security using path-based ownership for user-related data and segregated collections for different data types. Each listing is owned by a specific user, enabling straightforward security rules. This design avoids hierarchical `get()` calls in security rules, ensuring atomic operations and debuggability. Segregation of data with different access needs (e.g., user-owned listings vs. FAQs) into separate collections simplifies security rules and list operations.\n\n*   **Authorization Independence (CRITICAL):** Path-based ownership is used. The `VehicleListing` documents are stored within the `users/{userId}/listings/{listingId}` path, eliminating the need to fetch parent document attributes within the security rules.\n*   **DBAC:** There is no role-based access control required, given the application requirements. Authentication relies solely on `request.auth.uid`.\n*   **QAPs:** Listing operations for `users/{userId}/listings` are securely managed through path-based ownership. Public listing retrieval is supported by a separate `listings` collection, which can contain denormalized listing data to enable filtering and listing without complex rules.\n*   **Contact Messages:** Stored in a top-level `contactMessages` collection, allowing simple rules to manage access to these messages."
   }
 }
