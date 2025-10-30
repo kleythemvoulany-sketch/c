@@ -51,43 +51,40 @@ const signupSchema = z
     message: 'كلمتا المرور غير متطابقتين.',
     path: ['confirmPassword'],
   })
-  .refine(
-    (data) => {
-      if (data.accountType === 'personal') {
-        return !!data.fullName && data.fullName.length >= 3;
+  .superRefine((data, ctx) => {
+    if (data.accountType === 'personal') {
+      if (!data.fullName || data.fullName.length < 3) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'الاسم الكامل مطلوب للحسابات الشخصية.',
+          path: ['fullName'],
+        });
       }
-      return true;
-    },
-    {
-      message: 'الاسم الكامل مطلوب للحسابات الشخصية.',
-      path: ['fullName'],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.accountType === 'dealer') {
-        return !!data.dealerName && !!data.ownerName;
+    } else if (data.accountType === 'dealer') {
+      if (!data.dealerName) {
+         ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'اسم البورصة مطلوب.',
+          path: ['dealerName'],
+        });
       }
-      return true;
-    },
-    {
-      message: 'اسم البورصة واسم المالك مطلوبان.',
-      path: ['dealerName'], // Show error on one of the fields
-    }
-  )
-  .refine(
-    (data) => {
-      // Require email if password is provided
-      if (data.password) {
-        return !!data.email;
+      if (!data.ownerName) {
+         ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'اسم المالك مطلوب.',
+          path: ['ownerName'],
+        });
       }
-      return true;
-    },
-    {
-      message: 'البريد الإلكتروني مطلوب عند إدخال كلمة مرور.',
-      path: ['email'],
     }
-  );
+
+    if (data.password && !data.email) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'البريد الإلكتروني مطلوب عند إدخال كلمة مرور.',
+        path: ['email'],
+      });
+    }
+  });
 
 
 export default function SignupPage() {
