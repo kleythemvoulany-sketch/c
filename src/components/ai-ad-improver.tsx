@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect, useActionState } from "react";
-import { useFormStatus } from "react-dom";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Wand2 } from "lucide-react";
+import { Wand2 } from "lucide-react";
 import { improveAdDescriptionAction } from "@/app/actions";
 import {
   Dialog,
@@ -16,38 +15,13 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { SubmitButton } from "./ai-ad-improver-submit-button";
 
 const initialState = {
   improvedDescription: "",
   reasoning: "",
   error: "",
 };
-
-function SubmitButton({ formAction, currentDescription }: { formAction: (payload: FormData) => void; currentDescription: string; }) {
-  const { pending } = useFormStatus();
-
-  const handleClick = () => {
-    const formData = new FormData();
-    formData.append('adDescription', currentDescription);
-    formAction(formData);
-  };
-
-  return (
-    <Button type="button" onClick={handleClick} disabled={pending}>
-      {pending ? (
-        <>
-          <Sparkles className="mr-2 h-4 w-4 animate-spin" />
-          جاري التحسين...
-        </>
-      ) : (
-        <>
-          <Wand2 className="mr-2 h-4 w-4" />
-          تحسين الوصف بالذكاء الاصطناعي
-        </>
-      )}
-    </Button>
-  );
-}
 
 type AiAdImproverProps = {
   currentDescription: string;
@@ -82,7 +56,13 @@ export function AiAdImprover({ currentDescription, onDescriptionChange }: AiAdIm
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="description">الوصف</Label>
+      <div className="flex justify-between items-center">
+        <Label htmlFor="description">الوصف</Label>
+        <SubmitButton
+            formAction={formAction}
+            currentDescription={currentDescription}
+        />
+      </div>
       <Textarea
         id="description"
         name="adDescription"
