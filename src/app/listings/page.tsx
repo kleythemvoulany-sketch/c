@@ -14,18 +14,29 @@ import { Car } from '@/lib/data';
 import { Filter, List, LayoutGrid } from 'lucide-react';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useUser } from '@/firebase';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useMemoFirebase } from '@/firebase/provider';
 
 export default function ListingsPage() {
   const firestore = useFirestore();
+  const { isUserLoading } = useUser();
+
+  const carsQuery = useMemoFirebase(
+    () =>
+      firestore && !isUserLoading
+        ? collection(firestore, 'vehicleListings')
+        : null,
+    [firestore, isUserLoading]
+  );
+
   const {
     data: cars,
     isLoading,
     error,
-  } = useCollection<Car>(
-    firestore ? collection(firestore, 'vehicleListings') : null
-  );
+  } = useCollection<Car>(carsQuery);
+
+  const showSkeletons = isLoading || isUserLoading;
 
   return (
     <div className="bg-background">
@@ -116,7 +127,7 @@ export default function ListingsPage() {
                 <span>
                   تم العثور على{' '}
                   <span className="font-bold text-primary">
-                    {isLoading ? '...' : cars?.length ?? 0}
+                    {showSkeletons ? '...' : cars?.length ?? 0}
                   </span>{' '}
                   سيارة
                 </span>
@@ -151,7 +162,7 @@ export default function ListingsPage() {
               </div>
             </div>
             <div className="space-y-4">
-              {isLoading ? (
+              {showSkeletons ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className="bg-card border rounded-lg overflow-hidden flex flex-col sm:flex-row">
                      <Skeleton className="h-48 sm:h-auto sm:w-1/3 md:w-1/4" />

@@ -10,42 +10,46 @@ import { CarListItem } from '@/components/car-list-item';
 import { CarCard } from '@/components/car-card';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, query, where, limit, orderBy } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useUser } from '@/firebase';
 import { Car } from '@/lib/data';
 import { useMemoFirebase } from '@/firebase/provider';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
   const firestore = useFirestore();
+  const { isUserLoading } = useUser();
 
   const featuredQuery = useMemoFirebase(
     () =>
-      firestore
+      firestore && !isUserLoading
         ? query(
             collection(firestore, 'vehicleListings'),
             where('isFeatured', '==', true),
             limit(4)
           )
         : null,
-    [firestore]
+    [firestore, isUserLoading]
   );
 
   const latestQuery = useMemoFirebase(
     () =>
-      firestore
+      firestore && !isUserLoading
         ? query(
             collection(firestore, 'vehicleListings'),
             orderBy('listingDate', 'desc'),
             limit(8)
           )
         : null,
-    [firestore]
+    [firestore, isUserLoading]
   );
 
   const { data: featuredCars, isLoading: isLoadingFeatured } =
     useCollection<Car>(featuredQuery);
   const { data: latestCars, isLoading: isLoadingLatest } =
     useCollection<Car>(latestQuery);
+
+  const showFeaturedSkeletons = isLoadingFeatured || isUserLoading;
+  const showLatestSkeletons = isLoadingLatest || isUserLoading;
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
@@ -125,7 +129,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {isLoadingFeatured
+            {showFeaturedSkeletons
               ? Array.from({ length: 4 }).map((_, i) => (
                   <Card key={i}>
                     <Skeleton className="h-56 w-full" />
@@ -157,7 +161,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {isLoadingLatest
+            {showLatestSkeletons
               ? Array.from({ length: 8 }).map((_, i) => (
                    <Card key={i}>
                     <Skeleton className="h-56 w-full" />

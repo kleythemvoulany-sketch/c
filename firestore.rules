@@ -1,59 +1,87 @@
+/**
+ * @fileOverview Firestore Security Rules for AlBoursa Cars.
+ *
+ * Core Philosophy:
+ * This ruleset enforces a strict user-ownership model for user profiles and their associated vehicle listings. Public listings are supported via a separate, top-level collection.
+ *
+ * Data Structure:
+ * - /users/{userId}: Stores user profile information, accessible only to the authenticated user.
+ * - /users/{userId}/listings/{listingId}: Stores vehicle listings owned by a specific user.
+ * - /listings/{listingId}: Stores a denormalized collection of publicly accessible vehicle listings.
+ * - /faqs/{faqId}: Stores frequently asked questions, publicly readable.
+ * - /contactMessages/{contactMessageId}: Stores contact messages, only writable.
+ * - /aboutUs/{aboutUsId}: Stores About Us content, publicly readable.
+ *
+ * Key Security Decisions:
+ * - Users can only access their own profile data.
+ * - Users can only manage their own vehicle listings under their user ID.
+ * - Public listings are readable by everyone, but creation/modification is restricted.
+ * - Listing of other user's listings is not supported.
+ * - FAQ and About Us data is publicly readable.
+ * - Contact messages can be created by anyone but are not readable through the API.
+ *
+ * Denormalization for Authorization:
+ * - Vehicle listings in the `/listings` collection should contain a `userId` field, mirroring the owner from `/users/{userId}/listings/{listingId}`. This allows public read access while restricting writes to the owner.
+ */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Secures user profile information. Only the authenticated user can read/write their own profile.
+     * @description Allows users to read and write their own user profile data.
      * @path /users/{userId}
-     * @allow (create, update, delete, get, list) if the user is signed in and their UID matches the userId in the path.
-     *  Example: A user with UID "user123" can create/update/delete/get/list the document at /users/user123.
-     * @deny (create, update, delete, get, list) if the user is not signed in or their UID does not match the userId in the path.
-     *  Example: A user with UID "user456" cannot access /users/user123.
-     * @principle Enforces strict document ownership for user profiles.
+     * @allow (get, create, update, delete, list) if request.auth.uid == userId
+     * @deny (get, create, update, delete, list) if request.auth.uid != userId
+     * @principle Enforces document ownership for all operations on user profiles.
      */
     match /users/{userId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
       function isOwner(userId) {
         return request.auth.uid == userId;
       }
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if false; // User listing is not allowed.
+
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if false; // Listing users is not permitted.
       allow create: if isSignedIn() && isOwner(userId);
       allow update: if isSignedIn() && isOwner(userId);
       allow delete: if isSignedIn() && isOwner(userId);
     }
 
     /**
-     * @description Secures vehicle listings owned by a specific user. Only the owner can read/write their listings.
+     * @description Allows users to manage their own vehicle listings under their user profile.
      * @path /users/{userId}/listings/{listingId}
-     * @allow (create, update, delete, get, list) if the user is signed in and their UID matches the userId in the path.
-     *  Example: A user with UID "user123" can create/update/delete/get/list the document at /users/user123/listings/listing456.
-     * @deny (create, update, delete, get, list) if the user is not signed in or their UID does not match the userId in the path.
-     *  Example: A user with UID "user456" cannot access /users/user123/listings/listing456.
-     * @principle Enforces strict document ownership for vehicle listings.
+     * @allow (get, create, update, delete, list) if request.auth.uid == userId
+     * @deny (get, create, update, delete, list) if request.auth.uid != userId
+     * @principle Enforces strict ownership for managing user-specific vehicle listings.
      */
     match /users/{userId}/listings/{listingId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
       function isOwner(userId) {
         return request.auth.uid == userId;
       }
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if isSignedIn() && isOwner(userId);
+      function isExistingOwner(userId) {
+          return isOwner(userId) && exists(resource);
+      }
+
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
       allow create: if isSignedIn() && isOwner(userId);
       allow update: if isSignedIn() && isOwner(userId);
       allow delete: if isSignedIn() && isOwner(userId);
     }
 
     /**
-     * @description Allows public read access to FAQs. Write access is denied.
+     * @description Allows public read access to FAQs.
      * @path /faqs/{faqId}
-     * @allow (get, list) to all users (signed in or not).
-     * @deny (create, update, delete) to all users.
-     * @principle Public read, restricted write for FAQs.
+     * @allow (get, list) if true
+     * @deny (create, update, delete)
+     * @principle Allows public read access to FAQs, while preventing unauthorized modifications.
      */
     match /faqs/{faqId} {
       allow get: if true;
@@ -64,26 +92,26 @@ service cloud.firestore {
     }
 
     /**
-     * @description Allows public read access to Contact Messages. Write access is denied.
+     * @description Allows anyone to create a contact message, but prevents reading, listing, updating or deleting them through the API.
      * @path /contactMessages/{contactMessageId}
-     * @allow (get, list) to all users (signed in or not).
-     * @deny (create, update, delete) to all users.
-     * @principle Public read, restricted write for ContactMessages.
+     * @allow create: if true;
+     * @deny get, list, update, delete
+     * @principle Allows public creation of contact messages, while restricting access to the data.
      */
     match /contactMessages/{contactMessageId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
+      allow get: if false;
+      allow list: if false;
+      allow create: if true;
       allow update: if false;
       allow delete: if false;
     }
 
     /**
-     * @description Allows public read access to About Us content. Write access is denied.
+     * @description Allows public read access to 'About Us' content.
      * @path /aboutUs/{aboutUsId}
-     * @allow (get, list) to all users (signed in or not).
-     * @deny (create, update, delete) to all users.
-     * @principle Public read, restricted write for AboutUs.
+     * @allow (get, list) if true
+     * @deny (create, update, delete)
+     * @principle Allows public read access to 'About Us' content, while preventing unauthorized modifications.
      */
     match /aboutUs/{aboutUsId} {
       allow get: if true;
@@ -94,23 +122,26 @@ service cloud.firestore {
     }
 
     /**
-     * @description Allows public read access to vehicle listings. Write access is restricted to ensure only authenticated users can create, update or delete listings and that the 'userId' field matches the authenticated user's ID.
+     * @description Allows public read access to vehicle listings, but restricts creation, updates, and deletion to the owner.
      * @path /listings/{listingId}
-     * @allow (get, list) to all users (signed in or not).
-     * @allow (create) to signed in users only if the 'userId' matches their UID.
-     * @allow (update, delete) to signed in users only if the listing exists and the 'userId' matches their UID.
-     * @deny (create, update, delete) to non-authenticated users.
-     * @principle Public read, owner-only writes with authentication.
+     * @allow get, list: if true;
+     * @deny create, update, delete: if the userId field does not match the request.auth.uid
+     * @principle Allows public listing with owner-only writes, enforced by validating the userId field.
      */
     match /listings/{listingId} {
-      function isSignedIn() {
-        return request.auth != null;
-      }
-      allow get: if true;
-      allow list: if true;
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      allow update: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      allow delete: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+        function isSignedIn() {
+            return request.auth != null;
+        }
+
+        allow get: if true;
+        allow list: if true;
+
+        // CRITICAL: Enforce that a user can only create a listing if the userId matches their auth.uid.
+        allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+
+        // CRITICAL: The update and delete operations MUST check that the resource exists before allowing the write.
+        allow update: if isSignedIn() && get(/databases/$(database)/documents/listings/$(listingId)).data.userId == request.auth.uid;
+        allow delete: if isSignedIn() && get(/databases/$(database)/documents/listings/$(listingId)).data.userId == request.auth.uid;
     }
   }
 }
