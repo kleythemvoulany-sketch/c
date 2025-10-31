@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Car as CarType } from '@/lib/data';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, Timestamp } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
 // This is a server-side utility function to fetch data
@@ -31,25 +31,39 @@ async function getListingById(id: string): Promise<CarType | null> {
         return null;
     }
     const carData = carSnap.data();
+
+    // Convert Firestore Timestamp to string
+    let postDateString: string;
+    const postDate = carData.postDate;
+    if (postDate instanceof Timestamp) {
+      postDateString = postDate.toDate().toISOString();
+    } else if (postDate instanceof Date) {
+      postDateString = postDate.toISOString();
+    } else if (typeof postDate === 'string') {
+      postDateString = postDate;
+    } else {
+      postDateString = new Date().toISOString();
+    }
+
+
     return { 
         id: carSnap.id,
-        // Ensure all required fields from CarType are mapped
         userId: carData.userId || '',
-        make: carData.brand || '', // Corrected from make to brand
+        brand: carData.brand || '',
         model: carData.model || '',
         year: carData.year || 0,
         price: carData.price || 0,
         mileage: carData.mileage || 0,
         fuelType: carData.fuelType || 'بنزين',
-        transmission: carData.transmissionType || 'أوتوماتيكي', // Corrected from transmission to transmissionType
-        location: carData.city || '', // Corrected from location to city
-        image: carData.image || (carData.images && carData.images[0]) || '',
+        transmissionType: carData.transmissionType || 'أوتوماتيكي',
+        city: carData.city || '',
+        images: carData.images || [],
         description: carData.description || '',
+
         color: carData.color || '',
         contactNumber: carData.contactNumber || '',
-        listingDate: carData.postDate || new Date().toISOString(), // Corrected from listingDate to postDate
-        featured: carData.isFeatured || false, // Corrected from featured to isFeatured
-        imageUrls: carData.images || [], // Corrected from imageUrls to images
+        postDate: postDateString,
+        isFeatured: carData.isFeatured || false,
     } as CarType;
 }
 
@@ -61,7 +75,7 @@ export default async function CarDetailsPage({ params }: PageProps) {
   const car = await getListingById(params.id);
 
   if (!car) {
-      return (
+    return (
     <div className="container py-12 md:py-20">
         <Card>
             <CardHeader>
@@ -79,20 +93,21 @@ export default async function CarDetailsPage({ params }: PageProps) {
   }
 
   const gallery = [
-    car.image,
-    ...(car.imageUrls || [])
-      .slice(1, 5),
+    ...(car.images || []),
   ];
-  while (gallery.length < 5) {
+  while (gallery.length > 0 && gallery.length < 5) {
      gallery.push(`https://picsum.photos/seed/${car.id + gallery.length + 1}/600/400`);
+  }
+  if (gallery.length === 0) {
+      gallery.push(`https://picsum.photos/seed/${car.id}/600/400`);
   }
 
 
   const techDetails = [
-    { label: 'الماركة', value: car.make, icon: Car },
+    { label: 'الماركة', value: car.brand, icon: Car },
     { label: 'الطراز', value: car.model, icon: Car },
     { label: 'سنة الصنع', value: car.year, icon: Calendar },
-    { label: 'ناقل الحركة', value: car.transmission, icon: Wrench },
+    { label: 'ناقل الحركة', value: car.transmissionType, icon: Wrench },
     { label: 'الوقود', value: car.fuelType, icon: Fuel },
     {
       label: 'الكيلومترات',
@@ -101,7 +116,7 @@ export default async function CarDetailsPage({ params }: PageProps) {
     },
     { label: 'اللون', value: car.color, icon: Palette },
     { label: 'البلد', value: 'موريتانيا', icon: MapPin },
-    { label: 'المدينة', value: car.location, icon: MapPin },
+    { label: 'المدينة', value: car.city, icon: MapPin },
   ];
 
   return (
@@ -113,12 +128,12 @@ export default async function CarDetailsPage({ params }: PageProps) {
             <div className="relative aspect-video w-full overflow-hidden rounded-lg mb-4 shadow-lg">
               <Image
                 src={gallery[0]}
-                alt={`${car.make} ${car.model}`}
+                alt={`${car.brand} ${car.model}`}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 66vw"
               />
-              {car.featured && (
+              {car.isFeatured && (
                 <Badge
                   variant="default"
                   className="absolute top-4 right-4 bg-yellow-400 text-black border-2 border-white/50"
@@ -162,7 +177,7 @@ export default async function CarDetailsPage({ params }: PageProps) {
 
         <div className="md:col-span-1 space-y-6">
           <h1 className="text-3xl font-bold font-headline text-primary">
-            {car.make} {car.model}
+            {car.brand} {car.model}
           </h1>
           <div className="text-4xl font-bold text-accent">
             {new Intl.NumberFormat('en-US').format(car.price)}
@@ -208,7 +223,6 @@ export default async function CarDetailsPage({ params }: PageProps) {
                     alt="Mauritania Flag"
                     width={16}
                     height={12}
-                    className="h-auto"
                   />
                   <span className="text-xs text-white/80">+222</span>
                 </div>
