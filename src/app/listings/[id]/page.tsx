@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -32,17 +33,17 @@ async function getListingById(id: string): Promise<CarType | null> {
     }
     const carData = carSnap.data();
 
-    // Convert Firestore Timestamp to string
+    // Convert Firestore Timestamp to string safely
     let postDateString: string;
     const postDate = carData.postDate;
-    if (postDate instanceof Timestamp) {
+    if (postDate && typeof postDate.toDate === 'function') {
       postDateString = postDate.toDate().toISOString();
     } else if (postDate instanceof Date) {
       postDateString = postDate.toISOString();
     } else if (typeof postDate === 'string') {
       postDateString = postDate;
     } else {
-      postDateString = new Date().toISOString();
+      postDateString = new Date().toISOString(); // Fallback
     }
 
 
@@ -59,7 +60,6 @@ async function getListingById(id: string): Promise<CarType | null> {
         city: carData.city || '',
         images: carData.images || [],
         description: carData.description || '',
-
         color: carData.color || '',
         contactNumber: carData.contactNumber || '',
         postDate: postDateString,
