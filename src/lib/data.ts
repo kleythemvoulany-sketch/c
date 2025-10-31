@@ -17,24 +17,23 @@ export type User = {
 export type Car = {
     id: string;
     userId: string;
-    make: string;
+    make: string; // brand
     model: string;
     year: number;
     price: number;
     mileage: number;
     fuelType: 'بنزين' | 'ديزل' | 'كهرباء' | 'هجين';
-    transmission: 'أوتوماتيكي' | 'يدوي';
-    location: string;
+    transmission: 'أوتوماتيكي' | 'يدوي'; // transmissionType
+    location: string; // city
     image: string;
     imageHint?: string;
     description: string;
-    featured?: boolean;
+    featured?: boolean; // isFeatured
     color: string;
     contactNumber: string;
-    listingDate: Timestamp | Date | string;
+    listingDate: Timestamp | Date | string; // postDate
     viewCount?: number;
-    imageUrls?: string[];
-    contact?: string; // Adding contact for car details page
+    imageUrls?: string[]; // images
 };
 
 export type Category = {

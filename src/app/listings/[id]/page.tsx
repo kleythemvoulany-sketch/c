@@ -35,21 +35,21 @@ async function getListingById(id: string): Promise<CarType | null> {
         id: carSnap.id,
         // Ensure all required fields from CarType are mapped
         userId: carData.userId || '',
-        make: carData.make || '',
+        make: carData.brand || '', // Corrected from make to brand
         model: carData.model || '',
         year: carData.year || 0,
         price: carData.price || 0,
         mileage: carData.mileage || 0,
         fuelType: carData.fuelType || 'بنزين',
-        transmission: carData.transmission || 'أوتوماتيكي',
-        location: carData.location || '',
-        image: carData.image || '',
+        transmission: carData.transmissionType || 'أوتوماتيكي', // Corrected from transmission to transmissionType
+        location: carData.city || '', // Corrected from location to city
+        image: carData.image || (carData.images && carData.images[0]) || '',
         description: carData.description || '',
         color: carData.color || '',
         contactNumber: carData.contactNumber || '',
-        listingDate: carData.listingDate || new Date().toISOString(),
-        featured: carData.featured || false,
-        imageUrls: carData.imageUrls || [],
+        listingDate: carData.postDate || new Date().toISOString(), // Corrected from listingDate to postDate
+        featured: carData.isFeatured || false, // Corrected from featured to isFeatured
+        imageUrls: carData.images || [], // Corrected from imageUrls to images
     } as CarType;
 }
 
