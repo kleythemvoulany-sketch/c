@@ -231,5 +231,3 @@ export default async function CarDetailsPage({ params }: PageProps) {
     </div>
   );
 }
-
-    
