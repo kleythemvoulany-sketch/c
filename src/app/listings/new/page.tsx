@@ -39,11 +39,11 @@ import { uploadImages } from '@/firebase/storage';
 import { Progress } from '@/components/ui/progress';
 
 const listingSchema = z.object({
-  make: z.string().min(1, 'الرجاء اختيار الماركة'),
+  brand: z.string().min(1, 'الرجاء اختيار الماركة'),
   model: z.string().min(1, 'الرجاء اختيار الموديل'),
   year: z.string().min(4, 'الرجاء اختيار سنة الصنع'),
   fuelType: z.string().min(1, 'الرجاء اختيار نوع الوقود'),
-  transmission: z.string().min(1, 'الرجاء اختيار ناقل الحركة'),
+  transmissionType: z.string().min(1, 'الرجاء اختيار ناقل الحركة'),
   mileage: z.coerce.number().min(0, 'الرجاء إدخال الكيلومترات'),
   price: z.coerce.number().min(1, 'الرجاء إدخال السعر'),
   contactNumber: z.string().min(8, 'الرجاء إدخال رقم هاتف صحيح'),
@@ -91,11 +91,11 @@ export default function NewListingPage() {
   const form = useForm<z.infer<typeof listingSchema>>({
     resolver: zodResolver(listingSchema),
     defaultValues: {
-      make: '',
+      brand: '',
       model: '',
       year: '',
       fuelType: '',
-      transmission: '',
+      transmissionType: '',
       mileage: 0,
       price: 0,
       contactNumber: '',
@@ -105,7 +105,7 @@ export default function NewListingPage() {
     },
   });
 
-  const selectedMake = form.watch('make');
+  const selectedMake = form.watch('brand');
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -165,13 +165,11 @@ export default function NewListingPage() {
       await addDoc(listingsRef, {
         ...values,
         userId: user.uid,
-        listingDate: serverTimestamp(),
-        featured: false,
+        postDate: serverTimestamp(),
+        isFeatured: false,
         viewCount: 0,
-        image: imageUrls[0], // Main image
-        imageUrls: imageUrls,
+        images: imageUrls,
         year: Number(values.year), // Convert year to number
-        location: values.city, // Use city as location
       });
 
 
@@ -216,7 +214,7 @@ export default function NewListingPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
-                    name="make"
+                    name="brand"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>الماركة</FormLabel>
@@ -332,7 +330,7 @@ export default function NewListingPage() {
                   />
                   <FormField
                     control={form.control}
-                    name="transmission"
+                    name="transmissionType"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>ناقل الحركة</FormLabel>
@@ -438,7 +436,7 @@ export default function NewListingPage() {
                               className="text-left flex-1"
                             />
                              <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
-                               <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} style={{width:'auto', height:'auto'}}/>
+                               <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
                               <span className="text-sm text-muted-foreground">+222</span>
                             </div>
                           </div>

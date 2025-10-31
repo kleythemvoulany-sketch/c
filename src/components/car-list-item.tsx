@@ -22,13 +22,13 @@ export function CarListItem({ car }: CarListItemProps) {
       <Link href={`/listings/${car.id}`} className="block relative sm:w-1/3 md:w-1/4">
         <div className="relative h-48 sm:h-full w-full">
           <Image
-            src={car.image || "https://picsum.photos/seed/placeholder/600/400"}
-            alt={`${car.make} ${car.model}`}
+            src={car.images?.[0] || "https://picsum.photos/seed/placeholder/600/400"}
+            alt={`${car.brand} ${car.model}`}
             fill
             className="object-cover"
             data-ai-hint={car.imageHint}
           />
-          {car.featured && (
+          {car.isFeatured && (
             <Badge
               variant="default"
               className="absolute top-3 right-3 bg-yellow-400 text-black border-2 border-white/50"
@@ -43,7 +43,7 @@ export function CarListItem({ car }: CarListItemProps) {
         <div>
           <Link href={`/listings/${car.id}`} className="block">
             <h3 className="text-lg font-bold text-primary truncate hover:text-accent transition-colors">
-              {car.make} {car.model}
+              {car.brand} {car.model}
             </h3>
             <div className="text-2xl font-bold text-accent mt-1 mb-3">
               {new Intl.NumberFormat("en-US").format(car.price)}
@@ -65,11 +65,11 @@ export function CarListItem({ car }: CarListItemProps) {
             </div>
             <div className="flex items-center gap-2">
               <Wrench className="w-4 h-4 text-primary/70" />
-              <span>{car.transmission}</span>
+              <span>{car.transmissionType}</span>
             </div>
              <div className="flex items-center gap-2 col-span-2 md:col-span-1">
               <MapPin className="w-4 h-4 text-primary/70" />
-              <span>{car.location}</span>
+              <span>{car.city}</span>
             </div>
           </div>
         </div>

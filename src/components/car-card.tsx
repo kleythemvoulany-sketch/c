@@ -59,13 +59,13 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
           <CardHeader className="p-0">
             <div className="relative h-56 w-full">
               <Image
-                src={car.image || "https://picsum.photos/seed/placeholder/600/400"}
-                alt={`${car.make} ${car.model}`}
+                src={car.images?.[0] || "https://picsum.photos/seed/placeholder/600/400"}
+                alt={`${car.brand} ${car.model}`}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 data-ai-hint={car.imageHint}
               />
-              {car.featured && (
+              {car.isFeatured && (
                 <Badge
                   variant="default"
                   className="absolute top-3 right-3 bg-yellow-400 text-black border-2 border-white/50"
@@ -78,7 +78,7 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
           </CardHeader>
           <CardContent className="p-4 space-y-2">
             <h3 className="text-lg font-bold text-primary truncate">
-              {car.make} {car.model} - {car.year}
+              {car.brand} {car.model} - {car.year}
             </h3>
             <div className="text-2xl font-bold text-accent">
               {new Intl.NumberFormat("en-US").format(car.price)}
@@ -95,11 +95,11 @@ export function CarCard({ car, isOwnerView = false }: CarCardProps) {
               </div>
               <div className="flex items-center gap-2">
                 <Wrench className="w-4 h-4 text-primary/70" />
-                <span>{car.transmission}</span>
+                <span>{car.transmissionType}</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-primary/70" />
-                <span>{car.location}</span>
+                <span>{car.city}</span>
               </div>
             </div>
           </CardContent>

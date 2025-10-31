@@ -17,23 +17,22 @@ export type User = {
 export type Car = {
     id: string;
     userId: string;
-    make: string; // brand
+    brand: string;
     model: string;
     year: number;
     price: number;
     mileage: number;
     fuelType: 'بنزين' | 'ديزل' | 'كهرباء' | 'هجين';
-    transmission: 'أوتوماتيكي' | 'يدوي'; // transmissionType
-    location: string; // city
-    image: string;
+    transmissionType: 'أوتوماتيكي' | 'يدوي';
+    city: string;
+    images: string[];
     imageHint?: string;
     description: string;
-    featured?: boolean; // isFeatured
+    isFeatured?: boolean;
     color: string;
     contactNumber: string;
-    listingDate: Timestamp | Date | string; // postDate
+    postDate: Timestamp | Date | string;
     viewCount?: number;
-    imageUrls?: string[]; // images
 };
 
 export type Category = {
@@ -48,21 +47,21 @@ export const cars: Car[] = [
     {
         id: '1',
         userId: 'mock-user-1',
-        make: 'هيونداي',
+        brand: 'هيونداي',
         model: 'سنتافي',
         year: 2017,
         price: 320000,
         mileage: 160000,
         fuelType: 'بنزين',
-        transmission: 'أوتوماتيكي',
-        location: 'نواكشوط',
-        image: 'https://picsum.photos/seed/1/600/400',
+        transmissionType: 'أوتوماتيكي',
+        city: 'نواكشوط',
+        images: ['https://picsum.photos/seed/1/600/400'],
         imageHint: 'white suv',
         description: 'سيارة نظيفة جدًا، بحالة ممتازة من الداخل والخارج، جاهزة للاستعمال، بدون أي أعطال. تمت الصيانة الكاملة مؤخرًا.',
-        featured: true,
+        isFeatured: true,
         color: 'أسود',
         contactNumber: '34949470',
-        listingDate: new Date().toISOString(),
+        postDate: new Date().toISOString(),
     },
 ];
 

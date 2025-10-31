@@ -21,7 +21,7 @@ export default function Home() {
   const featuredQuery = useMemoFirebase(
     () =>
       firestore && !isUserLoading
-        ? query(collection(firestore, 'listings'), where('featured', '==', true), limit(4))
+        ? query(collection(firestore, 'listings'), where('isFeatured', '==', true), limit(4))
         : null,
     [firestore, isUserLoading]
   );
@@ -30,7 +30,7 @@ export default function Home() {
   const latestQuery = useMemoFirebase(
     () =>
       firestore && !isUserLoading
-        ? query(collection(firestore, 'listings'), orderBy('listingDate', 'desc'), limit(8))
+        ? query(collection(firestore, 'listings'), orderBy('postDate', 'desc'), limit(8))
         : null,
     [firestore, isUserLoading]
   );
