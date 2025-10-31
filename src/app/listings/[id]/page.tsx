@@ -75,21 +75,7 @@ export default async function CarDetailsPage({ params }: PageProps) {
   const car = await getListingById(params.id);
 
   if (!car) {
-    return (
-    <div className="container py-12 md:py-20">
-        <Card>
-            <CardHeader>
-                <CardTitle>لم يتم العثور على الإعلان</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p>عذرًا، لم نتمكن من العثور على هذا الإعلان. ربما تم حذفه.</p>
-                 <Button asChild variant="link" className="p-0 mt-2">
-                    <Link href="/listings">العودة إلى قائمة الإعلانات</Link>
-                 </Button>
-            </CardContent>
-        </Card>
-    </div>
-    )
+    notFound();
   }
 
   const gallery = [
@@ -245,3 +231,5 @@ export default async function CarDetailsPage({ params }: PageProps) {
     </div>
   );
 }
+
+    
