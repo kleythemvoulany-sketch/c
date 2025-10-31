@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Car as CarType } from '@/lib/data';
-import { doc, getDoc, getFirestore } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
 // This is a server-side utility function to fetch data
@@ -30,7 +30,27 @@ async function getListingById(id: string): Promise<CarType | null> {
     if (!carSnap.exists()) {
         return null;
     }
-    return { id: carSnap.id, ...carSnap.data() } as CarType;
+    const carData = carSnap.data();
+    return { 
+        id: carSnap.id,
+        // Ensure all required fields from CarType are mapped
+        userId: carData.userId || '',
+        make: carData.make || '',
+        model: carData.model || '',
+        year: carData.year || 0,
+        price: carData.price || 0,
+        mileage: carData.mileage || 0,
+        fuelType: carData.fuelType || 'بنزين',
+        transmission: carData.transmission || 'أوتوماتيكي',
+        location: carData.location || '',
+        image: carData.image || '',
+        description: carData.description || '',
+        color: carData.color || '',
+        contactNumber: carData.contactNumber || '',
+        listingDate: carData.listingDate || new Date().toISOString(),
+        featured: carData.featured || false,
+        imageUrls: carData.imageUrls || [],
+    } as CarType;
 }
 
 interface PageProps {
