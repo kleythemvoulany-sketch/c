@@ -278,7 +278,7 @@ export default function NewListingPage() {
                         <FormLabel>سنة الصنع</FormLabel>
                         <Select
                           dir="rtl"
-                          onValueChange={field.onChange}
+                          onValuechange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -436,7 +436,7 @@ export default function NewListingPage() {
                               className="text-left flex-1"
                             />
                              <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
-                               <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
+                               <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={0} height={0} className="w-5 h-auto"/>
                               <span className="text-sm text-muted-foreground">+222</span>
                             </div>
                           </div>

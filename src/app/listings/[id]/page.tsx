@@ -1,4 +1,5 @@
 
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -207,8 +208,9 @@ export default async function CarDetailsPage({ params }: PageProps) {
                   <Image
                     src="https://flagcdn.com/mr.svg"
                     alt="Mauritania Flag"
-                    width={16}
-                    height={12}
+                    width={0}
+                    height={0}
+                    className="w-4 h-auto"
                   />
                   <span className="text-xs text-white/80">+222</span>
                 </div>
