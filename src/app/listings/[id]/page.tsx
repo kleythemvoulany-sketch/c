@@ -1,7 +1,4 @@
-
-
 import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,8 +15,8 @@ import {
   Wrench,
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { Car as CarType } from '@/lib/data';
-import { doc, getDoc, Timestamp } from 'firebase/firestore';
+import { type Car as CarType } from '@/lib/data';
+import { doc, getDoc } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
 // This is a server-side utility function to fetch data
