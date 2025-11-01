@@ -16,8 +16,12 @@ import {
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { type Car as CarType } from '@/lib/data';
-import { initializeFirebase } from '@/firebase';
-import { doc, getDoc, Timestamp } from 'firebase/firestore';
+
+// This is a private utility function for use only in this file.
+// It is not intended to be a generic Firebase service.
+import { initializeApp, getApps } from 'firebase/app';
+import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
+import { firebaseConfig } from '@/firebase/config';
 
 interface PageProps {
   params: {
@@ -25,10 +29,15 @@ interface PageProps {
   };
 }
 
-// دالة جلب البيانات من جانب الخادم
+// Server-side data fetching function
 async function getListingById(id: string): Promise<CarType | null> {
-  // `initializeFirebase` هنا يعمل في بيئة الخادم
-  const { firestore } = initializeFirebase();
+  // Initialize Firebase Admin SDK for server-side operations
+  // This is a simplified, non-reusable initialization for this specific page.
+  if (!getApps().length) {
+    initializeApp(firebaseConfig);
+  }
+  const firestore = getFirestore();
+
   const carDocRef = doc(firestore, 'listings', id);
   const carSnap = await getDoc(carDocRef);
 
@@ -37,17 +46,17 @@ async function getListingById(id: string): Promise<CarType | null> {
   }
   const carData = carSnap.data();
 
-  // تحويل Timestamp إلى string بأمان
-  let postDateString: string;
+  // Safely convert Timestamp to ISO string
   const postDate = carData.postDate;
+  let postDateString: string;
   if (postDate instanceof Timestamp) {
     postDateString = postDate.toDate().toISOString();
-  } else if (postDate instanceof Date) {
-    postDateString = postDate.toISOString();
   } else if (typeof postDate === 'string') {
+    // If it's already a string, use it directly
     postDateString = postDate;
   } else {
-    postDateString = new Date().toISOString(); // Fallback
+    // Fallback for any other case
+    postDateString = new Date().toISOString();
   }
 
   return {
@@ -70,7 +79,7 @@ async function getListingById(id: string): Promise<CarType | null> {
   } as CarType;
 }
 
-// مكون الصفحة - الآن هو مكون خادم نقي
+// The page is now a pure Server Component
 export default async function CarDetailsPage({ params }: PageProps) {
   const car = await getListingById(params.id);
 
