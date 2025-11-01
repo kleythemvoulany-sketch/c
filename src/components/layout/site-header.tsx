@@ -159,7 +159,7 @@ export function SiteHeader() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="text-primary-foreground hover:bg-white/10 px-2 sm:px-3">
-                <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={0} height={0} className="w-6 h-auto"/>
+                <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={24} height={18} />
                 <span className="sm:inline-block mr-2 hidden">العربية</span>
                 <span className="sr-only">Change language</span>
               </Button>
@@ -167,19 +167,19 @@ export function SiteHeader() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
                 <div className="flex items-center gap-2">
-                  <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={0} height={0} className="w-5 h-auto" />
+                  <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
                   <span>العربية</span>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <div className="flex items-center gap-2">
-                   <Image src="https://flagcdn.com/gb.svg" alt="Great Britain Flag" width={0} height={0} className="w-5 h-auto"/>
+                   <Image src="https://flagcdn.com/gb.svg" alt="Great Britain Flag" width={20} height={15} />
                   <span>English</span>
                 </div>
               </DropdownMenuItem>
                <DropdownMenuItem>
                 <div className="flex items-center gap-2">
-                   <Image src="https://flagcdn.com/fr.svg" alt="France Flag" width={0} height={0} className="w-5 h-auto"/>
+                   <Image src="https://flagcdn.com/fr.svg" alt="France Flag" width={20} height={15} />
                   <span>Français</span>
                 </div>
               </DropdownMenuItem>

@@ -16,59 +16,61 @@ import {
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { type Car as CarType } from '@/lib/data';
-import { doc, getDoc } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
-
-// This is a server-side utility function to fetch data
-async function getListingById(id: string): Promise<CarType | null> {
-    // We need to initialize firebase services here because this is a server component
-    const { firestore } = initializeFirebase();
-    const carDocRef = doc(firestore, 'listings', id);
-    const carSnap = await getDoc(carDocRef);
-
-    if (!carSnap.exists()) {
-        return null;
-    }
-    const carData = carSnap.data();
-
-    // Convert Firestore Timestamp to string safely
-    let postDateString: string;
-    const postDate = carData.postDate;
-    if (postDate && typeof postDate.toDate === 'function') {
-      postDateString = postDate.toDate().toISOString();
-    } else if (postDate instanceof Date) {
-      postDateString = postDate.toISOString();
-    } else if (typeof postDate === 'string') {
-      postDateString = postDate;
-    } else {
-      postDateString = new Date().toISOString(); // Fallback
-    }
-
-
-    return { 
-        id: carSnap.id,
-        userId: carData.userId || '',
-        brand: carData.brand || '',
-        model: carData.model || '',
-        year: carData.year || 0,
-        price: carData.price || 0,
-        mileage: carData.mileage || 0,
-        fuelType: carData.fuelType || 'بنزين',
-        transmissionType: carData.transmissionType || 'أوتوماتيكي',
-        city: carData.city || '',
-        images: carData.images || [],
-        description: carData.description || '',
-        color: carData.color || '',
-        contactNumber: carData.contactNumber || '',
-        postDate: postDateString,
-        isFeatured: carData.isFeatured || false,
-    } as CarType;
-}
+import { doc, getDoc } from 'firebase/firestore';
 
 interface PageProps {
-  params: { id: string };
+  params: {
+    id: string;
+  };
 }
 
+// دالة جلب البيانات من جانب الخادم
+async function getListingById(id: string): Promise<CarType | null> {
+  // `initializeFirebase` هنا يعمل في بيئة الخادم
+  const { firestore } = initializeFirebase();
+  const carDocRef = doc(firestore, 'listings', id);
+  const carSnap = await getDoc(carDocRef);
+
+  if (!carSnap.exists()) {
+    return null;
+  }
+  const carData = carSnap.data();
+
+  // تحويل Timestamp إلى string بأمان
+  let postDateString: string;
+  const postDate = carData.postDate;
+  if (postDate && typeof postDate.toDate === 'function') {
+    postDateString = postDate.toDate().toISOString();
+  } else if (postDate instanceof Date) {
+    postDateString = postDate.toISOString();
+  } else if (typeof postDate === 'string') {
+    postDateString = postDate;
+  } else {
+    postDateString = new Date().toISOString(); // Fallback
+  }
+
+  return {
+    id: carSnap.id,
+    userId: carData.userId || '',
+    brand: carData.brand || '',
+    model: carData.model || '',
+    year: carData.year || 0,
+    price: carData.price || 0,
+    mileage: carData.mileage || 0,
+    fuelType: carData.fuelType || 'بنزين',
+    transmissionType: carData.transmissionType || 'أوتوماتيكي',
+    city: carData.city || '',
+    images: carData.images || [],
+    description: carData.description || '',
+    color: carData.color || '',
+    contactNumber: carData.contactNumber || '',
+    postDate: postDateString,
+    isFeatured: carData.isFeatured || false,
+  } as CarType;
+}
+
+// مكون الصفحة - الآن هو مكون خادم نقي
 export default async function CarDetailsPage({ params }: PageProps) {
   const car = await getListingById(params.id);
 
@@ -76,16 +78,15 @@ export default async function CarDetailsPage({ params }: PageProps) {
     notFound();
   }
 
-  const gallery = [
-    ...(car.images || []),
-  ];
+  const gallery = [...(car.images || [])];
   while (gallery.length > 0 && gallery.length < 5) {
-     gallery.push(`https://picsum.photos/seed/${car.id + gallery.length + 1}/600/400`);
+    gallery.push(
+      `https://picsum.photos/seed/${car.id + gallery.length + 1}/600/400`
+    );
   }
   if (gallery.length === 0) {
-      gallery.push(`https://picsum.photos/seed/${car.id}/600/400`);
+    gallery.push(`https://picsum.photos/seed/${car.id}/600/400`);
   }
-
 
   const techDetails = [
     { label: 'الماركة', value: car.brand, icon: Car },
@@ -200,21 +201,27 @@ export default async function CarDetailsPage({ params }: PageProps) {
               className="w-full text-lg h-14 bg-accent hover:bg-accent/90 text-accent-foreground dir-ltr items-center justify-center"
             >
               <span className="flex items-center gap-2">
-                <span className="text-lg font-semibold">{car.contactNumber}</span>
+                <span className="text-lg font-semibold">
+                  {car.contactNumber}
+                </span>
                 <div className="flex items-center gap-1.5 rounded-md bg-white/20 px-2 py-1">
                   <Image
                     src="https://flagcdn.com/mr.svg"
                     alt="Mauritania Flag"
-                    width={0}
-                    height={0}
                     className="w-4 h-auto"
+                    width={20}
+                    height={15}
                   />
                   <span className="text-xs text-white/80">+222</span>
                 </div>
               </span>
               <Phone className="mr-3 h-6 w-6" />
             </Button>
-            <Button size="lg" variant="outline" className="w-full text-lg h-14 mt-3">
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full text-lg h-14 mt-3"
+            >
               <svg
                 className="ml-3 h-6 w-6"
                 fill="currentColor"
