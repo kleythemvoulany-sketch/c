@@ -17,9 +17,6 @@ import {
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { type Car as CarType } from '@/lib/data';
-
-// This is a private utility function for use only in this file.
-// It is not intended to be a generic Firebase service.
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { firebaseConfig } from '@/firebase/config';
@@ -33,8 +30,8 @@ interface PageProps {
 
 // Server-side data fetching function
 async function getListingById(id: string): Promise<CarType | null> {
-  // Initialize Firebase Admin SDK for server-side operations
-  // This is a simplified, non-reusable initialization for this specific page.
+  // Initialize Firebase for server-side operations.
+  // This is safe to run on the server multiple times as getApps() prevents re-initialization.
   if (!getApps().length) {
     initializeApp(firebaseConfig);
   }
@@ -48,19 +45,19 @@ async function getListingById(id: string): Promise<CarType | null> {
   }
   const carData = carSnap.data();
 
-  // Safely convert Timestamp to ISO string
+  // Safely convert Firestore Timestamp to a serializable ISO string
   const postDate = carData.postDate;
   let postDateString: string;
   if (postDate instanceof Timestamp) {
     postDateString = postDate.toDate().toISOString();
   } else if (typeof postDate === 'string') {
-    // If it's already a string, use it directly
     postDateString = postDate;
   } else {
-    // Fallback for any other case
+    // Provide a fallback if the date is missing or in an unexpected format
     postDateString = new Date().toISOString();
   }
 
+  // Construct the Car object, ensuring all fields are present
   return {
     id: carSnap.id,
     userId: carData.userId || '',
@@ -76,7 +73,7 @@ async function getListingById(id: string): Promise<CarType | null> {
     description: carData.description || '',
     color: carData.color || '',
     contactNumber: carData.contactNumber || '',
-    postDate: postDateString,
+    postDate: postDateString, // Ensure this is a serializable string
     isFeatured: carData.isFeatured || false,
   } as CarType;
 }
@@ -247,5 +244,3 @@ export default async function CarDetailsPage({ params }: PageProps) {
     </div>
   );
 }
-
-    
