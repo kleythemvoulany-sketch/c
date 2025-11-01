@@ -17,7 +17,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { type Car as CarType } from '@/lib/data';
 import { initializeFirebase } from '@/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, Timestamp } from 'firebase/firestore';
 
 interface PageProps {
   params: {
@@ -40,7 +40,7 @@ async function getListingById(id: string): Promise<CarType | null> {
   // تحويل Timestamp إلى string بأمان
   let postDateString: string;
   const postDate = carData.postDate;
-  if (postDate && typeof postDate.toDate === 'function') {
+  if (postDate instanceof Timestamp) {
     postDateString = postDate.toDate().toISOString();
   } else if (postDate instanceof Date) {
     postDateString = postDate.toISOString();
@@ -208,7 +208,6 @@ export default async function CarDetailsPage({ params }: PageProps) {
                   <Image
                     src="https://flagcdn.com/mr.svg"
                     alt="Mauritania Flag"
-                    className="w-4 h-auto"
                     width={20}
                     height={15}
                   />
