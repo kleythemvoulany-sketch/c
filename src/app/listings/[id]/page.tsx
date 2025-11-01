@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +24,7 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { firebaseConfig } from '@/firebase/config';
 
+// Correct interface definition for the page's props
 interface PageProps {
   params: {
     id: string;
@@ -88,7 +90,7 @@ export default async function CarDetailsPage({ params }: PageProps) {
   }
 
   const gallery = [...(car.images || [])];
-  while (gallery.length > 0 && gallery.length < 5) {
+    while (gallery.length > 0 && gallery.length < 5) {
     gallery.push(
       `https://picsum.photos/seed/${car.id + gallery.length + 1}/600/400`
     );
@@ -245,3 +247,5 @@ export default async function CarDetailsPage({ params }: PageProps) {
     </div>
   );
 }
+
+    
