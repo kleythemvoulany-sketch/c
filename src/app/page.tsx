@@ -63,7 +63,7 @@ export default function Home() {
                 >
                   <Link href="/listings">
                     <span className="whitespace-nowrap text-sm ml-4">
-                      بحث متقدم
+                      يدب ان يكونمتناسقا
                     </span>
                   </Link>
                 </Button>
