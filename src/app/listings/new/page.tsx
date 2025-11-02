@@ -278,7 +278,7 @@ export default function NewListingPage() {
                         <FormLabel>سنة الصنع</FormLabel>
                         <Select
                           dir="rtl"
-                          onValuechange={field.onChange}
+                          onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -572,3 +572,5 @@ export default function NewListingPage() {
     </div>
   );
 }
+
+    
