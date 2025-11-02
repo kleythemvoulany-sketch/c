@@ -21,12 +21,6 @@ import { type Car as CarType } from '@/lib/data';
 import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
-interface CarDetailsPageProps {
-  params: {
-    id: string;
-  };
-}
-
 async function getListingById(id: string): Promise<CarType | null> {
   // This function runs only on the server
   const { firestore } = initializeFirebase();
@@ -78,7 +72,7 @@ async function getListingById(id: string): Promise<CarType | null> {
   }
 }
 
-export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
+export default async function CarDetailsPage({ params }: { params: { id: string } }) {
   const car = await getListingById(params.id);
 
   if (!car) {
