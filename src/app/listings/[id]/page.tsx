@@ -203,7 +203,7 @@ export default async function CarDetailsPage({ params }: { params: { id: string 
               className="w-full text-lg h-14 bg-accent hover:bg-accent/90 text-accent-foreground"
               asChild
             >
-              <a href={`tel:+222${car.contactNumber}`} className="dir-ltr flex items-center justify-center">
+              <a href={`tel:+222${car.contactNumber}`} className="flex items-center justify-center">
                  <Phone className="mr-3 h-6 w-6" />
                 <span>{car.contactNumber}</span>
               </a>
