@@ -21,7 +21,6 @@ import { type Car as CarType } from '@/lib/data';
 import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
-// Define the props type directly as expected by Next.js App Router
 interface CarDetailsPageProps {
   params: {
     id: string;
@@ -55,7 +54,6 @@ async function getListingById(id: string): Promise<CarType | null> {
       postDateString = new Date().toISOString();
     }
 
-    // Construct the final CarType object with all required fields
     return {
       id: carSnap.id,
       userId: carData.userId || '',
@@ -80,7 +78,6 @@ async function getListingById(id: string): Promise<CarType | null> {
   }
 }
 
-// The Page component is now an async function that directly uses the correct props type
 export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
   const car = await getListingById(params.id);
 
