@@ -14,6 +14,7 @@ import {
   Palette,
   Phone,
   Wrench,
+  MessageCircle,
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { type Car as CarType } from '@/lib/data';
@@ -222,7 +223,8 @@ export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
               className="w-full text-lg h-14 mt-3"
               asChild
             >
-              <a href={`https://wa.me/222${car.contactNumber}`} target="_blank" rel="noopener noreferrer">
+              <a href={`https://wa.me/222${car.contactNumber}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
+                <MessageCircle className="ml-3 h-6 w-6" />
                 تواصل عبر واتساب
               </a>
             </Button>

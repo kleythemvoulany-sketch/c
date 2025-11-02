@@ -43,7 +43,9 @@ export function SiteHeader() {
   const auth = useAuth();
 
   const handleLogout = async () => {
-    await signOut(auth);
+    if (auth) {
+        await signOut(auth);
+    }
   };
 
   const isAuthenticated = !!user;
@@ -142,15 +144,9 @@ export function SiteHeader() {
                   إنشاء حساب
                 </Link>
               </Button>
-              <Button variant="secondary" asChild className="bg-white text-primary hover:bg-white/90 hidden sm:flex">
+              <Button variant="secondary" asChild className="bg-white text-primary hover:bg-white/90">
                 <Link href="/signup">
                   تسجيل الدخول
-                </Link>
-              </Button>
-              <Button variant="secondary" size="icon" asChild className="bg-white text-primary hover:bg-white/90 sm:hidden rounded-full">
-                <Link href="/signup">
-                  <User className="h-6 w-6" />
-                  <span className="sr-only">تسجيل الدخول</span>
                 </Link>
               </Button>
             </>
