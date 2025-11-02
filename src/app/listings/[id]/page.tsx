@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -18,19 +17,16 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { type Car as CarType } from '@/lib/data';
 import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
-import { initializeFirebase } from '@/firebase'; // Using the central initializer
+import { initializeFirebase } from '@/firebase';
 
-// Correct interface definition for the page's props
-interface PageProps {
+// Renamed interface to avoid conflict with Next.js generated types
+interface CarDetailsPageProps {
   params: {
     id: string;
   };
 }
 
-// Function to fetch data on the server
 async function getListingById(id: string): Promise<CarType | null> {
-  // We need to get the Firestore instance on the server.
-  // The central initializeFirebase function handles app initialization.
   const { firestore } = initializeFirebase();
   const carDocRef = doc(firestore, 'listings', id);
 
@@ -49,6 +45,8 @@ async function getListingById(id: string): Promise<CarType | null> {
       postDateString = postDate.toDate().toISOString();
     } else if (typeof postDate === 'string') {
       postDateString = postDate;
+    } else if (postDate instanceof Date) {
+      postDateString = postDate.toISOString();
     } else {
       postDateString = new Date().toISOString();
     }
@@ -68,20 +66,16 @@ async function getListingById(id: string): Promise<CarType | null> {
       description: carData.description || '',
       color: carData.color || '',
       contactNumber: carData.contactNumber || '',
-      postDate: postDateString, // Pass serializable string to component
+      postDate: postDateString,
       isFeatured: carData.isFeatured || false,
     } as CarType;
   } catch (error) {
     console.error("Error fetching listing:", error);
-    // In case of error (e.g., permissions), we can treat it as not found
-    // or handle it differently if needed.
     return null;
   }
 }
 
-
-// The page is now a pure Server Component
-export default async function CarDetailsPage({ params }: PageProps) {
+export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
   const car = await getListingById(params.id);
 
   if (!car) {
