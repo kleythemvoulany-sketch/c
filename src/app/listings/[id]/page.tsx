@@ -21,13 +21,6 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { firebaseConfig } from '@/firebase/config';
 
-// Correct interface definition for the page's props
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
 // Server-side data fetching function
 async function getListingById(id: string): Promise<CarType | null> {
   // Initialize Firebase for server-side operations.
@@ -76,6 +69,14 @@ async function getListingById(id: string): Promise<CarType | null> {
     postDate: postDateString, // Ensure this is a serializable string
     isFeatured: carData.isFeatured || false,
   } as CarType;
+}
+
+
+// Correct interface definition for the page's props
+interface PageProps {
+  params: {
+    id: string;
+  };
 }
 
 // The page is now a pure Server Component
@@ -237,5 +238,3 @@ export default async function CarDetailsPage({ params }: PageProps) {
     </div>
   );
 }
-
-    
