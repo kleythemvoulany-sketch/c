@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { Search } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { categories } from '@/lib/data';
 import { CarCard } from '@/components/car-card';
@@ -62,8 +62,9 @@ export default function Home() {
                   asChild
                 >
                   <Link href="/listings">
-                    <span className="whitespace-nowrap text-sm ml-4">
-                      يدب ان يكونمتناسقا
+                    <SlidersHorizontal className="w-4 h-4 ml-2" />
+                    <span className="whitespace-nowrap text-sm">
+                      بحث متقدم
                     </span>
                   </Link>
                 </Button>
