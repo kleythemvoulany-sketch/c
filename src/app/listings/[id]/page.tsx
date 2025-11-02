@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +20,7 @@ import { type Car as CarType } from '@/lib/data';
 import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
-// Renamed interface to avoid conflict with Next.js generated types
+// Define the props type directly as expected by Next.js App Router
 interface CarDetailsPageProps {
   params: {
     id: string;
@@ -27,6 +28,7 @@ interface CarDetailsPageProps {
 }
 
 async function getListingById(id: string): Promise<CarType | null> {
+  // This function runs only on the server
   const { firestore } = initializeFirebase();
   const carDocRef = doc(firestore, 'listings', id);
 
@@ -38,7 +40,7 @@ async function getListingById(id: string): Promise<CarType | null> {
     }
     const carData = carSnap.data();
 
-    // Ensure postDate is a serializable string (ISO format)
+    // Ensure postDate is a serializable string (ISO format) before returning
     const postDate = carData.postDate;
     let postDateString: string;
     if (postDate instanceof Timestamp) {
@@ -48,9 +50,11 @@ async function getListingById(id: string): Promise<CarType | null> {
     } else if (postDate instanceof Date) {
       postDateString = postDate.toISOString();
     } else {
+      // Provide a fallback if the date is missing or in an unexpected format
       postDateString = new Date().toISOString();
     }
 
+    // Construct the final CarType object with all required fields
     return {
       id: carSnap.id,
       userId: carData.userId || '',
@@ -75,6 +79,7 @@ async function getListingById(id: string): Promise<CarType | null> {
   }
 }
 
+// The Page component is now an async function that directly uses the correct props type
 export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
   const car = await getListingById(params.id);
 
@@ -82,6 +87,7 @@ export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
     notFound();
   }
 
+  // Create a gallery with placeholders if needed
   const gallery = [...(car.images || [])];
     while (gallery.length > 0 && gallery.length < 5) {
     gallery.push(
@@ -133,7 +139,7 @@ export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
               )}
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {gallery.slice(1).map((img, i) => (
+              {gallery.slice(1, 5).map((img, i) => (
                 <div
                   key={i}
                   className="relative aspect-video w-full overflow-hidden rounded-md cursor-pointer hover:opacity-80 transition-opacity"
@@ -202,24 +208,23 @@ export default async function CarDetailsPage({ params }: CarDetailsPageProps) {
           <div className="sticky top-24">
             <Button
               size="lg"
-              className="w-full text-lg h-14 bg-accent hover:bg-accent/90 text-accent-foreground dir-ltr items-center justify-center"
+              className="w-full text-lg h-14 bg-accent hover:bg-accent/90 text-accent-foreground"
+              asChild
             >
-              <span className="flex items-center gap-2">
-                <span className="text-lg font-semibold">
-                  {car.contactNumber}
-                </span>
-                <div className="flex items-center gap-1.5 rounded-md bg-white/20 px-2 py-1">
-                  <span className="text-xs text-white/80">+222</span>
-                </div>
-              </span>
-              <Phone className="mr-3 h-6 w-6" />
+              <a href={`tel:+222${car.contactNumber}`} className="dir-ltr flex items-center justify-center">
+                 <Phone className="mr-3 h-6 w-6" />
+                <span>{car.contactNumber}</span>
+              </a>
             </Button>
             <Button
               size="lg"
               variant="outline"
               className="w-full text-lg h-14 mt-3"
+              asChild
             >
-              تواصل عبر واتساب
+              <a href={`https://wa.me/222${car.contactNumber}`} target="_blank" rel="noopener noreferrer">
+                تواصل عبر واتساب
+              </a>
             </Button>
           </div>
         </div>
