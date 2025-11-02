@@ -1,15 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    allowedDevOrigins: ["https://*.cloudworkstations.dev"],
+    allowedDevOrigins: [
+      'https://6000-firebase-studio-1761826878404.cluster-lu4mup47g5gm4rtyvhzpwbfadi.cloudworkstations.dev',
+    ],
   },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
       },
     ],
   },
