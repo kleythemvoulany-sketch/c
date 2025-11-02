@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -142,12 +143,12 @@ export function SiteHeader() {
                 </Link>
               </Button>
               <Button variant="secondary" asChild className="bg-white text-primary hover:bg-white/90 hidden sm:flex">
-                <Link href="/login">
+                <Link href="/signup">
                   تسجيل الدخول
                 </Link>
               </Button>
               <Button variant="secondary" size="icon" asChild className="bg-white text-primary hover:bg-white/90 sm:hidden rounded-full">
-                <Link href="/login">
+                <Link href="/signup">
                   <User className="h-6 w-6" />
                   <span className="sr-only">تسجيل الدخول</span>
                 </Link>
@@ -159,7 +160,7 @@ export function SiteHeader() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="text-primary-foreground hover:bg-white/10 px-2 sm:px-3">
-                <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={24} height={18} />
+                <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={24} height={18} className="h-auto w-auto" />
                 <span className="sm:inline-block mr-2 hidden">العربية</span>
                 <span className="sr-only">Change language</span>
               </Button>
@@ -167,19 +168,19 @@ export function SiteHeader() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
                 <div className="flex items-center gap-2">
-                  <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} />
+                  <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} className="h-auto w-auto" />
                   <span>العربية</span>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <div className="flex items-center gap-2">
-                   <Image src="https://flagcdn.com/gb.svg" alt="Great Britain Flag" width={20} height={15} />
+                   <Image src="https://flagcdn.com/gb.svg" alt="Great Britain Flag" width={20} height={15} className="h-auto w-auto" />
                   <span>English</span>
                 </div>
               </DropdownMenuItem>
                <DropdownMenuItem>
                 <div className="flex items-center gap-2">
-                   <Image src="https://flagcdn.com/fr.svg" alt="France Flag" width={20} height={15} />
+                   <Image src="https://flagcdn.com/fr.svg" alt="France Flag" width={20} height={15} className="h-auto w-auto" />
                   <span>Français</span>
                 </div>
               </DropdownMenuItem>

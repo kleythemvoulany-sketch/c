@@ -219,6 +219,7 @@ export default async function CarDetailsPage({ params }: PageProps) {
                     alt="Mauritania Flag"
                     width={20}
                     height={15}
+                    className="h-auto w-auto"
                   />
                   <span className="text-xs text-white/80">+222</span>
                 </div>
