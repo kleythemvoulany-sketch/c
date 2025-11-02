@@ -74,38 +74,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-primary/10 py-8 sm:py-12">
-        <div className="container">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800 md:text-3xl">
-              البورصة الموثوقة
-            </h2>
-            <Button variant="link" asChild>
-              <Link href="/listings">عرض الكل</Link>
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 justify-center">
-            {categories.map((category, index) => (
-              <Link href="/listings" key={category.name}>
-                <div className="group flex cursor-pointer flex-col items-center text-center *:duration-200 hover:scale-105">
-                  <div className="relative size-28 sm:size-32 lg:size-40 rounded-full transition-transform border-4 border-accent/20 group-hover:border-accent/50 overflow-hidden">
-                    <Image
-                      src={category.image}
-                      alt={category.name}
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
-                      priority={index < 4}
-                    />
-                  </div>
-                  <p className="m-0 mt-3 font-medium whitespace-nowrap text-sm md:text-base group-hover:text-accent">
-                    {category.name}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       <section className="bg-background py-12 md:py-16">
         <div className="container">
