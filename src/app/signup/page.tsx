@@ -295,7 +295,6 @@ export default function SignupPage() {
                           {...field}
                         />
                          <div className="flex h-10 items-center rounded-md border border-input bg-background px-3 gap-2">
-                           <Image src="https://flagcdn.com/mr.svg" alt="Mauritania Flag" width={20} height={15} className="h-auto w-auto"/>
                           <span className="text-sm text-muted-foreground">+222</span>
                         </div>
                       </div>

@@ -1,4 +1,5 @@
 
+'use client';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -20,57 +21,7 @@ import { type Car as CarType } from '@/lib/data';
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { firebaseConfig } from '@/firebase/config';
-
-// Server-side data fetching function
-async function getListingById(id: string): Promise<CarType | null> {
-  // Initialize Firebase for server-side operations.
-  // This is safe to run on the server multiple times as getApps() prevents re-initialization.
-  if (!getApps().length) {
-    initializeApp(firebaseConfig);
-  }
-  const firestore = getFirestore();
-
-  const carDocRef = doc(firestore, 'listings', id);
-  const carSnap = await getDoc(carDocRef);
-
-  if (!carSnap.exists()) {
-    return null;
-  }
-  const carData = carSnap.data();
-
-  // Safely convert Firestore Timestamp to a serializable ISO string
-  const postDate = carData.postDate;
-  let postDateString: string;
-  if (postDate instanceof Timestamp) {
-    postDateString = postDate.toDate().toISOString();
-  } else if (typeof postDate === 'string') {
-    postDateString = postDate;
-  } else {
-    // Provide a fallback if the date is missing or in an unexpected format
-    postDateString = new Date().toISOString();
-  }
-
-  // Construct the Car object, ensuring all fields are present
-  return {
-    id: carSnap.id,
-    userId: carData.userId || '',
-    brand: carData.brand || '',
-    model: carData.model || '',
-    year: carData.year || 0,
-    price: carData.price || 0,
-    mileage: carData.mileage || 0,
-    fuelType: carData.fuelType || 'بنزين',
-    transmissionType: carData.transmissionType || 'أوتوماتيكي',
-    city: carData.city || '',
-    images: carData.images || [],
-    description: carData.description || '',
-    color: carData.color || '',
-    contactNumber: carData.contactNumber || '',
-    postDate: postDateString, // Ensure this is a serializable string
-    isFeatured: carData.isFeatured || false,
-  } as CarType;
-}
-
+import { useEffect, useState } from 'react';
 
 // Correct interface definition for the page's props
 interface PageProps {
@@ -80,8 +31,75 @@ interface PageProps {
 }
 
 // The page is now a pure Server Component
-export default async function CarDetailsPage({ params }: PageProps) {
-  const car = await getListingById(params.id);
+export default function CarDetailsPage({ params }: PageProps) {
+  const [car, setCar] = useState<CarType | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getListingById(id: string): Promise<CarType | null> {
+      if (!getApps().length) {
+        initializeApp(firebaseConfig);
+      }
+      const firestore = getFirestore();
+      const carDocRef = doc(firestore, 'listings', id);
+      try {
+        const carSnap = await getDoc(carDocRef);
+
+        if (!carSnap.exists()) {
+          return null;
+        }
+        const carData = carSnap.data();
+
+        const postDate = carData.postDate;
+        let postDateString: string;
+        if (postDate instanceof Timestamp) {
+          postDateString = postDate.toDate().toISOString();
+        } else if (typeof postDate === 'string') {
+          postDateString = postDate;
+        } else {
+          postDateString = new Date().toISOString();
+        }
+
+        return {
+          id: carSnap.id,
+          userId: carData.userId || '',
+          brand: carData.brand || '',
+          model: carData.model || '',
+          year: carData.year || 0,
+          price: carData.price || 0,
+          mileage: carData.mileage || 0,
+          fuelType: carData.fuelType || 'بنزين',
+          transmissionType: carData.transmissionType || 'أوتوماتيكي',
+          city: carData.city || '',
+          images: carData.images || [],
+          description: carData.description || '',
+          color: carData.color || '',
+          contactNumber: carData.contactNumber || '',
+          postDate: postDateString,
+          isFeatured: carData.isFeatured || false,
+        } as CarType;
+      } catch (error) {
+        console.error("Error fetching listing:", error);
+        return null;
+      }
+    }
+
+    if (params.id) {
+      getListingById(params.id).then(data => {
+        if (data) {
+          setCar(data);
+        }
+        setLoading(false);
+      });
+    } else {
+      setLoading(false);
+    }
+  }, [params.id]);
+
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!car) {
     notFound();
@@ -214,13 +232,6 @@ export default async function CarDetailsPage({ params }: PageProps) {
                   {car.contactNumber}
                 </span>
                 <div className="flex items-center gap-1.5 rounded-md bg-white/20 px-2 py-1">
-                  <Image
-                    src="https://flagcdn.com/mr.svg"
-                    alt="Mauritania Flag"
-                    width={20}
-                    height={15}
-                    className="h-auto w-auto"
-                  />
                   <span className="text-xs text-white/80">+222</span>
                 </div>
               </span>
